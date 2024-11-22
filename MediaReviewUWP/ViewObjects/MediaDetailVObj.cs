@@ -1,4 +1,5 @@
 ﻿using MediaReviewClassLibrary.Models.Enitites;
+using System.Collections.Generic;
 
 namespace MediaReviewUWP.ViewObjects
 {
@@ -15,8 +16,9 @@ namespace MediaReviewUWP.ViewObjects
         public string TagLine { get; set; }
         public PersonalMedia UserPersonalMedia {  get; set; }
         public Rating UserRating { get; set; }
+        public List<Genre> GenreList { get; set; }
 
-        public MediaDetailVObj(Media media, PersonalMedia userPersonalMedia, Rating userRating)
+        public MediaDetailVObj(Media media, PersonalMedia userPersonalMedia, Rating userRating,List<Genre> genres)
         {
             MediaId = media.MediaId;
             Title = media.Title;
@@ -29,6 +31,7 @@ namespace MediaReviewUWP.ViewObjects
             TagLine = media.Tagline;
             UserPersonalMedia = userPersonalMedia;
             UserRating = userRating;
+            GenreList = genres;
         }
     }
 }

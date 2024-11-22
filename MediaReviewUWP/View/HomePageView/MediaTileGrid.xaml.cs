@@ -25,6 +25,11 @@ namespace MediaReviewUWP.View.HomePageView
         public MediaTileGrid()
         {
             this.InitializeComponent();
+            this.Loaded += (s, e) =>
+            {
+                GridScrollViewer.Height = Window.Current.Bounds.Height - 100;
+            };
+
             Window.Current.SizeChanged += (s, e) =>
             {
                 GridScrollViewer.Height = e.Size.Height - 100;

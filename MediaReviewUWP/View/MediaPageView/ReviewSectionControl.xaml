@@ -46,7 +46,7 @@
 
         <local:ReviewListControl x:Name="ReviewListComponent" Grid.Row="2" />
 
-        <!--<VisualStateManager.VisualStateGroups>
+        <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState x:Name="NarrowLayout">
                     <VisualState.StateTriggers>
@@ -67,11 +67,16 @@
                         <AdaptiveTrigger MinWindowWidth="800" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="ReviewTitle.Margin" Value="20,0,0,0" />
+                        <Setter Target="ReviewTitle.HorizontalAlignment" Value="Left" />
+                        <Setter Target="ReviewTb.HorizontalAlignment" Value="Left" />
+                        <Setter Target="ReviewSubmit.HorizontalAlignment" Value="Left" />
                         <Setter Target="ReviewTb.Width" Value="500" />
+                        <Setter Target="AddReviewSP.Orientation" Value="Horizontal" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>-->
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 
 </UserControl>
