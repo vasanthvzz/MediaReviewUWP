@@ -5,7 +5,6 @@ using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
 using MediaReviewClassLibrary.Utlis;
 using MediaReviewUWP.View.Contract;
-using MediaReviewUWP.View.MediaPageView;
 using MediaReviewUWP.ViewModel.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using System;

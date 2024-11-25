@@ -17,7 +17,7 @@
         <ToggleButton
             x:Name="FavouriteTb"
             Grid.Column="0"
-            Margin="10"
+            Margin="0,10,10,10"
             Click="PersonalMediaUpdate"
             IsChecked="{x:Bind UserPersonalMedia.IsFavourite, Mode=TwoWay}">
             <StackPanel Orientation="Horizontal">

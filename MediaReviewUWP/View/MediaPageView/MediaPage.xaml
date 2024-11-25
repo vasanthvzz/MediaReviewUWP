@@ -44,6 +44,8 @@
                 <local:ReviewSectionControl
                     x:Name="ReviewSectionComponent"
                     Grid.Row="2"
+                    HorizontalContentAlignment="Left"
+                    Background="Blue"
                     MediaId="{x:Bind MediaId, Mode=OneWay}" />
             </Grid>
         </ScrollViewer>

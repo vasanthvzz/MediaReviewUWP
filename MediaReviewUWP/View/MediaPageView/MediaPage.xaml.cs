@@ -11,20 +11,22 @@ using Windows.UI.Composition;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media.Imaging;
+
 namespace MediaReviewUWP.View.MediaPageView
 {
-
     public sealed partial class MediaPage : Page, IMediaPage
     {
         private IMediaPageViewModel _viewModel;
         private Compositor _compositor;
         private SpriteVisual _blurVisual;
-
         private MediaDetailBObj _mediaDetail;
         private long _mediaId;
+
+        public event EventHandler DataFetched;
+        public event EventHandler MediaDetailComponentUpdated;
+
         public long MediaId
         {
             get => _mediaId;
@@ -42,8 +44,29 @@ namespace MediaReviewUWP.View.MediaPageView
             _viewModel = new MediaPageViewModel(this);
             this.InitializeComponent();
             ApplyBlurEffect();
-            this.Loaded += MediaPage_Loaded;
             Window.Current.SizeChanged += AdjustScrollViewer;
+            DataFetched += MediaPage_DataFetched;
+            this.SizeChanged += AdaptiveSize;
+            this.Loaded += MediaPage_Loaded;
+        }
+
+        public void MediaPage_Loaded(object sender, RoutedEventArgs e) 
+        {
+            AdjustScrollViewer(null,null);
+        }
+
+        private void MediaPage_DataFetched(object sender, EventArgs e)
+        {
+            LoadImage();
+        }
+
+        private void LoadImage()
+        {
+            if (_mediaDetail?.Media?.PosterPath != null)
+            {
+                var bitmapImage = new BitmapImage(new Uri(_mediaDetail.Media.PosterPath, UriKind.Absolute));
+                BackgroundImageElement.Source = bitmapImage;
+            }
         }
 
         private void AdjustScrollViewer(object sender, WindowSizeChangedEventArgs e)
@@ -53,24 +76,13 @@ namespace MediaReviewUWP.View.MediaPageView
             MainScrollViewer.Height = windowHeight;
         }
 
-        private void LoadImage()
-        {
-            var bitmapImage = new BitmapImage(new Uri(_mediaDetail.Media.PosterPath, UriKind.Absolute));
-            BackgroundImageElement.Source = bitmapImage;
-        }
-
-        private void MediaPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            LoadImage();
-            AdjustScrollViewer(null,null);
-        }
-
         private void AdaptiveSize(object sender, RoutedEventArgs e)
         {
             MainScrollViewer.Height = BackgroundContainer.ActualHeight;
         }
 
         #region Background Blur Operations
+
         private void ApplyBlurEffect()
         {
             _compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
@@ -102,7 +114,6 @@ namespace MediaReviewUWP.View.MediaPageView
             // Apply the blur effect only to the background image (targeting the background image element)
             ElementCompositionPreview.SetElementChildVisual(BackgroundImageElement, _blurVisual);
 
-
             BackgroundContainer.SizeChanged += (s, e) =>
             {
                 _blurVisual.Size = new Vector2((float)BackgroundContainer.ActualWidth, (float)BackgroundContainer.ActualHeight);
@@ -114,9 +125,10 @@ namespace MediaReviewUWP.View.MediaPageView
         public async void UpdateMediaPage(MediaDetailBObj mediaDetailBObj)
         {
             _mediaDetail = mediaDetailBObj;
-            MediaDetailVObj mediaDetailVObj = new MediaDetailVObj(mediaDetailBObj?.Media, mediaDetailBObj?.UserPersonalMedia,mediaDetailBObj?.UserRating);
+            MediaDetailVObj mediaDetailVObj = new MediaDetailVObj(mediaDetailBObj?.Media, mediaDetailBObj?.UserPersonalMedia, mediaDetailBObj?.UserRating, mediaDetailBObj?.GenreList);
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
             {
+                DataFetched?.Invoke(this, EventArgs.Empty);
                 MediaDetailControlComponent.DataContext = mediaDetailVObj;
             });
         }
@@ -130,7 +142,7 @@ namespace MediaReviewUWP.View.MediaPageView
 
         private void BackgroundImageElement_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            Debug.WriteLine("image failed" + _mediaDetail.Media.Title);
+            Debug.WriteLine("image failed" + _mediaDetail?.Media?.Title);
         }
     }
 }

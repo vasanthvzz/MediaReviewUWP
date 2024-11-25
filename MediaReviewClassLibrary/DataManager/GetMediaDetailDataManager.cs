@@ -6,6 +6,7 @@ using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 
 namespace MediaReviewClassLibrary.DataManager
 {
@@ -15,6 +16,7 @@ namespace MediaReviewClassLibrary.DataManager
         private IMediaDataHandler _mediaDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IMediaDataHandler>();
         private IPersonalMediaDataHandler _personalmediaDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IPersonalMediaDataHandler>();
         private IRatingDataHandler _ratingDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IRatingDataHandler>();
+        private IGenreDataHandler _genreDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IGenreDataHandler>();
 
 
         public async void GetMediaDetail(GetMediaDetailRequest request, GetMediaDetailUseCaseCallback callback)
@@ -37,7 +39,9 @@ namespace MediaReviewClassLibrary.DataManager
                     await _ratingDataHandler.UpdateUserRating(userRating);
                 }
 
-                MediaDetailBObj mediaDetail = new MediaDetailBObj(request.UserId, media,personalMedia,userRating);
+                List<Genre> genres = _genreDataHandler.GetGenreByMediaId(request.MediaId).Result;
+
+                MediaDetailBObj mediaDetail = new MediaDetailBObj(request.UserId, media,personalMedia,userRating,genres);
                 GetMediaDetailResponse response = new GetMediaDetailResponse(mediaDetail);
                 ZResponse<GetMediaDetailResponse> zResponse = new ZResponse<GetMediaDetailResponse>(response);
                 callback?.OnSuccess(zResponse);

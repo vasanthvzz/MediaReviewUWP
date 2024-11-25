@@ -186,6 +186,9 @@
     <Compile Include="View\MediaPageView\ReviewSectionControl.xaml.cs">
       <DependentUpon>ReviewSectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MediaPageView\TagGridView.xaml.cs">
+      <DependentUpon>TagGridView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MediaPageView\UserRatingControl.xaml.cs">
       <DependentUpon>UserRatingControl.xaml</DependentUpon>
     </Compile>
@@ -272,6 +275,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MediaPageView\ReviewSectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MediaPageView\TagGridView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

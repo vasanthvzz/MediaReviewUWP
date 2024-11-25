@@ -50,6 +50,7 @@ namespace MediaReviewClassLibrary
             services.AddSingleton<IPersonalMediaDataHandler, PersonalMediaDataHandler>();
             services.AddSingleton<IRatingDataHandler, RatingDataHandler>();
             services.AddSingleton<IReviewDataHandler, ReviewDataHandler>();
+            services.AddSingleton<IGenreDataHandler, GenreDataHandler>();
 
             services.AddSingleton<IDatabaseAdapter, DatabaseAdapter>();
             services.AddSingleton<ISessionManager, SessionManager>();

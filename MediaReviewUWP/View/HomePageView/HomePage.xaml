@@ -97,7 +97,7 @@
             PaneOpening="NavBar_PaneOpening">
 
             <SplitView.Pane>
-                <StackPanel Background="{ThemeResource Shade3}">
+                <StackPanel Background="{ThemeResource SystemAccentColor}">
 
                     <!--  Hamburger Button  -->
                     <Button

@@ -6,10 +6,11 @@
     xmlns:local="using:MediaReviewUWP.View.MediaPageView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:Microsoft.UI.Xaml.Media"
+    xmlns:models="using:MediaReviewClassLibrary.Models.Enitites"
     d:DesignHeight="300"
     d:DesignWidth="400"
     mc:Ignorable="d">
-    <RelativePanel Margin="15">
+    <RelativePanel Margin="30">
         <Grid x:Name="ContentGrid">
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -19,18 +20,50 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
+
+            <ScrollViewer x:Name="GenreScrollViewer" HorizontalScrollBarVisibility="Auto">
+                <GridView
+                    x:Name="GenreGridView"
+                    Margin="0,30,0,0"
+                    ItemsSource="{x:Bind MediaDetail.GenreList, Mode=OneWay}"
+                    SelectionMode="None">
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel Margin="0" Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Genre">
+                            <Border
+                                Margin="0,0,20,0"
+                                HorizontalAlignment="Left"
+                                BorderBrush="{ThemeResource Shade3}"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                                <TextBlock
+                                    x:Name="GenreTb"
+                                    Margin="0"
+                                    Padding="10"
+                                    HorizontalAlignment="Stretch"
+                                    FontSize="14"
+                                    Text="{x:Bind GenreName, Mode=OneWay}"
+                                    TextAlignment="Center" />
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </ScrollViewer>
             <TextBlock
                 x:Name="TitleTb"
                 Grid.Row="1"
                 Grid.Column="0"
-                Margin="0,20,0,0"
+                Margin="0,0,0,0"
                 HorizontalAlignment="Left"
                 FontSize="36"
                 FontWeight="Bold"
                 Text="{x:Bind MediaDetail.Title}"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />
-
             <StackPanel
                 x:Name="InfoPanel"
                 Grid.Row="2"
@@ -68,13 +101,14 @@
             <Grid
                 x:Name="MediaDetailPanel"
                 Grid.Row="4"
-                Margin="0,10,0,0">
+                Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <local:PersonalMediaControl
                     x:Name="PersonalMediaContentComponent"
+                    Margin="0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center" />
 
@@ -96,7 +130,6 @@
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
-                <!--  Narrow Layout: For window width less than 600  -->
                 <VisualState x:Name="NarrowLayout">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
@@ -115,6 +148,7 @@
                         <Setter Target="UserRatingComponent.HorizontalAlignment" Value="Center" />
                         <Setter Target="PersonalMediaContentComponent.HorizontalAlignment" Value="Center" />
                         <Setter Target="UserRatingComponent.(Grid.Row)" Value="1" />
+                        <Setter Target="GenreScrollViewer.Width" Value="400" />
                     </VisualState.Setters>
                 </VisualState>
 

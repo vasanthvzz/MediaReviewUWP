@@ -1,4 +1,5 @@
 ﻿using MediaReviewClassLibrary.Models.Enitites;
+using System.Collections.Generic;
 
 namespace MediaReviewClassLibrary.Models
 {
@@ -10,13 +11,15 @@ namespace MediaReviewClassLibrary.Models
         public Rating UserRating { get; set; }
         public float TotalRating {  get; set; }
         public int RatedUserCount {  get; set; }
+        public List<Genre> GenreList { get; set; }
 
-        public MediaDetailBObj(long userId, Media media, PersonalMedia personalMedia,Rating userRating)
+        public MediaDetailBObj(long userId, Media media, PersonalMedia personalMedia,Rating userRating, List<Genre> genres)
         {
             UserId = userId;
             Media = media;
             UserPersonalMedia = personalMedia;
             UserRating = userRating;
+            GenreList = genres;
         }
     }
 }
