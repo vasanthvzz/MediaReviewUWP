@@ -16,10 +16,33 @@ namespace MediaReviewClassLibrary.Data.DataHandler
             _databaseAdapter.InsertAsync(review);
         }
 
+        public Task DeleteReview(long reviewId)
+        {
+            return _databaseAdapter.DeleteAsync<Review>(reviewId);
+        }
+
+        public async Task<List<Review>> GetAllUserReviews(long userId)
+        {
+            var tabledQuery = _databaseAdapter.GetTableQuery<Review>();
+            return await tabledQuery.Where(review => review.UserId == userId).ToListAsync();
+        }
+
+        public async Task<Review> GetReviewById(long reviewId)
+        {
+            return await _databaseAdapter.FindAsync<Review>(reviewId);
+        }
+
         public async Task<List<Review>> GetReviewsByMedia(long mediaId)
         {
             var tabledQuery = _databaseAdapter.GetTableQuery<Review>();
             return await tabledQuery.Where(review => review.MediaId == mediaId).ToListAsync();
+        }
+
+        public async Task<Review> UpdateReview(long reviewId, string reviewContent)
+        {
+            var customQuery = "UPDATE review SET description = ? , is_edited = ? WHERE review_id = ?";
+            await _databaseAdapter.ExecuteQuery<Review>(customQuery,reviewContent,true,reviewId);
+            return await _databaseAdapter.FindAsync<Review>(reviewId);
         }
     }
 }

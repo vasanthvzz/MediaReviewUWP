@@ -9,6 +9,6 @@ namespace MediaReviewUWP.View.Contract
 {
     public interface IUserRatingView : IView
     {
-        void SetUserRating(Rating rating);
+        void UpdatedUserRating(Rating userRating);
     }
 }

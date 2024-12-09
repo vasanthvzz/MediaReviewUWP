@@ -1,6 +1,5 @@
 ﻿using MediaReviewClassLibrary.Models.Enitites;
 using System;
-using Windows.UI.Xaml.Controls;
 
 namespace MediaReviewClassLibrary.Models
 {
@@ -15,8 +14,9 @@ namespace MediaReviewClassLibrary.Models
         public DateTime Timestamp { get; set; }
         public string Description {  get; set; }
         public bool Following {  get; set; }
+        public short UserRating {  get; set; }
 
-        public MediaReviewBObj(Review review, UserDetail user)
+        public MediaReviewBObj(Review review, UserDetail user,short rating,bool following)
         {
             ReviewId = review.ReviewId;
             UserId = review.UserId;
@@ -25,7 +25,9 @@ namespace MediaReviewClassLibrary.Models
             Timestamp = review.Timestamp;
             Description = review.Description;
             UserName= user.UserName;
-            ProfileImage = user.ProfilePicture;   
+            ProfileImage = user.ProfilePicture;
+            UserRating = rating;
+            Following = following;
         }
     }
 }

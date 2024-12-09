@@ -2,9 +2,10 @@
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
-using MediaReviewUWP.ViewObjects;
+using MediaReviewUWP.ViewObject;
 using Microsoft.Graphics.Canvas.Effects;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Numerics;
 using Windows.UI.Composition;
@@ -21,53 +22,25 @@ namespace MediaReviewUWP.View.MediaPageView
         private IMediaPageViewModel _viewModel;
         private Compositor _compositor;
         private SpriteVisual _blurVisual;
-        private MediaDetailBObj _mediaDetail;
-        private long _mediaId;
-
-        public event EventHandler DataFetched;
-        public event EventHandler MediaDetailComponentUpdated;
-
-        public long MediaId
-        {
-            get => _mediaId;
-            set
-            {
-                if (_mediaId != value)
-                {
-                    _mediaId = value;
-                }
-            }
-        }
+        public MediaPageVObj MediaDetail { get; set; }
 
         public MediaPage()
         {
             _viewModel = new MediaPageViewModel(this);
             this.InitializeComponent();
-            ApplyBlurEffect();
-            Window.Current.SizeChanged += AdjustScrollViewer;
-            DataFetched += MediaPage_DataFetched;
-            this.SizeChanged += AdaptiveSize;
-            this.Loaded += MediaPage_Loaded;
         }
 
-        public void MediaPage_Loaded(object sender, RoutedEventArgs e) 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            AdjustScrollViewer(null,null);
+            MediaDetailControlComponent.UserRatingComponent.UserRatingChanged -= UserRatingChanged;
+            MediaDetailControlComponent.UserRatingComponent.UserRatingChanged += UserRatingChanged;
         }
 
-        private void MediaPage_DataFetched(object sender, EventArgs e)
+        private void UserRatingChanged(object sender , UserRatingChangedEventArgs e)
         {
-            LoadImage();
+            ReviewSectionComponent.UserRatingChanged(e);
         }
 
-        private void LoadImage()
-        {
-            if (_mediaDetail?.Media?.PosterPath != null)
-            {
-                var bitmapImage = new BitmapImage(new Uri(_mediaDetail.Media.PosterPath, UriKind.Absolute));
-                BackgroundImageElement.Source = bitmapImage;
-            }
-        }
 
         private void AdjustScrollViewer(object sender, WindowSizeChangedEventArgs e)
         {
@@ -111,7 +84,8 @@ namespace MediaReviewUWP.View.MediaPageView
             _blurVisual.Brush = effectBrush;
             _blurVisual.Size = new Vector2((float)BackgroundContainer.ActualWidth, (float)BackgroundContainer.ActualHeight);
 
-            // Apply the blur effect only to the background image (targeting the background image element)
+            // Apply the blur effect only to the background image (targeting the background image element)var
+            Debug.Write(MediaDetail?.PosterPath);
             ElementCompositionPreview.SetElementChildVisual(BackgroundImageElement, _blurVisual);
 
             BackgroundContainer.SizeChanged += (s, e) =>
@@ -124,25 +98,31 @@ namespace MediaReviewUWP.View.MediaPageView
 
         public async void UpdateMediaPage(MediaDetailBObj mediaDetailBObj)
         {
-            _mediaDetail = mediaDetailBObj;
-            MediaDetailVObj mediaDetailVObj = new MediaDetailVObj(mediaDetailBObj?.Media, mediaDetailBObj?.UserPersonalMedia, mediaDetailBObj?.UserRating, mediaDetailBObj?.GenreList);
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            MediaDetailVObj mediaDetailVObj = new MediaDetailVObj(mediaDetailBObj) ;
+            await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                DataFetched?.Invoke(this, EventArgs.Empty);
-                MediaDetailControlComponent.DataContext = mediaDetailVObj;
+                MediaDetail.UpdateFrom(mediaDetailBObj);
+                MediaDetailControlComponent.MediaDetail = mediaDetailVObj;
             });
         }
 
         public void Init(long mediaId)
         {
-            MediaId = mediaId;
-            ReviewSectionComponent.MediaId = MediaId;
-            _viewModel.GetMediaDetail(MediaId);
+            MediaDetail = new MediaPageVObj(mediaId);
+            ReviewSectionComponent.MediaId = MediaDetail.MediaId;
+            ReloadData();
+        }
+
+        public void ReloadData()
+        {
+            _viewModel.GetMediaDetail(MediaDetail.MediaId);
+            ReviewSectionComponent.ReloadData();
+            ApplyBlurEffect();
         }
 
         private void BackgroundImageElement_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            Debug.WriteLine("image failed" + _mediaDetail?.Media?.Title);
+
         }
     }
 }

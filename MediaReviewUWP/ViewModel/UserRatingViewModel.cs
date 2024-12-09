@@ -27,7 +27,7 @@ namespace MediaReviewUWP.ViewModel
 
         public void SendUserRating(Rating userRating)
         {
-            _view.SetUserRating(userRating);
+            _view.UpdatedUserRating(userRating);
         }
     }
 
@@ -42,7 +42,7 @@ namespace MediaReviewUWP.ViewModel
 
         public void OnSuccess(ZResponse<UpdateUserRatingResponse> response)
         {
-            _vm.UpdateUserRating(response.Data.UserRating);
+            _vm.SendUserRating(response.Data.UserRating);
         }
 
         public void OnFailure(Exception exception)

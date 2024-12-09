@@ -40,7 +40,7 @@ namespace MediaReviewUWP.ViewModel
 
         private class GetMediaPresenterCallback : IGetMediaDetailPresenterCallback
         {
-            private MediaPageViewModel _vm;
+            private IMediaPageViewModel _vm;
             public GetMediaPresenterCallback(MediaPageViewModel vm)
             {
                 _vm = vm;

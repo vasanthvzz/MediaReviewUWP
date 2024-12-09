@@ -6,6 +6,7 @@
     xmlns:local="using:MediaReviewUWP.View.MediaPageView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Grid
@@ -15,10 +16,8 @@
         <Image
             x:Name="BackgroundImageElement"
             VerticalAlignment="Stretch"
-            x:DefaultBindMode="OneWay"
             ImageFailed="BackgroundImageElement_ImageFailed"
-            Loaded="MediaPage_Loaded"
-            Source="{x:Bind _mediaDetail.Media.PosterPath}"
+            Source="{x:Bind MediaDetail.PosterPath, Mode=OneWay}"
             Stretch="UniformToFill" />
 
         <Rectangle
@@ -29,7 +28,7 @@
 
         <ScrollViewer
             x:Name="MainScrollViewer"
-            VerticalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Auto"
             VerticalScrollMode="Enabled">
             <Grid x:Name="MainGrid" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
@@ -39,22 +38,24 @@
                     <RowDefinition x:Name="FooterRow" Height="100" />
                 </Grid.RowDefinitions>
 
-                <local:MediaDetailControl x:Name="MediaDetailControlComponent" Grid.Row="1" />
+                <local:MediaDetailControl
+                    x:Name="MediaDetailControlComponent"
+                    Grid.Row="1"
+                    x:FieldModifier="public" />
 
                 <local:ReviewSectionControl
                     x:Name="ReviewSectionComponent"
                     Grid.Row="2"
                     HorizontalContentAlignment="Left"
-                    Background="Blue"
-                    MediaId="{x:Bind MediaId, Mode=OneWay}" />
+                    MediaId="{x:Bind MediaDetail.MediaId, Mode=OneWay}" />
             </Grid>
-        </ScrollViewer>
 
+        </ScrollViewer>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LayoutStates">
                 <VisualState x:Name="WideLayout">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="600" />
+                        <AdaptiveTrigger MinWindowWidth="1400" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="HeaderRow.Height" Value="300" />
@@ -71,4 +72,5 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>
+
 </Page>

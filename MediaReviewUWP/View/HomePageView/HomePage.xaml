@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource MildBackground}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
 
     <Page.Resources>
         <ResourceDictionary>
@@ -35,7 +36,7 @@
             Click="DbButton_Click"
             Content="DbButton"/>-->
 
-        <RelativePanel Grid.Row="1">
+        <RelativePanel Grid.Row="0">
             <Button
                 x:Name="HomeButton"
                 Width="50"
@@ -97,196 +98,234 @@
             PaneOpening="NavBar_PaneOpening">
 
             <SplitView.Pane>
-                <StackPanel Background="{ThemeResource SystemAccentColor}">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <!--  Hamburger Button  -->
+                        <Button
+                            x:Name="HamburgerButton"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Click="HamburgerButton_Click"
+                            Style="{StaticResource ListButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Margin="5" Glyph="&#xE700;" />
+                                <TextBlock
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="18" />
+                            </StackPanel>
+                        </Button>
 
-                    <!--  Hamburger Button  -->
+                        <TextBlock
+                            x:Name="MyMovieListTb"
+                            Style="{StaticResource NavbarTextBlock}"
+                            Text="My Movie List"
+                            Visibility="Collapsed" />
+
+                        <!--  My Favourites Menu Item  -->
+                        <Button
+                            x:Name="FavouriteButton"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Click="FavoriteButton_Click"
+                            Style="{StaticResource ListButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon
+                                    Margin="5"
+                                    FontFamily="Segoe Fluent Icons"
+                                    Glyph="&#xEB52;" />
+                                <TextBlock
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Text="My Favourites" />
+                            </StackPanel>
+                        </Button>
+
+                        <!--  Contact Menu Item  -->
+                        <Button
+                            x:Name="HasWatchedButton"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Click="HasWatchedButton_Click"
+                            Style="{StaticResource ListButton}">
+
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon
+                                    Margin="5"
+                                    FontFamily="Segoe Fluent Icons"
+                                    Glyph="&#xE7B3;" />
+                                <TextBlock
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Text="I've Watched" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button
+                            x:Name="WatchListButton"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Click="WatchListButton_Click"
+                            Style="{StaticResource ListButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Margin="5" Symbol="Flag" />
+                                <TextBlock
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Text="Watch list" />
+                            </StackPanel>
+                        </Button>
+
+                        <TextBlock
+                            x:Name="SocialTb"
+                            Style="{StaticResource NavbarTextBlock}"
+                            Text="Social"
+                            Visibility="Collapsed" />
+
+                        <!--  Back Menu Item  -->
+                        <Button
+                            x:Name="MyFollowButton"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Style="{StaticResource ListButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon
+                                    Margin="5"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Glyph="&#xE77B;" />
+                                <TextBlock
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Text="People I Follow" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button
+                            x:Name="FollowersButton"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Style="{StaticResource ListButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon
+                                    Margin="5"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Glyph="&#xE716;" />
+                                <TextBlock
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Text="My Followers" />
+                            </StackPanel>
+                        </Button>
+
+                        <TextBlock
+                            x:Name="MyActionTb"
+                            Style="{StaticResource NavbarTextBlock}"
+                            Text="My Actions"
+                            Visibility="Collapsed" />
+
+                        <Button
+                            x:Name="ReviewsButton"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Click="ReviewsButton_Click"
+                            Style="{StaticResource ListButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon
+                                    Margin="5"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Glyph="&#xE70F;" />
+
+                                <TextBlock
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Text="Reviews" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button
+                            x:Name="RatingsButton"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Click="RatingsButton_Click"
+                            Style="{StaticResource ListButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon
+                                    Margin="5"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Glyph="&#xE734;" />
+
+                                <TextBlock
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Text="Rating" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
                     <Button
-                        x:Name="HamburgerButton"
+                        x:Name="SettingButton"
+                        Grid.Row="1"
+                        Margin="0,0,0,10"
                         HorizontalAlignment="Stretch"
+                        VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Left"
                         Background="Transparent"
-                        Click="HamburgerButton_Click"
-                        Style="{StaticResource ListButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon Margin="5" Glyph="&#xE700;" />
-                            <TextBlock
-                                Margin="30,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="18" />
-                        </StackPanel>
-                    </Button>
-
-                    <TextBlock
-                        x:Name="MyMovieListTb"
-                        Style="{StaticResource NavbarTextBlock}"
-                        Text="My Movie List"
-                        Visibility="Collapsed" />
-
-                    <!--  My Favourites Menu Item  -->
-                    <Button
-                        x:Name="FavouriteButton"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Background="Transparent"
+                        Click="SettingButton_Click"
                         Style="{StaticResource ListButton}">
                         <StackPanel Orientation="Horizontal">
                             <FontIcon
                                 Margin="5"
-                                FontFamily="Segoe Fluent Icons"
-                                Glyph="&#xEB52;" />
-                            <TextBlock
-                                Margin="30,0,0,0"
                                 VerticalAlignment="Center"
-                                FontSize="18"
-                                Text="My Favourites" />
-                        </StackPanel>
-                    </Button>
-
-                    <!--  Contact Menu Item  -->
-                    <Button
-                        x:Name="HasWatchedButton"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Background="Transparent"
-                        Style="{StaticResource ListButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon
-                                Margin="5"
-                                FontFamily="Segoe Fluent Icons"
-                                Glyph="&#xE7B3;" />
-                            <TextBlock
-                                Margin="30,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Text="I've Watched" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button
-                        x:Name="WatchListButton"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Background="Transparent"
-                        Style="{StaticResource ListButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <SymbolIcon Margin="5" Symbol="Flag" />
-                            <TextBlock
-                                Margin="30,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Text="Watch list" />
-                        </StackPanel>
-                    </Button>
-
-                    <TextBlock
-                        x:Name="SocialTb"
-                        Style="{StaticResource NavbarTextBlock}"
-                        Text="Social"
-                        Visibility="Collapsed" />
-
-                    <!--  Back Menu Item  -->
-                    <Button
-                        x:Name="MyFollowButton"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Background="Transparent"
-                        Style="{StaticResource ListButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon
-                                Margin="5"
                                 FontFamily="Segoe MDL2 Assets"
-                                Glyph="&#xE77B;" />
-                            <TextBlock
-                                Margin="30,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Text="People I Follow" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button
-                        x:Name="FollowersButton"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Background="Transparent"
-                        Style="{StaticResource ListButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon
-                                Margin="5"
-                                FontFamily="Segoe MDL2 Assets"
-                                Glyph="&#xE716;" />
-                            <TextBlock
-                                Margin="30,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Text="My Followers" />
-                        </StackPanel>
-                    </Button>
-
-                    <TextBlock
-                        x:Name="MyActionTb"
-                        Style="{StaticResource NavbarTextBlock}"
-                        Text="My Actions"
-                        Visibility="Collapsed" />
-
-                    <Button
-                        x:Name="ReviewsButton"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Background="Transparent"
-                        Style="{StaticResource ListButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon
-                                Margin="5"
-                                FontFamily="Segoe MDL2 Assets"
-                                Glyph="&#xE70F;" />
+                                Glyph="&#xE713;" />
 
                             <TextBlock
                                 Margin="30,0,0,0"
                                 VerticalAlignment="Center"
                                 FontSize="18"
-                                Text="Reviews" />
+                                Text="Settings" />
                         </StackPanel>
                     </Button>
-
-                    <Button
-                        x:Name="RatingsButton"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Background="Transparent"
-                        Style="{StaticResource ListButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon
-                                Margin="5"
-                                FontFamily="Segoe MDL2 Assets"
-                                Glyph="&#xE734;" />
-
-                            <TextBlock
-                                Margin="30,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Text="Rating" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                </Grid>
             </SplitView.Pane>
 
 
             <SplitView.Content>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <muxc:TabView
                         x:Name="MainTabView"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
+                        Background="{ThemeResource MildBackground}"
                         IsAddTabButtonVisible="False"
                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         ScrollViewer.VerticalScrollMode="Disabled"
                         SelectionChanged="MainTabView_SelectionChanged"
                         TabCloseRequested="TabView_TabCloseRequested">
+
                         <muxc:TabViewItem IsClosable="False" Tag="home">
                             <muxc:TabViewItem.Header>
                                 <StackPanel Orientation="Horizontal">
@@ -298,16 +337,17 @@
                                     <TextBlock Margin="5,0,0,0" Text="Home" />
                                 </StackPanel>
                             </muxc:TabViewItem.Header>
-                            <local:HomeContentPage x:Name="HomeContent" />
+                            <local:ShowMediaListControl
+                                x:Name="HomeContent"
+                                Background="{ThemeResource StrongBackground}"
+                                TileClicked="MediaTileSelected" />
                         </muxc:TabViewItem>
                         <muxc:TabView.Resources>
                             <ResourceDictionary>
-                                <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="{ThemeResource StrongBackground}" />
-                                <SolidColorBrush x:Key="TabViewItemBackground" Color="{ThemeResource StrongBackground}" />
+                                <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="{ThemeResource SystemAltHighColor}" />
                             </ResourceDictionary>
                         </muxc:TabView.Resources>
                     </muxc:TabView>
-
                 </Grid>
             </SplitView.Content>
         </SplitView>

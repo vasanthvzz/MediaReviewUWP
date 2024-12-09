@@ -79,9 +79,9 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="FavouriteTb.Margin" Value="0" />
-                        <Setter Target="HasWatchedTb.Margin" Value="5,0,0,0" />
-                        <Setter Target="WatchlistTb.Margin" Value="5,0,0,0" />
+                        <Setter Target="FavouriteTb.Margin" Value="0,5,0,5" />
+                        <Setter Target="HasWatchedTb.Margin" Value="5,5,0,5" />
+                        <Setter Target="WatchlistTb.Margin" Value="5,5,0,5" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

@@ -1,4 +1,5 @@
 ﻿using CommonClassLibrary;
+using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -51,8 +52,8 @@ namespace MediaReviewClassLibrary.Domain
 
     public class GetAllMediaResponse
     {
-        public List<Media> MediaList { get; }
-        public GetAllMediaResponse(List<Media> mediaList)
+        public List<MediaBObj> MediaList { get; }
+        public GetAllMediaResponse(List<MediaBObj> mediaList)
         {
             MediaList = mediaList;
         }

@@ -11,5 +11,9 @@ namespace MediaReviewClassLibrary.Data.DataHandler.Contract
     {
         void AddReview(Review review);
         Task<List<Review>> GetReviewsByMedia(long mediaId);
+        Task<Review> GetReviewById(long id);
+        Task<Review> UpdateReview(long reviewId, string reviewContent);
+        Task DeleteReview(long reviewId);
+        Task<List<Review>> GetAllUserReviews(long userId);
     }
 }

@@ -209,7 +209,7 @@
 
                                 <VisualState x:Name="Disabled">
                                     <VisualState.Setters>
-                                        <Setter Target="RootGrid.Background" Value="{ThemeResource Shade3}" />
+                                        <Setter Target="RootGrid.Background" Value="{ThemeResource SystemAccentColor}" />
                                         <Setter Target="ContentPresenter.BorderBrush" Value="{ThemeResource ButtonRevealBorderBrushDisabled}" />
                                         <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource ButtonForegroundDisabled}" />
                                     </VisualState.Setters>
@@ -257,9 +257,8 @@
                                 <VisualState x:Name="PointerOver">
                                     <VisualState.Setters>
                                         <Setter Target="RootGrid.(RevealBrush.State)" Value="PointerOver" />
-                                        <Setter Target="RootGrid.Background" Value="{ThemeResource Shade2}" />
+                                        <Setter Target="RootGrid.Background" Value="{ThemeResource SystemAccentColor}" />
                                         <Setter Target="ContentPresenter.BorderBrush" Value="Transparent" />
-                                        <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource Shade1}" />
                                     </VisualState.Setters>
 
                                     <Storyboard>

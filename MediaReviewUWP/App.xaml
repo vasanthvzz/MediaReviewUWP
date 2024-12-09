@@ -7,9 +7,37 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Themes/CustomThemeDictionary.xaml" />
+                <ResourceDictionary>
+                    <ResourceDictionary.ThemeDictionaries>
+                        <!--  Light Theme  -->
+                        <ResourceDictionary x:Key="Light">
+                            <SolidColorBrush x:Key="Shade1" Color="{Binding DarkShade.Color, Source={StaticResource ThemeSettings}}" />
+                            <SolidColorBrush x:Key="Shade2" Color="{Binding MainShade.Color, Source={StaticResource ThemeSettings}}" />
+                            <SolidColorBrush x:Key="Shade3" Color="{Binding LightShade.Color, Source={StaticResource ThemeSettings}}" />
+                            <SolidColorBrush x:Key="MildBackground" Color="{StaticResource MildLightColor}" />
+                            <SolidColorBrush x:Key="StrongBackground" Color="White" />
+                        </ResourceDictionary>
+
+                        <!--  Dark Theme  -->
+                        <ResourceDictionary x:Key="Dark">
+                            <SolidColorBrush x:Key="Shade1" Color="{Binding MainShade.Color, Source={StaticResource ThemeSettings}}" />
+                            <SolidColorBrush x:Key="Shade2" Color="{Binding DarkShade.Color, Source={StaticResource ThemeSettings}}" />
+                            <SolidColorBrush x:Key="Shade3" Color="{Binding DarkestShade.Color, Source={StaticResource ThemeSettings}}" />
+                            <SolidColorBrush x:Key="MildBackground" Color="{StaticResource MildDarkColor}" />
+                            <SolidColorBrush x:Key="StrongBackground" Color="Black" />
+                        </ResourceDictionary>
+                    </ResourceDictionary.ThemeDictionaries>
+
+                    <!--  Default (Fallback)  -->
+                    <Color x:Key="MildDarkColor">#212121</Color>
+                    <Color x:Key="MildLightColor">#f5f5f5</Color>
+
+                </ResourceDictionary>
+
+                <!--<ResourceDictionary Source="Themes/CustomThemeDictionary.xaml" />-->
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+
     </Application.Resources>
 </Application>

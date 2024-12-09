@@ -2,6 +2,7 @@
     x:Class="MediaReviewUWP.View.MediaPageView.MediaDetailControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="using:MediaReviewUWP.View.HomePageView"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MediaReviewUWP.View.MediaPageView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,10 +10,28 @@
     xmlns:models="using:MediaReviewClassLibrary.Models.Enitites"
     d:DesignHeight="300"
     d:DesignWidth="400"
+    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
-    <RelativePanel Margin="30">
-        <Grid x:Name="ContentGrid">
+    <UserControl.Resources>
+        <converter:RatingControlVisibility x:Key="RatingControlVisibilityConv" />
+    </UserControl.Resources>
+    <Grid Margin="30">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition x:Name="MediaImageColumn" Width="300" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid
+            x:Name="ContentGrid"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
+                <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
@@ -20,11 +39,11 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-
-            <ScrollViewer x:Name="GenreScrollViewer" HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <GridView
                     x:Name="GenreGridView"
                     Margin="0,30,0,0"
+                    HorizontalAlignment="Center"
                     ItemsSource="{x:Bind MediaDetail.GenreList, Mode=OneWay}"
                     SelectionMode="None">
                     <GridView.ItemsPanel>
@@ -90,6 +109,7 @@
             <TextBlock
                 Grid.Row="3"
                 Grid.Column="0"
+                Margin="5"
                 HorizontalAlignment="Left"
                 FontSize="15"
                 FontWeight="SemiLight"
@@ -112,21 +132,41 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center" />
 
-                <!--  UserRatingControl aligned to the right  -->
                 <local:UserRatingControl
                     x:Name="UserRatingComponent"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Center" />
+                    VerticalAlignment="Center"
+                    x:FieldModifier="public" />
             </Grid>
 
         </Grid>
-        <Image
-            x:Name="MediaImage"
-            Width="200"
-            Margin="10"
-            HorizontalAlignment="Center"
-            RelativePanel.AlignRightWithPanel="True"
-            Source="{x:Bind MediaDetail.ImagePath}" />
+        <Grid x:Name="MediaImageContainer" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Image
+                x:Name="MediaImage"
+                Grid.Row="0"
+                Width="200"
+                Margin="10"
+                HorizontalAlignment="Right"
+                ImageFailed="MediaImage_ImageFailed"
+                Source="{x:Bind MediaDetail.ImagePath}" />
+            <RatingControl
+                Grid.Row="1"
+                Margin="0,0,30,0"
+                HorizontalAlignment="Right"
+                Caption="{x:Bind MediaDetail.MediaRatingString, Mode=OneWay}"
+                InitialSetValue="-1"
+                IsReadOnly="True"
+                Visibility="{x:Bind MediaDetail.MediaRating, Mode=OneWay, Converter={StaticResource RatingControlVisibilityConv}}"
+                Value="{x:Bind MediaDetail.MediaRating, Mode=OneWay}">
+                <RatingControl.Resources>
+                    <SolidColorBrush x:Key="RatingControlSelectedForeground" Color="Gold" />
+                </RatingControl.Resources>
+            </RatingControl>
+        </Grid>
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -135,43 +175,49 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="MediaImage.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="True" />
-                        <Setter Target="MediaImage.(RelativePanel.AlignRightWithPanel)" Value="False" />
-                        <Setter Target="ContentGrid.Margin" Value="0" />
-                        <Setter Target="ContentGrid.HorizontalAlignment" Value="Center" />
-                        <Setter Target="ContentGrid.(RelativePanel.Below)" Value="MediaImage" />
-                        <Setter Target="MediaImage.HorizontalAlignment" Value="Center" />
-                        <Setter Target="ContentGrid.(RelativePanel.LeftOf)" Value="{x:Null}" />
+                        <Setter Target="MediaImageContainer.(Grid.Row)" Value="0" />
+                        <Setter Target="MediaImageContainer.(Grid.Column)" Value="0" />
+                        <Setter Target="MediaImageContainer.VerticalAlignment" Value="Top" />
+                        <Setter Target="MediaImageContainer.HorizontalAlignment" Value="Center" />
+                        <Setter Target="UserRatingComponent.(Grid.Row)" Value="5" />
                         <Setter Target="TitleTb.HorizontalAlignment" Value="Center" />
-                        <Setter Target="TitleTb.Margin" Value="0" />
-                        <Setter Target="InfoPanel.HorizontalAlignment" Value="Center" />
                         <Setter Target="UserRatingComponent.HorizontalAlignment" Value="Center" />
-                        <Setter Target="PersonalMediaContentComponent.HorizontalAlignment" Value="Center" />
-                        <Setter Target="UserRatingComponent.(Grid.Row)" Value="1" />
-                        <Setter Target="GenreScrollViewer.Width" Value="400" />
+                        <Setter Target="GenreGridView.HorizontalAlignment" Value="Center" />
+                        <Setter Target="MediaImageColumn.Width" Value="0" />
                     </VisualState.Setters>
                 </VisualState>
 
                 <VisualState x:Name="WideLayout">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="750" />
+                        <AdaptiveTrigger MinWindowWidth="1400" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="ContentGrid.(RelativePanel.LeftOf)" Value="MediaImage" />
+                        <Setter Target="MediaImageContainer.(Grid.Row)" Value="1" />
+                        <Setter Target="UserRatingComponent.HorizontalAlignment" Value="Right" />
+                        <Setter Target="UserRatingComponent.(Grid.Row)" Value="4" />
+                        <Setter Target="GenreGridView.HorizontalAlignment" Value="Center" />
+                        <Setter Target="TitleTb.HorizontalAlignment" Value="Left" />
+                        <Setter Target="MediaImageColumn.Width" Value="300" />
+                        <!--<Setter Target="ContentGrid.(RelativePanel.LeftOf)" Value="MediaImage" />
                         <Setter Target="UserRatingComponent.(Grid.Row)" Value="1" />
+                        <Setter Target="ContentGrid.(RelativePanel.LeftWithPanel)" Value="True" />-->
                     </VisualState.Setters>
                 </VisualState>
 
-                <VisualState x:Name="WiderLayout">
+                <!--<VisualState x:Name="WiderLayout">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="900" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="UserRatingComponent.(Grid.Row)" Value="0" />
-                        <Setter Target="ContentGrid.(RelativePanel.LeftOf)" Value="MediaImage" />
+                        <Setter Target="MediaImageContainer.(Grid.Row)" Value="1" />
+                        <Setter Target="UserRatingComponent.HorizontalAlignment" Value="Right" />
+
+                        <Setter Target="GenreGridView.HorizontalAlignment" Value="Left" />
+                        <Setter Target="TitleTb.HorizontalAlignment" Value="Left" />
                     </VisualState.Setters>
-                </VisualState>
+                </VisualState>-->
+
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-    </RelativePanel>
+    </Grid>
 </UserControl>

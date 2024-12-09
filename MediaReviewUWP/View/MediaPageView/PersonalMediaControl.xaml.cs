@@ -18,6 +18,7 @@ namespace MediaReviewUWP.View.MediaPageView
         {
             get
             { return this.DataContext as PersonalMedia; }
+            set { this.DataContext = value; }
         }
 
         public PersonalMediaControl()
@@ -42,7 +43,7 @@ namespace MediaReviewUWP.View.MediaPageView
 
         private void PersonalMediaUpdate(object sender, RoutedEventArgs e)
         {
-            if (sender is ToggleButton toggleButton)
+            if (sender is ToggleButton)
             {
                 ChangebuttonContent();
                 _viewModel?.UpdatePersonalMedia(UserPersonalMedia);

@@ -57,16 +57,18 @@ namespace MediaReviewClassLibrary.Domain
     public class GetMediaReviewRequest
     { 
         public long MediaId {  get; set; }
-        public GetMediaReviewRequest(long mediaId)
+        public long UserId {  get; set; }
+        public GetMediaReviewRequest(long mediaId, long userId)
         {
             MediaId = mediaId;
+            UserId = userId;
         }
     }
     
     public interface IGetMediaReviewDataManager
     {
         void GetMediaReviews(GetMediaReviewRequest request,GetMediaReviewUseCaseCallback callback);
-        Task<MediaReviewBObj> GetReviewBObj(Review review);
+        Task<MediaReviewBObj> GetReviewBObj(Review review,long userId);
     }
 
     public interface IGetMediaReviewPresenterCallback : ICallback<GetMediaReviewResponse>

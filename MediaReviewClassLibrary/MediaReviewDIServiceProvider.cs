@@ -16,24 +16,7 @@ namespace MediaReviewClassLibrary
         {
             ServiceCollection services = new ServiceCollection();
 
-            // 2. Register (add and configure) the services.
-            //services.AddSingleton<IMediaDatabase, MediaDatabase>();
-            //services.AddSingleton<IAddMediaDataManager, AddMediaDataManager>();
-            //services.AddSingleton<IAddPersonalMediaDataManager, AddPersonalMediaDataManager>();
-            //services.AddSingleton<IAddRatingDataManager, AddRatingDataManager>();
-            //services.AddSingleton<IAddReactionDataManager, AddReactionDataManager>();
-            //services.AddSingleton<IAddReviewDataManager, AddReviewDataManager>();
-            //services.AddSingleton<ICreateUserDataManager, CreateUserDataManager>();
-            //services.AddSingleton<IFilterMediaByGenreDataManager, FilterMediaByGenreDataManager>();
-            //services.AddSingleton<IGenreValidationDataManager, GenreValidationDataManager>();
-            //services.AddSingleton<IGetAllMediaDataManager, GetAllMediaDataManager>();
-            //services.AddSingleton<IGetPersonalMediaDataManager, GetPersonalMediaDataManager>();
-            //services.AddSingleton<IGetRatedMediaDataManager, GetRatedMediaDataManager>();
-            //services.AddSingleton<IGetReactedMediaDataManager, GetReactedMediaDataManager>();
-            //services.AddSingleton<IGetMediaDetailDataManager, GetSingleMediaDataManager>();
-            //services.AddSingleton<IGetUserReviewDataManager, GetUserReviewDataManager>();
-            //services.AddSingleton<ISearchMediaDataManager, SearchMediaDataManager>();
-            //services.AddSingleton<IShowGenresDataManager, ShowGenresDataManager>();
+            //Data Manager
             services.AddSingleton<ILoginUserDataManager, LoginUserDataManager>();
             services.AddSingleton<ICreateUserDataManager, CreateUserDataManager>();
             services.AddSingleton<IGetAllMediaDataManager, GetAllMediaDataManager>();
@@ -42,21 +25,30 @@ namespace MediaReviewClassLibrary
             services.AddSingleton<IUpdateUserRatingDataManager, UpdateUserRatingDataManager>();
             services.AddSingleton<IAddReviewDataManager, AddReviewDataManager>();
             services.AddSingleton<IGetMediaReviewDataManager, GetMediaReviewDataManager>();
+            services.AddSingleton<IGetPersonalisedMediaDataManager, GetPersonalisedMediaDataManager>();
+            services.AddSingleton<IRemovePersonalisedMediaDataManager, RemovePersonalisedMediaDataManager>();
+            services.AddSingleton<IEditReviewDataManager, EditReviewDataManager>();
+            services.AddSingleton<IDeleteReviewDataManager, DeleteReviewDataManager>();
+            services.AddSingleton<IUpdateFollowDataManager, UpdateFollowDataManager>();
+            services.AddSingleton<IGetUserRatedMediaDataManager, GetUserRatedMediaDataManager>();
+            services.AddSingleton<IGetMediaRatingDataManager, GetMediaRatingDataManager>();
+            services.AddSingleton<IGetUserReviewDataManager, GetUserReviewDataManager>();
             
-
-
+            //Data Handler
             services.AddSingleton<IUserDataHandler, UserDataHandler>();
             services.AddSingleton<IMediaDataHandler, MediaDataHandler>(); 
             services.AddSingleton<IPersonalMediaDataHandler, PersonalMediaDataHandler>();
             services.AddSingleton<IRatingDataHandler, RatingDataHandler>();
             services.AddSingleton<IReviewDataHandler, ReviewDataHandler>();
             services.AddSingleton<IGenreDataHandler, GenreDataHandler>();
+            services.AddSingleton<IFolloweeDataHandler, FolloweeDataHandler>();
 
+            //Data Adapter
             services.AddSingleton<IDatabaseAdapter, DatabaseAdapter>();
             services.AddSingleton<ISessionManager, SessionManager>();
             services.AddSingleton<IPasswordAdapter, PasswordAdapter>();
 
-            // 3. Build the service provider from the service collection.
+            //Build the service provider from the service collection.
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             _serviceProvider = serviceProvider;
         }
@@ -64,6 +56,11 @@ namespace MediaReviewClassLibrary
         public static ServiceProvider GetServiceProvider()
         {
             return _serviceProvider;
+        }
+
+        public static T GetRequiredService<T>()
+        {
+            return _serviceProvider.GetRequiredService<T>();
         }
     }
 }

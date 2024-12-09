@@ -1,33 +1,61 @@
-﻿
-// The Blank View item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
-using MediaReviewClassLibrary;
+﻿using MediaReviewClassLibrary;
 using MediaReviewClassLibrary.Utlis;
 using MediaReviewUWP.View.HomePageView;
 using MediaReviewUWP.View.WelcomePageView;
 using Microsoft.Extensions.DependencyInjection;
+using Windows.UI.ViewManagement;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.ApplicationModel.Core;
+using MediaReviewUWP.Utils;
 
 namespace MediaReviewUWP
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         private readonly ISessionManager _sessionManager;
+
+
         public MainPage()
         {
             this.InitializeComponent();
             _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
+            
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
             InitializeTheme();
+            UpdateThemeInTitleBar();
             RedirectPage();
+            ThemeManager.ThemeChanged += ThemeManager_ThemeChanged;
+        }
+
+        private void ThemeManager_ThemeChanged()
+        {
+            UpdateThemeInTitleBar();
+        }
+            
+        private void UpdateThemeInTitleBar()
+        {
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = false;
+            //Window.Current.UpdateThemeInTitleBar(AppTitleBar);
+           
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            var color = ((FrameworkElement)Window.Current.Content).RequestedTheme == ElementTheme.Dark ?
+                (Color)Application.Current.Resources["MildDarkColor"] : (Color)Application.Current.Resources["MildLightColor"];
+
+            titleBar.BackgroundColor = titleBar.ButtonBackgroundColor= titleBar.InactiveBackgroundColor = titleBar.ButtonInactiveBackgroundColor = color;
         }
 
         public void InitializeTheme()
         {
             string theme = _sessionManager.GetApplicationTheme();
+            SolidColorBrush mildBackgroundBrush = (SolidColorBrush)Application.Current.Resources["MildBackground"];
+
             if (theme == null || theme == "" || theme == "dark")
             {
                 ((FrameworkElement)Window.Current.Content).RequestedTheme = ElementTheme.Dark;
@@ -36,6 +64,8 @@ namespace MediaReviewUWP
             {
                 ((FrameworkElement)Window.Current.Content).RequestedTheme = ElementTheme.Light;
             }
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.BackgroundColor = mildBackgroundBrush.Color;
         }
 
         private void RedirectPage()
@@ -48,11 +78,6 @@ namespace MediaReviewUWP
             {
                 Frame.Navigate(typeof(WelcomePage));
             }
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

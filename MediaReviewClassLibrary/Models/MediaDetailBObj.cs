@@ -5,21 +5,25 @@ namespace MediaReviewClassLibrary.Models
 {
     public class MediaDetailBObj
     {
-        public long UserId { get; set; }
-        public Media Media { get; set; }
-        public PersonalMedia UserPersonalMedia { get; set; }
-        public Rating UserRating { get; set; }
-        public float TotalRating {  get; set; }
-        public int RatedUserCount {  get; set; }
-        public List<Genre> GenreList { get; set; }
+        //(request.UserId, media, personalMedia, userRating, genres, mediaRating, ratedUser);
 
-        public MediaDetailBObj(long userId, Media media, PersonalMedia personalMedia,Rating userRating, List<Genre> genres)
+        public long UserId {  get; set; }
+        public Media MediaDetail { get; set; }
+        public Rating UserRating {  get; set; }
+        public PersonalMedia UserPersonalMedia { get; set; }
+        public List<Genre> Genres { get; set; }
+        public float MediaRating { get; set; }
+        public long RatedUsers {  get; set; }
+
+        public MediaDetailBObj(long userId, Media mediaDetail, Rating userRating, PersonalMedia userPersonalMedia, List<Genre> genres, float mediaRating, long ratedUsers)
         {
             UserId = userId;
-            Media = media;
-            UserPersonalMedia = personalMedia;
+            MediaDetail = mediaDetail;
             UserRating = userRating;
-            GenreList = genres;
+            UserPersonalMedia = userPersonalMedia;
+            Genres = genres;
+            MediaRating = mediaRating;
+            RatedUsers = ratedUsers;
         }
     }
 }

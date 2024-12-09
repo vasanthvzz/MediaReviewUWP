@@ -123,51 +123,80 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MRSViewDIServiceProvider.cs" />
     <Compile Include="Settings\ThemeSettings.cs" />
     <Compile Include="Utils\DateManager.cs" />
     <Compile Include="Utils\Theme.cs" />
     <Compile Include="Utils\ThemeManager.cs" />
+    <Compile Include="Utils\WindowManager.cs" />
     <Compile Include="ViewModel\Contract\IHomePageViewModel.cs" />
-    <Compile Include="ViewModel\Contract\IMediaPageViewModel.cs" />
-    <Compile Include="ViewModel\Contract\IPersonalMediaViewModel.cs" />
-    <Compile Include="ViewModel\Contract\IReviewListViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IMediaDetailViewModel.cs" />
     <Compile Include="ViewModel\Contract\IReviewSectionViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IMediaPageViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IPersonalisedMediaViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IPersonalMediaViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IShowMediaListViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IUserRatedMediaViewModel.cs" />
     <Compile Include="ViewModel\Contract\IUserRatingViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IUserReviewViewModel.cs" />
     <Compile Include="ViewModel\HomePageViewModel.cs" />
     <Compile Include="ViewModel\Contract\ISignupUserViewModel.cs" />
     <Compile Include="ViewModel\Contract\ILoginUserViewModel.cs" />
-    <Compile Include="ViewModel\MediaPageViewModel.cs" />
-    <Compile Include="ViewModel\PersonalMediaViewModel.cs" />
-    <Compile Include="ViewModel\ReviewListViewModel.cs" />
+    <Compile Include="ViewModel\MediaDetailViewModel.cs" />
     <Compile Include="ViewModel\ReviewSectionViewModel.cs" />
+    <Compile Include="ViewModel\MediaPageViewModel.cs" />
+    <Compile Include="ViewModel\PersonalisedMediaViewModel.cs" />
+    <Compile Include="ViewModel\PersonalMediaViewModel.cs" />
+    <Compile Include="ViewModel\ShowMediaListViewModel.cs" />
     <Compile Include="ViewModel\SignupUserViewModel.cs" />
     <Compile Include="ViewModel\LoginUserViewModel.cs" />
+    <Compile Include="ViewModel\UserRatedMediaViewModel.cs" />
     <Compile Include="ViewModel\UserRatingViewModel.cs" />
-    <Compile Include="ViewObjects\MediaDetailVObj.cs" />
-    <Compile Include="ViewObjects\MediaReviewVObj.cs" />
-    <Compile Include="ViewObjects\MediaTileVObj.cs" />
+    <Compile Include="ViewModel\UserReviewViewModel.cs" />
+    <Compile Include="ViewObject\MediaDetailVObj.cs" />
+    <Compile Include="ViewObject\MediaPageVObj.cs" />
+    <Compile Include="ViewObject\MediaReviewVObj.cs" />
+    <Compile Include="ViewObject\MediaTileVObj.cs" />
+    <Compile Include="ViewObject\UserFollowVObj.cs" />
+    <Compile Include="ViewObject\UserRatingVObj.cs" />
+    <Compile Include="ViewObject\UserReviewVObj.cs" />
+    <Compile Include="View\Contract\IFavouriteMediaView.cs" />
     <Compile Include="View\Contract\IHomePageView.cs" />
     <Compile Include="View\Contract\ILoginUserView.cs" />
+    <Compile Include="View\Contract\IManageReviewView.cs" />
+    <Compile Include="View\Contract\IMediaDetailControl.cs" />
     <Compile Include="View\Contract\IMediaPage.cs" />
+    <Compile Include="View\Contract\IPersonalisedMediaView.cs" />
     <Compile Include="View\Contract\IPersonalMediaControl.cs" />
-    <Compile Include="View\Contract\IReviewListView.cs" />
-    <Compile Include="View\Contract\IReviewSectionView.cs" />
+    <Compile Include="View\Contract\IShowMediaListView.cs" />
     <Compile Include="View\Contract\ISignupUserView.cs" />
+    <Compile Include="View\Contract\IUserRatedMediaPage.cs" />
     <Compile Include="View\Contract\IUserRatingView.cs" />
+    <Compile Include="View\Contract\IUserReviewPage.cs" />
     <Compile Include="View\Contract\IView.cs" />
-    <Compile Include="View\HomePageView\HomeContentPage.xaml.cs">
-      <DependentUpon>HomeContentPage.xaml</DependentUpon>
+    <Compile Include="View\HomePageView\FolloweeListControl.xaml.cs">
+      <DependentUpon>FolloweeListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomePageView\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\HomePageView\MediaTile.xaml.cs">
-      <DependentUpon>MediaTile.xaml</DependentUpon>
+    <Compile Include="View\HomePageView\MediaListViewUserControl.xaml.cs">
+      <DependentUpon>MediaListViewUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\HomePageView\MediaTileGrid.xaml.cs">
-      <DependentUpon>MediaTileGrid.xaml</DependentUpon>
+    <Compile Include="View\HomePageView\PersonalisedMediaControl.xaml.cs">
+      <DependentUpon>PersonalisedMediaControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\HomePageView\RatingControlVisibility.cs" />
+    <Compile Include="View\HomePageView\ShowMediaListControl.xaml.cs">
+      <DependentUpon>ShowMediaListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HomePageView\UserRatedMediaPage.xaml.cs">
+      <DependentUpon>UserRatedMediaPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HomePageView\UserReviewPage.xaml.cs">
+      <DependentUpon>UserReviewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MediaPageView\FollowButtonContentConverter.cs" />
+    <Compile Include="View\MediaPageView\FollowButtonVisiblityConverter.cs" />
     <Compile Include="View\MediaPageView\MediaDetailControl.xaml.cs">
       <DependentUpon>MediaDetailControl.xaml</DependentUpon>
     </Compile>
@@ -177,20 +206,15 @@
     <Compile Include="View\MediaPageView\PersonalMediaControl.xaml.cs">
       <DependentUpon>PersonalMediaControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MediaPageView\ReviewListControl.xaml.cs">
-      <DependentUpon>ReviewListControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\MediaPageView\ReviewListItem.xaml.cs">
-      <DependentUpon>ReviewListItem.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="View\MediaPageView\ReviewInteractionConverter.cs" />
     <Compile Include="View\MediaPageView\ReviewSectionControl.xaml.cs">
       <DependentUpon>ReviewSectionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MediaPageView\TagGridView.xaml.cs">
-      <DependentUpon>TagGridView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\MediaPageView\UserRatingControl.xaml.cs">
       <DependentUpon>UserRatingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingsView\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WelcomePageView\LoginUserControl.xaml.cs">
       <DependentUpon>LoginUserControl.xaml</DependentUpon>
@@ -211,6 +235,8 @@
   <ItemGroup>
     <Content Include="Assets\bookmark-icon.png" />
     <Content Include="Assets\bookmark-icon.svg" />
+    <Content Include="Assets\defaultMediaImage.png" />
+    <Content Include="Assets\ListViewIcon.png" />
     <Content Include="Assets\movie-elements.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
@@ -238,7 +264,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\HomePageView\HomeContentPage.xaml">
+    <Page Include="View\HomePageView\FolloweeListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -246,11 +272,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\HomePageView\MediaTile.xaml">
+    <Page Include="View\HomePageView\MediaListViewUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\HomePageView\MediaTileGrid.xaml">
+    <Page Include="View\HomePageView\PersonalisedMediaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePageView\ShowMediaListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePageView\UserRatedMediaPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePageView\UserReviewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -266,23 +304,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MediaPageView\ReviewListControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\MediaPageView\ReviewListItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\MediaPageView\ReviewSectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MediaPageView\TagGridView.xaml">
+    <Page Include="View\MediaPageView\UserRatingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MediaPageView\UserRatingControl.xaml">
+    <Page Include="View\SettingsView\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

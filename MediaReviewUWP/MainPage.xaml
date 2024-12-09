@@ -5,8 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MediaReviewUWP"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Loaded="Page_Loaded">
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
 
     <Frame Name="Frame" />
+
 </Page>

@@ -3,6 +3,9 @@ using MediaReviewUWP.Utils;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -24,6 +27,7 @@ namespace MediaReviewUWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            
         }
 
         /// <summary>
@@ -34,9 +38,7 @@ namespace MediaReviewUWP
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Current.Resources["ThemeSettings"] = ThemeManager.GetThemeSettings();
-            //Current.Resources["GlobalFontFamily"] = new FontFamily("Segoe UI");
             Frame rootFrame = Window.Current.Content as Frame;
-
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active

@@ -26,7 +26,7 @@ namespace MediaReviewClassLibrary.DataManager
                 long reviewId = IdentityManager.GenerateUniqueId();
                 Review review = new Review(reviewId, request.UserId, request.MediaId, request.Description, DateTime.Now);
                 _dataHandler.AddReview(review);
-                MediaReviewBObj mediaReview = await getMediaReviewDataManager.GetReviewBObj(review);
+                MediaReviewBObj mediaReview = await getMediaReviewDataManager.GetReviewBObj(review, request.UserId);
                 AddReviewResponse response = new AddReviewResponse(true, mediaReview);   
                 ZResponse<AddReviewResponse> zResponse = new ZResponse<AddReviewResponse>(response);
                 callback?.OnSuccess(zResponse);

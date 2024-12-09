@@ -12,13 +12,17 @@ namespace MediaReviewClassLibrary.DataManager
 {
     public class GetMediaReviewDataManager : IGetMediaReviewDataManager
     {
-        private IReviewDataHandler _reviewDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IReviewDataHandler>(); 
-        private IUserDataHandler _userDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IUserDataHandler>();
-        
-        public async Task<MediaReviewBObj> GetReviewBObj(Review review)
+        private IReviewDataHandler _reviewDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IReviewDataHandler>(); 
+        private IUserDataHandler _userDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IUserDataHandler>();
+        private IRatingDataHandler _ratingDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IRatingDataHandler>();
+        private IUpdateFollowDataManager _followDataManager = MediaReviewDIServiceProvider.GetRequiredService<IUpdateFollowDataManager>();
+
+        public async Task<MediaReviewBObj> GetReviewBObj(Review review,long userId)
         {
-            var user = await _userDataHandler.GetUserById(review.UserId);
-            return new MediaReviewBObj(review, user);
+            var reviewedUser = await _userDataHandler.GetUserById(review.UserId);
+            var rating = await _ratingDataHandler.GetUserRating(review.UserId,review.MediaId);
+            bool following = await _followDataManager.GetFollowingStatus(userId,reviewedUser.UserId);
+            return new MediaReviewBObj(review, reviewedUser,rating.Score,following);
         }
 
         public async void GetMediaReviews(GetMediaReviewRequest request, GetMediaReviewUseCaseCallback callback)
@@ -29,8 +33,7 @@ namespace MediaReviewClassLibrary.DataManager
                 List<MediaReviewBObj> mediaReview = new List<MediaReviewBObj>();
                 foreach (var review in reviewList) 
                 {
-                    var user = await _userDataHandler.GetUserById(review.UserId);
-                    mediaReview.Add(new MediaReviewBObj(review, user));
+                    mediaReview.Add(await GetReviewBObj(review,request.UserId));
                 }
                 GetMediaReviewResponse response = new GetMediaReviewResponse(mediaReview);
                 ZResponse<GetMediaReviewResponse> zResponse = new ZResponse<GetMediaReviewResponse>(response);

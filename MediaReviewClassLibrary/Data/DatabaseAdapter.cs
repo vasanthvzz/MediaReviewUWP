@@ -24,7 +24,7 @@ namespace MediaReviewClassLibrary.Data
             _db.CreateTableAsync<ActorMapper>();
             _db.CreateTableAsync<Artist>();
             _db.CreateTableAsync<DirectorMapper>();
-            _db.CreateTableAsync<FollowerMappper>();
+            _db.CreateTableAsync<FolloweeMapper>();
             _db.CreateTableAsync<Genre>();
             _db.CreateTableAsync<GenreMapper>();
             _db.CreateTableAsync<Media>();

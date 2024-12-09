@@ -1,5 +1,4 @@
 ﻿using CommonClassLibrary;
-using MediaReviewClassLibrary.Data.DataHandler;
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models;
@@ -39,9 +38,10 @@ namespace MediaReviewClassLibrary.DataManager
                     await _ratingDataHandler.UpdateUserRating(userRating);
                 }
 
-                List<Genre> genres = _genreDataHandler.GetGenreByMediaId(request.MediaId).Result;
-
-                MediaDetailBObj mediaDetail = new MediaDetailBObj(request.UserId, media,personalMedia,userRating,genres);
+                List<Genre> genres = await _genreDataHandler.GetGenreByMediaId(request.MediaId);
+                float mediaRating = await _ratingDataHandler.GetAverageRating(request.MediaId);
+                long ratedUser = await _ratingDataHandler.GetRatedUserCount(request.MediaId);
+                MediaDetailBObj mediaDetail = new MediaDetailBObj(request.UserId, media, userRating,personalMedia,genres,mediaRating,ratedUser);
                 GetMediaDetailResponse response = new GetMediaDetailResponse(mediaDetail);
                 ZResponse<GetMediaDetailResponse> zResponse = new ZResponse<GetMediaDetailResponse>(response);
                 callback?.OnSuccess(zResponse);

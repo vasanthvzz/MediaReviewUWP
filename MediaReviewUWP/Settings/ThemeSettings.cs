@@ -1,6 +1,7 @@
 ﻿using MediaReviewUWP.Utils;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 namespace MediaReviewUWP.Settings
@@ -52,7 +53,6 @@ namespace MediaReviewUWP.Settings
         }
 
         private SolidColorBrush _darkestShade;
-        private ThemeSettings themeSettings;
 
         public SolidColorBrush DarkestShade
         {
@@ -66,6 +66,8 @@ namespace MediaReviewUWP.Settings
                 }
             }
         }
+
+        private ThemeSettings themeSettings;
 
         // Constructor that initializes properties using a Theme object
         public ThemeSettings(Theme theme)

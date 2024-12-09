@@ -2,6 +2,7 @@
 using MediaReviewClassLibrary.Utlis;
 using MediaReviewUWP.Settings;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace MediaReviewUWP.Utils
 {
@@ -9,6 +10,7 @@ namespace MediaReviewUWP.Utils
     {
         private static ThemeSettings _themeSetting { get; set; }
         private static ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
+        public static event Action ThemeChanged;
 
         static ThemeManager()
         {
@@ -29,6 +31,11 @@ namespace MediaReviewUWP.Utils
             {
                 _themeSetting = new ThemeSettings(ThemeRepo.GetBlueTheme());
             }
+        }
+
+        public static void InvokeThemeChange()
+        {
+            ThemeChanged.Invoke();
         }
 
         public static ThemeSettings GetThemeSettings()
