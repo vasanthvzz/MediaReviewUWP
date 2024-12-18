@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MediaReviewUWP.View.MediaPageView
 {
-    public sealed partial class MediaPage : Page, IMediaPage
+    public sealed partial class MediaPage : Page, IMediaPage , ITabItemContent
     {
         private IMediaPageViewModel _viewModel;
         private Compositor _compositor;

@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace MediaReviewUWP.View.HomePageView
 {
-    public sealed partial class UserReviewPage : Page, IUserReviewPage, INotifyPropertyChanged
+    public sealed partial class UserReviewPage : Page, IUserReviewPage, INotifyPropertyChanged , ITabItemContent
     {
         public ObservableCollection<UserReviewVObj> UserReviewList { get; set; }
         private IUserReviewViewModel _vm;

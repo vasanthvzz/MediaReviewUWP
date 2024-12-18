@@ -1,14 +1,12 @@
 ﻿using MediaReviewUWP.Settings;
 using MediaReviewUWP.Utils;
 using System;
+using System.Collections.Generic;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Core;
-using Windows.UI;
-using Windows.UI.ViewManagement;
+using Windows.Globalization;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace MediaReviewUWP
@@ -22,22 +20,24 @@ namespace MediaReviewUWP
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
-        public static ThemeSettings ThemeSettingsInstance { get; } = new ThemeSettings();
+        public static AccentShade ThemeSettingsInstance { get; } = AccentManager.GetAccentShade();
         public App()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            SetLanguage();
             
         }
 
-        /// <summary>
-        /// Invoked when the application is launched normally by the end user.  Other entry points
-        /// will be used such as when the application is launched to open a specific file.
-        /// </summary>
-        /// <param name="e">Details about the launch request and process.</param>
+        private void SetLanguage()
+        {
+            //ApplicationLanguages.PrimaryLanguageOverride = "ta";
+            ApplicationLanguages.PrimaryLanguageOverride = "en";
+        }
+
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Current.Resources["ThemeSettings"] = ThemeManager.GetThemeSettings();
+            Current.Resources["AccentShade"] = AccentManager.GetAccentShade();
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -56,6 +56,8 @@ namespace MediaReviewUWP
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
+
+                WindowManager.Initialize();// change if it bugs
             }
 
             if (e.PrelaunchActivated == false)

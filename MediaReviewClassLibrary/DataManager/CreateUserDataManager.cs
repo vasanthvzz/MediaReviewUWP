@@ -5,6 +5,7 @@ using MediaReviewClassLibrary.Models.Enitites;
 using MediaReviewClassLibrary.Utlis;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.DataManager
 {
@@ -19,16 +20,16 @@ namespace MediaReviewClassLibrary.DataManager
             _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
         }
 
-        public void CreateUserAccount(CreateUserRequest request, CreateUserUseCaseCallback callback)
+        public async Task CreateUserAccount(CreateUserRequest request, CreateUserUseCaseCallback callback)
         {
             try
             {
                 string profilePicture = "";
                 if (request.ProfilePicture == null || request.ProfilePicture == "")
                 {
-                    profilePicture =  AvatarGenerator.GenerateImage(request.UserName).Result;
+                    profilePicture =  await AvatarGenerator.GenerateImage(request.UserName);
                 }
-                UserDetail user = _userDataHandler.CreateUser(request.UserName, request.Password,profilePicture).Result;
+                UserDetail user = await _userDataHandler.CreateUser(request.UserName, request.Password,profilePicture);
                 bool success = user != null;
                 if (success)
                 {

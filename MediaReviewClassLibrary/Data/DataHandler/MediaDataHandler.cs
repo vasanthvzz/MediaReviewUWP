@@ -37,5 +37,13 @@ namespace MediaReviewClassLibrary.Data.DataHandler
             return await _databaseAdapter.GetTableQuery<Media>().
                 Where(media => media.Title == title && media.ReleaseDate == releaseDate).CountAsync() > 0;
         }
+
+        public async Task<List<Media>> GetAllMedia(long currentCount, long requiredCount)
+        {
+            return await _databaseAdapter.GetTableQuery<Media>()
+                .Skip((int)currentCount)
+                .Take((int)requiredCount)
+                .ToListAsync();
+        }
     }
 }

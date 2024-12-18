@@ -16,9 +16,9 @@ namespace MediaReviewUWP.ViewModel
             _view = view;
         }
 
-        public void GetAllMedia()
+        public void GetAllMedia(long currentCount = 0,long requiredCount = 5)
         {
-            GetAllMediaUseCase useCase = new GetAllMediaUseCase(new GetAllMediaRequest(), new GetAllMediaPresenterCallback(this));
+            GetAllMediaUseCase useCase = new GetAllMediaUseCase(new GetAllMediaRequest(currentCount,requiredCount), new GetAllMediaPresenterCallback(this));
             useCase.Execute();
         }
 

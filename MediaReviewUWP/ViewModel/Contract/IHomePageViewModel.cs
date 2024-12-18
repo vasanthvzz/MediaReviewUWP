@@ -2,6 +2,6 @@
 {
     public interface IHomePageViewModel
     {
-        void GetAllMedia();
+        void GetAllMedia(long currentCount,long requiredCount);
     }
 }

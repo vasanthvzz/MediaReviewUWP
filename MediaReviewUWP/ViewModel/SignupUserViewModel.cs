@@ -1,6 +1,8 @@
 ﻿using CommonClassLibrary;
+using MediaReviewClassLibrary;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models.Enitites;
+using MediaReviewClassLibrary.Utlis;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel.Contract;
 using System;
@@ -10,6 +12,7 @@ namespace MediaReviewUWP.ViewModel
     public class SignupUserViewModel : ISignupUserViewModel
     {
         private ISignupUserView _view;
+        private ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetRequiredService<ISessionManager>();   
 
         public SignupUserViewModel(ISignupUserView view)
         {
@@ -26,14 +29,14 @@ namespace MediaReviewUWP.ViewModel
 
         public void LoginSuccess(UserDetail user)
         {
-            _view.RedirectOnSuccess(user);
+            _sessionManager.SaveUserToStorage(user);
+            _view.AccountCreatedSuccess(user);
         }
 
         public void LoginFail()
         {
-            _view.ShowErrorMessage();
+            _view.AccountCreationFailed();
         }
-
     }
 
     public class CreateUserPresenterCallback : ICreateUserPresenterCallback

@@ -40,17 +40,15 @@ namespace MediaReviewClassLibrary.Data.DataHandler
 
         public async Task<UserDetail> GetUserByName(string username)
         {
-            var userDetails = _databaseAdapter.GetTableAsync<UserDetail>();
-            await userDetails;
-            UserDetail userDetail = userDetails.Result.FirstOrDefault(user => user.UserName == username);
+            var userDetails = await _databaseAdapter.GetTableAsync<UserDetail>();
+            UserDetail userDetail = userDetails.FirstOrDefault(user => user.UserName == username);
             return userDetail;
         }
 
         public async Task<bool> IsUserExist(string username)
         {
-            var userDetails = _databaseAdapter.GetTableAsync<UserDetail>();
-            await userDetails;
-            return userDetails.Result.Any(user => user.UserName == username);
+            var userDetails = await _databaseAdapter.GetTableAsync<UserDetail>();
+            return userDetails.Any(user => user.UserName == username);
         }
 
         public async Task<bool> IsValidCredential(string username, string password)

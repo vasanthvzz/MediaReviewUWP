@@ -67,7 +67,7 @@ namespace MediaReviewClassLibrary.Domain
     
     public interface IGetMediaReviewDataManager
     {
-        void GetMediaReviews(GetMediaReviewRequest request,GetMediaReviewUseCaseCallback callback);
+        Task GetMediaReviews(GetMediaReviewRequest request,GetMediaReviewUseCaseCallback callback);
         Task<MediaReviewBObj> GetReviewBObj(Review review,long userId);
     }
 

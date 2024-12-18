@@ -1,6 +1,5 @@
 ﻿using MediaReviewClassLibrary.Models;
 using MediaReviewUWP.View.Contract;
-using MediaReviewUWP.View.MediaPageView;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
 using MediaReviewUWP.ViewObject;
@@ -15,16 +14,17 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MediaReviewUWP.View.HomePageView
 {
-    public sealed partial class ShowMediaListControl : Page,IShowMediaListView
+    public sealed partial class ShowMediaListControl : Page,IShowMediaListView, ITabItemContent
     {
-
+        private IShowMediaListViewModel _vm;
         public event EventHandler<MediaTileEventArgs> TileClicked;
+        public event EventHandler<ListReachedEndArgs> ListReachedEnd;
+
         public ObservableCollection<MediaTileVObj> MediaList
         {
             get { return (ObservableCollection<MediaTileVObj>)GetValue(mediaListProperty); }
             set { SetValue(mediaListProperty, value); }
         }
-        private IShowMediaListViewModel _vm;
 
         public static readonly DependencyProperty mediaListProperty =
             DependencyProperty.Register("MediaList", typeof(ObservableCollection<MediaTileVObj>), typeof(ShowMediaListControl), new PropertyMetadata(null));
@@ -38,22 +38,12 @@ namespace MediaReviewUWP.View.HomePageView
 
         private void Page_Loaded(object sender, RoutedEventArgs args)
         {
+            //TO DO : Get the user preference and the view
 
         }
 
         public void UpdateMedia(List<MediaBObj> mediaList)
         {
-            var mediaDict = mediaList.ToDictionary(m => m.MediaId);
-
-            for (int i = MediaList.Count - 1; i >= 0; i--)
-            {
-                var existingMedia = MediaList[i];
-                if (!mediaDict.ContainsKey(existingMedia.MediaId))
-                {
-                    MediaList.RemoveAt(i);
-                }
-            }
-
             foreach (var media in mediaList)
             {
                 var existingMedia = MediaList.FirstOrDefault(m => m.MediaId == media.MediaId);
@@ -70,13 +60,18 @@ namespace MediaReviewUWP.View.HomePageView
 
         private void DisplayModeButton_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(MainContentPresenter == null)
+            {
+                return;
+            }
             if (DisplayModeButton.SelectedIndex == 0)
             {
                 MainContentPresenter.ContentTemplate = (DataTemplate)Resources["GridViewTemplate"];
             }
             else
             {
-                MainContentPresenter.ContentTemplate = (DataTemplate)Resources["CompactListViewTemplate"];
+                MainContentPresenter.ContentTemplate = (DataTemplate)Resources["ListViewTemplate"];
+
             }
         }
 
@@ -88,24 +83,6 @@ namespace MediaReviewUWP.View.HomePageView
             MediaTileVObj media = (MediaTileVObj)item;
             MediaTileEventArgs eventArgs = new MediaTileEventArgs(media);
             TileClicked?.Invoke(this, eventArgs);
-        }
-
-        public class MediaTileEventArgs : EventArgs
-        {
-            public long MediaId { get; set; }
-            public string Title { get; set; }
-
-            public MediaTileEventArgs(MediaTileVObj media)
-            {
-                MediaId = media.MediaId;
-                Title = media.Title;
-            }
-
-            public MediaTileEventArgs(UserRatingVObj media)
-            {
-                MediaId = media.MediaId;
-                Title = media.MediaName;
-            }
         }
 
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
@@ -122,6 +99,45 @@ namespace MediaReviewUWP.View.HomePageView
         public void ReloadData()
         {
             _vm.GetPresentMediaDetails();
+        }
+
+        private void MediaGridViewUserControl_TileClicked(object sender, MediaTileEventArgs e)
+        {
+            TileClicked?.Invoke(this, e);
+        }
+
+        private void ScrollViewerReachedEnd()
+        {
+            ListReachedEndArgs args = new ListReachedEndArgs(MediaList.Count);
+            ListReachedEnd?.Invoke(this, args);
+        }
+    }
+
+    public class MediaTileEventArgs : EventArgs
+    {
+        public long MediaId { get; set; }
+        public string Title { get; set; }
+
+        public MediaTileEventArgs(MediaTileVObj media)
+        {
+            MediaId = media.MediaId;
+            Title = media.Title;
+        }
+
+        public MediaTileEventArgs(UserRatingVObj media)
+        {
+            MediaId = media.MediaId;
+            Title = media.MediaName;
+        }
+    }
+
+    public class ListReachedEndArgs : EventArgs
+    {
+        public long ExistingItemCount { get; set; }
+
+        public ListReachedEndArgs(long existingItemCount)
+        {
+            ExistingItemCount = existingItemCount;
         }
     }
 }

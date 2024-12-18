@@ -4,7 +4,7 @@ namespace MediaReviewUWP.View.Contract
 {
     public interface ISignupUserView : IView
     {
-        void RedirectOnSuccess(UserDetail user);
-        void ShowErrorMessage();
+        void AccountCreatedSuccess(UserDetail user);
+        void AccountCreationFailed();
     }
 }

@@ -6,6 +6,7 @@ using MediaReviewClassLibrary.Models.Enitites;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.DataManager
 {
@@ -18,11 +19,11 @@ namespace MediaReviewClassLibrary.DataManager
         private IGenreDataHandler _genreDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IGenreDataHandler>();
 
 
-        public async void GetMediaDetail(GetMediaDetailRequest request, GetMediaDetailUseCaseCallback callback)
+        public async Task GetMediaDetail(GetMediaDetailRequest request, GetMediaDetailUseCaseCallback callback)
         {
             try
             {
-                Media media = _mediaDataHandler.GetMediaById(request.MediaId).Result; 
+                Media media = await _mediaDataHandler.GetMediaById(request.MediaId); 
                 PersonalMedia personalMedia = await _personalmediaDataHandler.GetPersonalMedia(request.MediaId, request.UserId);
                 Rating userRating = await _ratingDataHandler.GetUserRating(request.UserId,request.MediaId);
 

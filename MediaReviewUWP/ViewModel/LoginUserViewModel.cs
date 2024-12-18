@@ -1,6 +1,5 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Domain;
-using MediaReviewClassLibrary.Models.Enitites;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel.Contract;
 using System;
@@ -19,7 +18,6 @@ namespace MediaReviewUWP.ViewModel
             this._view = loginUserControl;
         }
 
-
         public void LoginUser(string username, string password)
         {
             ILoginUserPresenterCallback callback = new LoginUserPresenterCallback(this);
@@ -28,19 +26,14 @@ namespace MediaReviewUWP.ViewModel
             usecase.Execute();
         }
 
-        private void UserNotExist()
+        private void ValidationFailure()
         {
-            _view.UsernameNotFound();
+            _view.LoginFailure();
         }
 
-        private void UserExist()
+        private void ValidationSuccess()
         {
-            _view.PasswordMissmatch();
-        }
-
-        private void ValidationSuccess(UserDetail user)
-        {
-            _view.ValidationSuccess(user);
+            _view.LoginSuccess();
         }
 
         public class LoginUserPresenterCallback : ILoginUserPresenterCallback
@@ -61,15 +54,11 @@ namespace MediaReviewUWP.ViewModel
                 var data = response.Data;
                 if (data.Success)
                 {
-                    _presenter.ValidationSuccess(data.User);
-                }
-                else if (data.UsernameExist)
-                {
-                    _presenter.UserExist();
+                    _presenter.ValidationSuccess();
                 }
                 else
                 {
-                    _presenter.UserNotExist();
+                    _presenter.ValidationFailure();
                 }
             }
         }

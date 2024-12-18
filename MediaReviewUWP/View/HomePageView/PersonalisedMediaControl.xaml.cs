@@ -1,29 +1,22 @@
-﻿using MediaReviewClassLibrary.Data;
-using MediaReviewClassLibrary.Models;
+﻿using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Constants;
-using MediaReviewClassLibrary.Models.Enitites;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
 using MediaReviewUWP.ViewObject;
-using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
-using static MediaReviewUWP.View.HomePageView.ShowMediaListControl;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace MediaReviewUWP.View.HomePageView
 {
-    public sealed partial class PersonalisedMediaControl : Page ,IPersonalisedMediaView
+    public sealed partial class PersonalisedMediaControl : Page ,IPersonalisedMediaView , ITabItemContent
     {
         public PersonalMediaType PersonalisedMediaType { get; private set; }
         private IPersonalisedMediaViewModel _vm;
@@ -59,7 +52,7 @@ namespace MediaReviewUWP.View.HomePageView
 
         private void CheckMedia()
         {
-            if(MediaList!=null && MediaList.Count != 0)
+            if (MediaList != null && MediaList.Count != 0)
             {
                 EmptyMediaTb.Visibility = Visibility.Collapsed;
                 DisplayModeButton.Visibility = Visibility.Visible;
@@ -91,6 +84,11 @@ namespace MediaReviewUWP.View.HomePageView
 
         private void DisplayModeButton_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(MainContentPresenter == null)
+            {
+                return;
+            }
+
             if (DisplayModeButton.SelectedIndex == 0)
             {
                 MainContentPresenter.ContentTemplate = (DataTemplate)Resources["GridViewTemplate"];
@@ -169,6 +167,11 @@ namespace MediaReviewUWP.View.HomePageView
                 image.Source = new BitmapImage(new Uri("ms-appx:///Assets/DefaultMediaImage.png"));
                 image.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
             }
+        }
+
+        private void myListButton_Click(Microsoft.UI.Xaml.Controls.SplitButton sender, Microsoft.UI.Xaml.Controls.SplitButtonClickEventArgs args)
+        {
+
         }
     }
 }

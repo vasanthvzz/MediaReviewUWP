@@ -2,6 +2,7 @@
 using MediaReviewClassLibrary.Models.Enitites;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
@@ -66,7 +67,7 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface ICreateUserDataManager
     {
-        void CreateUserAccount(CreateUserRequest request, CreateUserUseCaseCallback callback);
+        Task CreateUserAccount(CreateUserRequest request, CreateUserUseCaseCallback callback);
     }
 
     public interface ICreateUserPresenterCallback : ICallback<CreateUserResponse> { }

@@ -35,7 +35,7 @@
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <TextBlock
-                        Margin="10,10,10,10"
+                        Margin="10"
                         VerticalAlignment="Center"
                         FontSize="18"
                         FontWeight="Bold"
@@ -72,11 +72,11 @@
                     CornerRadius="10" />
                 <TextBlock
                     Name="ErrorText"
-                    Text=""
-                    Foreground="Red"
                     Grid.Row="4"
                     Grid.ColumnSpan="2"
-                    HorizontalAlignment="Center"/>
+                    HorizontalAlignment="Center"
+                    Foreground="Red"
+                    Text="" />
             </Grid>
         </Grid>
     </Grid>

@@ -1,92 +1,108 @@
-﻿using MediaReviewClassLibrary;
+﻿using CommunityToolkit.WinUI;
+using MediaReviewClassLibrary;
 using MediaReviewClassLibrary.Utlis;
-using MediaReviewUWP.Settings;
-using Microsoft.Extensions.DependencyInjection;
 using System;
+using Windows.UI.ViewManagement;
+using Windows.UI.WindowManagement;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Hosting;
 
 namespace MediaReviewUWP.Utils
 {
     public static class ThemeManager
     {
-        private static ThemeSettings _themeSetting { get; set; }
-        private static ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
-        public static event Action ThemeChanged;
+        public static ElementTheme CurrentElementTheme { get; private set; }
+        private static ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetRequiredService<ISessionManager>();
+        public static Action ThemeChanged;
 
         static ThemeManager()
         {
-            string color = _sessionManager.GetAccentColor();
-            if (color == null || color == "blue")
+            var theme =  _sessionManager.GetApplicationTheme();
+            if(theme != null && theme.ToLower() == "dark")
             {
-                _themeSetting = new ThemeSettings(ThemeRepo.GetBlueTheme());
-            }
-            else if (color == "orange")
-            {
-                _themeSetting = new ThemeSettings(ThemeRepo.GetOrangeTheme());
-            }
-            else if (color == "green")
-            {
-                _themeSetting = new ThemeSettings(ThemeRepo.GetGreenTheme());
+                CurrentElementTheme = ElementTheme.Dark;
             }
             else
             {
-                _themeSetting = new ThemeSettings(ThemeRepo.GetBlueTheme());
+                CurrentElementTheme = ElementTheme.Light;
             }
         }
-
-        public static void InvokeThemeChange()
+        
+        public static void RequestThemeChange()
         {
-            ThemeChanged.Invoke();
+            ToggleElementTheme();
         }
-
-        public static ThemeSettings GetThemeSettings()
+        
+        public static void RequestThemeChange(ElementTheme theme)
         {
-            return _themeSetting;
-        }
-
-        public static void ToggleTheme()
-        {
-            if (ThemeManager.GetThemeSettings().ThemeName == ThemeColor.BLUE)
+            if (CurrentElementTheme != theme)
             {
-                ThemeManager.SetOrangeTheme();
+                CurrentElementTheme = theme;
+                ChangeAllTheme();
             }
-            else if (ThemeManager.GetThemeSettings().ThemeName == ThemeColor.ORANGE)
+        }
+
+        private static void ToggleElementTheme()
+        {
+            if (CurrentElementTheme == ElementTheme.Default || CurrentElementTheme == ElementTheme.Dark)
             {
-                ThemeManager.SetGreenTheme();
+                CurrentElementTheme = ElementTheme.Light;
             }
-            else if (ThemeManager.GetThemeSettings().ThemeName == ThemeColor.GREEN)
+            else
             {
-                ThemeManager.SetBlueTheme();
+                CurrentElementTheme = ElementTheme.Dark;
             }
-            _sessionManager.StoreAccentColor(GetThemeName());
+            ChangeAllTheme();
         }
 
-        private static string GetThemeName()
+        public static void UpdateElementTheme()
         {
-            return _themeSetting.ThemeName.ToString();
+            ThemeChanged?.Invoke();    
         }
 
-        private static void SetBlueTheme()
+        private static void ChangeAllTheme()
         {
-            ThemeSettingSetter(ThemeRepo.GetBlueTheme());
+            // Update the Main Window's theme
+            var mainWindow = WindowManager.MainWindow;
+            if (mainWindow != null && mainWindow.Content is FrameworkElement mainRootElement)
+            {
+                // Change the theme of the main window's content
+                mainRootElement.RequestedTheme = CurrentElementTheme;
+
+                // Update the TitleBar theme for the main window
+                var mainWindowTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+                TitlebarManager.ChangeTitlebarTheme(mainWindowTitleBar);
+            }
+
+            // Update the Settings AppWindow's theme
+            AppWindow appWindow = WindowManager.SettingsWindow;
+            if (appWindow != null)
+            {
+                // Update the TitleBar theme for the AppWindow
+                var appWindowTitleBar = appWindow.TitleBar;
+                TitlebarManager.ChangeTitlebarTheme(appWindowTitleBar);
+
+                // Update the theme of the AppWindow's content
+                if (ElementCompositionPreview.GetAppWindowContent(appWindow) is Frame contentFrame)
+                {
+                    contentFrame.RequestedTheme = CurrentElementTheme;
+                }
+            }
+
+            ThemeChanged?.Invoke();
+            _sessionManager.SetApplicationTheme(CurrentElementTheme.ToString());
         }
 
-        private static void SetGreenTheme()
-        {
-            ThemeSettingSetter(ThemeRepo.GetGreenTheme());
-        }
+    }
 
-        public static void SetOrangeTheme()
-        {
-            ThemeSettingSetter(ThemeRepo.GetOrangeTheme());
-        }
+    public class ThemeChangeEventArgs
+    {
+        public ElementTheme ThemeColor { get; set; }
 
-        private static void ThemeSettingSetter(Theme theme)
+        public ThemeChangeEventArgs(ElementTheme themeColor)
         {
-            _themeSetting.ThemeName = theme.ThemeColor;
-            _themeSetting.DarkestShade = theme.DarkestShade;
-            _themeSetting.DarkShade = theme.DarkShade;
-            _themeSetting.MainShade = theme.MainShade;
-            _themeSetting.LightShade = theme.LightShade;
+            ThemeColor = themeColor;
         }
     }
 }

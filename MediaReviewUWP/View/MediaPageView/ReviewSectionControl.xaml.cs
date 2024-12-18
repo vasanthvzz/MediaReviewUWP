@@ -14,6 +14,7 @@ using System.Linq;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace MediaReviewUWP.View.MediaPageView
 {
@@ -243,7 +244,7 @@ namespace MediaReviewUWP.View.MediaPageView
 
         private void FollowButton_Click(object sender, RoutedEventArgs e)
         {
-            if(sender is Button b && b.DataContext is MediaReviewVObj review)
+            if(sender is ButtonBase b && b.DataContext is MediaReviewVObj review)
             {
                 _viewModel.UpdateFollow(review.UserId, !review.Following);
             }

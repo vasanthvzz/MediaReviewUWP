@@ -9,8 +9,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace MediaReviewUWP.View.WelcomePageView
 {
     public sealed partial class SignupUserControl : UserControl, ISignupUserView
@@ -100,7 +98,7 @@ namespace MediaReviewUWP.View.WelcomePageView
             }
         }
 
-        public async void RedirectOnSuccess(UserDetail user)
+        public async void AccountCreatedSuccess(UserDetail user)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
             {
@@ -117,7 +115,7 @@ namespace MediaReviewUWP.View.WelcomePageView
             }
         }
 
-        public async void ShowErrorMessage()
+        public async void AccountCreationFailed()
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {

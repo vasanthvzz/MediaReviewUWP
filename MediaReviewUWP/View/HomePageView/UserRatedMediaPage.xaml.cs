@@ -23,7 +23,7 @@ using static MediaReviewUWP.View.HomePageView.ShowMediaListControl;
 namespace MediaReviewUWP.View.HomePageView
 {
 
-    public sealed partial class UserRatedMediaPage : Page, IUserRatedMediaPage, INotifyPropertyChanged
+    public sealed partial class UserRatedMediaPage : Page, IUserRatedMediaPage, INotifyPropertyChanged , ITabItemContent
     {
         public ObservableCollection<UserRatingVObj> UserRatingList { get; set; }
         private IUserRatedMediaViewModel _vm;

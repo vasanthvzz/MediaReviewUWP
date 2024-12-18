@@ -123,10 +123,15 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\ThemeSettings.cs" />
+    <Compile Include="ResourceDictionary\ColorHelper.cs" />
+    <Compile Include="ResourceDictionary\ColorManipulationConverter.cs" />
+    <Compile Include="ResourceDictionary\ColorConverter.cs" />
+    <Compile Include="Utils\AccentShade.cs" />
     <Compile Include="Utils\DateManager.cs" />
-    <Compile Include="Utils\Theme.cs" />
+    <Compile Include="Utils\Accent.cs" />
+    <Compile Include="Utils\AccentManager.cs" />
     <Compile Include="Utils\ThemeManager.cs" />
+    <Compile Include="Utils\TitlebarManager.cs" />
     <Compile Include="Utils\WindowManager.cs" />
     <Compile Include="ViewModel\Contract\IHomePageViewModel.cs" />
     <Compile Include="ViewModel\Contract\IMediaDetailViewModel.cs" />
@@ -169,6 +174,7 @@
     <Compile Include="View\Contract\IPersonalMediaControl.cs" />
     <Compile Include="View\Contract\IShowMediaListView.cs" />
     <Compile Include="View\Contract\ISignupUserView.cs" />
+    <Compile Include="View\Contract\ITabItemContent.cs" />
     <Compile Include="View\Contract\IUserRatedMediaPage.cs" />
     <Compile Include="View\Contract\IUserRatingView.cs" />
     <Compile Include="View\Contract\IUserReviewPage.cs" />
@@ -178,6 +184,10 @@
     </Compile>
     <Compile Include="View\HomePageView\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HomePageView\ImageToBrushConverter.cs" />
+    <Compile Include="View\HomePageView\MediaGridViewUserControl.xaml.cs">
+      <DependentUpon>MediaGridViewUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomePageView\MediaListViewUserControl.xaml.cs">
       <DependentUpon>MediaListViewUserControl.xaml</DependentUpon>
@@ -194,6 +204,18 @@
     </Compile>
     <Compile Include="View\HomePageView\UserReviewPage.xaml.cs">
       <DependentUpon>UserReviewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LandingPageView\ApplicationInfoUserControl.xaml.cs">
+      <DependentUpon>ApplicationInfoUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LandingPageView\LandingPage.xaml.cs">
+      <DependentUpon>LandingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LandingPageView\LoginControl.xaml.cs">
+      <DependentUpon>LoginControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LandingPageView\SignupControl.xaml.cs">
+      <DependentUpon>SignupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MediaPageView\FollowButtonContentConverter.cs" />
     <Compile Include="View\MediaPageView\FollowButtonVisiblityConverter.cs" />
@@ -238,6 +260,8 @@
     <Content Include="Assets\defaultMediaImage.png" />
     <Content Include="Assets\ListViewIcon.png" />
     <Content Include="Assets\movie-elements.png" />
+    <Content Include="Assets\PiperImage1.png" />
+    <Content Include="Assets\PiperImage2.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -260,7 +284,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\CustomThemeDictionary.xaml">
+    <Page Include="ResourceDictionary\ComboBoxDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\GridDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\GridViewDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\GridViewItemDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\ListboxDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\ListViewDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\NavbarDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\TextboxDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -269,6 +321,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\HomePageView\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePageView\MediaGridViewUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -289,6 +345,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\HomePageView\UserReviewPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LandingPageView\ApplicationInfoUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LandingPageView\LandingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LandingPageView\LoginControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LandingPageView\SignupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -353,7 +425,12 @@
       <Name>MediaReviewClassLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PRIResource Include="Resources\en-US\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Resources\ta-IN\Resources.resw" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -9,7 +9,7 @@ namespace MediaReviewClassLibrary.Data.DataHandler.Contract
     {
         Task<bool> IsMediaExist(string title, DateTime releaseDate);
         Task<Media> CreateMedia(Media media);
-        Task<List<Media>> GetAllMedia();
+        Task<List<Media>> GetAllMedia(long currentCount,long requiredCount);
         Task<Media> GetMediaById(long mediaId);
     }
 }

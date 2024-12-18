@@ -7,13 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource MildBackground}"
-    mc:Ignorable="d"
-    Loaded="Page_Loaded">
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
 
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <local:ImageToBrushConverter x:Name="ImageToBrushConv" />
+                </ResourceDictionary>
                 <ResourceDictionary Source="/ResourceDictionary/ButtonDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/NavbarDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -24,17 +28,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <!--<Button
-            x:Name="AccentButton"
-            Click="AccentButton_Click"
-            Content="Accent change" />-->
-
-        <!--<Button
-            x:Name="DbButton"
-            Margin="10"
-            Click="DbButton_Click"
-            Content="DbButton"/>-->
 
         <RelativePanel Grid.Row="0">
             <Button
@@ -57,33 +50,70 @@
                 x:Name="ProfileButton"
                 BorderThickness="2"
                 Click="ProfileButton_Click"
-                RelativePanel.LeftOf="ThemeButton"
+                RelativePanel.AlignRightWithPanel="True"
                 Style="{StaticResource ProfileButton}">
                 <Button.Background>
-                    <ImageBrush ImageSource="{x:Bind _user.ProfilePicture}" />
+                    <ImageBrush ImageSource="{x:Bind _user.ProfilePicture, Mode=OneWay}" />
                 </Button.Background>
                 <Button.Flyout>
                     <Flyout x:Name="ProfileFlyout">
-                        <StackPanel>
+                        <Grid Width="150">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Ellipse
+                                Grid.Row="0"
+                                Width="75"
+                                Height="75"
+                                Fill="{x:Bind _user.ProfilePicture, Mode=OneWay, Converter={StaticResource ImageToBrushConv}}" />
+                            <!--<Image
+                                Grid.Row="0"
+                                Width="75"
+                                Height="75"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Source="{x:Bind _user.ProfilePicture, Mode=OneWay}" />-->
+
+                            <Button
+                                x:Name="ThemeButton"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Click="ThemeButton_Click">
+                                <Button.Content>
+                                    <FontIcon
+                                        FontFamily="Segoe Fluent Icons"
+                                        FontSize="20"
+                                        Glyph="&#xEC46;" />
+                                </Button.Content>
+                            </Button>
+
                             <TextBlock
                                 x:Name="Username"
-                                Margin="5,5,5,5"
+                                Grid.Row="1"
+                                Margin="10"
                                 HorizontalAlignment="Center"
-                                Text="{x:Bind _user.UserName}" />
-                            <Button Click="LogoutButton_Click" Content="Logout" />
-                        </StackPanel>
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Text="{x:Bind _user.UserName, Mode=OneWay}" />
+
+
+                            <Button
+                                Grid.Row="2"
+                                HorizontalAlignment="Center"
+                                Background="Red"
+                                Click="LogoutButton_Click"
+                                Content="Logout"
+                                CornerRadius="10"
+                                FontWeight="SemiBold"
+                                Style="{StaticResource LogoutButtonStyle}" />
+                        </Grid>
                     </Flyout>
                 </Button.Flyout>
             </Button>
 
-            <Button
-                x:Name="ThemeButton"
-                Padding="1"
-                Background="{ThemeResource Shade3}"
-                Click="ThemeButton_Click"
-                Content=""
-                RelativePanel.AlignRightWithPanel="True"
-                Style="{ThemeResource CircleButton}" />
 
         </RelativePanel>
         <SplitView
@@ -111,7 +141,7 @@
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
                             Click="HamburgerButton_Click"
-                            Style="{StaticResource ListButton}">
+                            Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon Margin="5" Glyph="&#xE700;" />
                                 <TextBlock
@@ -123,7 +153,7 @@
 
                         <TextBlock
                             x:Name="MyMovieListTb"
-                            Style="{StaticResource NavbarTextBlock}"
+                            Style="{StaticResource NavbarSubheading}"
                             Text="My Movie List"
                             Visibility="Collapsed" />
 
@@ -134,7 +164,7 @@
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
                             Click="FavoriteButton_Click"
-                            Style="{StaticResource ListButton}">
+                            Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon
                                     Margin="5"
@@ -155,7 +185,7 @@
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
                             Click="HasWatchedButton_Click"
-                            Style="{StaticResource ListButton}">
+                            Style="{StaticResource NavbarItem}">
 
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon
@@ -176,7 +206,7 @@
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
                             Click="WatchListButton_Click"
-                            Style="{StaticResource ListButton}">
+                            Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <SymbolIcon Margin="5" Symbol="Flag" />
                                 <TextBlock
@@ -189,7 +219,7 @@
 
                         <TextBlock
                             x:Name="SocialTb"
-                            Style="{StaticResource NavbarTextBlock}"
+                            Style="{StaticResource NavbarSubheading}"
                             Text="Social"
                             Visibility="Collapsed" />
 
@@ -199,7 +229,7 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
-                            Style="{StaticResource ListButton}">
+                            Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon
                                     Margin="5"
@@ -218,7 +248,7 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
-                            Style="{StaticResource ListButton}">
+                            Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon
                                     Margin="5"
@@ -234,7 +264,7 @@
 
                         <TextBlock
                             x:Name="MyActionTb"
-                            Style="{StaticResource NavbarTextBlock}"
+                            Style="{StaticResource NavbarSubheading}"
                             Text="My Actions"
                             Visibility="Collapsed" />
 
@@ -244,7 +274,7 @@
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
                             Click="ReviewsButton_Click"
-                            Style="{StaticResource ListButton}">
+                            Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon
                                     Margin="5"
@@ -265,7 +295,7 @@
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
                             Click="RatingsButton_Click"
-                            Style="{StaticResource ListButton}">
+                            Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon
                                     Margin="5"
@@ -290,7 +320,7 @@
                         HorizontalContentAlignment="Left"
                         Background="Transparent"
                         Click="SettingButton_Click"
-                        Style="{StaticResource ListButton}">
+                        Style="{StaticResource NavbarItem}">
                         <StackPanel Orientation="Horizontal">
                             <FontIcon
                                 Margin="5"
@@ -340,6 +370,7 @@
                             <local:ShowMediaListControl
                                 x:Name="HomeContent"
                                 Background="{ThemeResource StrongBackground}"
+                                ListReachedEnd="HomeContent_ListReachedEnd"
                                 TileClicked="MediaTileSelected" />
                         </muxc:TabViewItem>
                         <muxc:TabView.Resources>

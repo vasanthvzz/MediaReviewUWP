@@ -1,35 +1,32 @@
 ﻿using MediaReviewClassLibrary;
-using MediaReviewClassLibrary.Data.DataHandler;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Constants;
 using MediaReviewClassLibrary.Models.Enitites;
 using MediaReviewClassLibrary.Utlis;
 using MediaReviewUWP.Utils;
 using MediaReviewUWP.View.Contract;
+using MediaReviewUWP.View.LandingPageView;
 using MediaReviewUWP.View.MediaPageView;
 using MediaReviewUWP.View.SettingsView;
-using MediaReviewUWP.View.WelcomePageView;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
+using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using static MediaReviewUWP.View.HomePageView.ShowMediaListControl;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Hosting;
 
 
 namespace MediaReviewUWP.View.HomePageView
 {
     public sealed partial class HomePage : Page, IHomePageView
     {
-        private ISessionManager _sessionManager;
+        private ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
         private IHomePageViewModel _viewModel;
         private UserDetail _user;
 
@@ -37,13 +34,11 @@ namespace MediaReviewUWP.View.HomePageView
         {
             this.InitializeComponent();
             _viewModel = new HomePageViewModel(this);
-            _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
             _user = _sessionManager.RetriveUserFromStorage();
-           
         }
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdateThemeContent();
             LoadContentPage();
         }
 
@@ -54,17 +49,15 @@ namespace MediaReviewUWP.View.HomePageView
 
         private void MediaTileSelected(object sender, MediaTileEventArgs e)
         {
-            // Check if the media ID is already present in any existing tab
             foreach (TabViewItem item in MainTabView.TabItems)
             {
                 if (item.Tag != null && item.Tag.Equals(e.MediaId))
                 {
-                    MainTabView.SelectedItem = item; // Navigate to the already added tab
+                    MainTabView.SelectedItem = item;
                     return;
                 }
             }
 
-            // Create a new TabViewItem
             TabViewItem newItem = new TabViewItem
             {
                 Tag = e.MediaId,
@@ -81,21 +74,10 @@ namespace MediaReviewUWP.View.HomePageView
 
         #region Page Initilization Methods
 
-        private void UpdateThemeContent()
+        private void UpdateThemeButtonContent()
         {
-            var currentTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
-            string theme = "";
-            if (currentTheme == ElementTheme.Dark)
-            {
-                ThemeButton.Content = "☾";
-                theme = "dark";
-            }
-            else
-            {
-                ThemeButton.Content = "☼";
-                theme = "light";
-            }
-            _sessionManager.SetApplicationTheme(theme);
+            var currentTheme = ThemeManager.CurrentElementTheme;
+            ThemeButton.Content = currentTheme == ElementTheme.Dark ? "☾" : "☼";
         }
 
         #endregion
@@ -109,36 +91,21 @@ namespace MediaReviewUWP.View.HomePageView
 
         private void ThemeButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var button = sender as Button;
-            button.IsEnabled = false;
-            var currentTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
-            if (currentTheme == ElementTheme.Dark)
+            ThemeManager.RequestThemeChange();
+            UpdateThemeButtonContent();
+            if (ProfileFlyout != null)
             {
-                ((FrameworkElement)Window.Current.Content).RequestedTheme = ElementTheme.Light;
+                ProfileFlyout.Hide();
             }
-            else
-            {
-                ((FrameworkElement)Window.Current.Content).RequestedTheme = ElementTheme.Dark;
-            }
-
-            //SolidColorBrush mildBackgroundBrush = (SolidColorBrush)Application.Current.Resources["MildBackground"];
-            //Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar.BackgroundColor = mildBackgroundBrush.Color;
-            ThemeManager.InvokeThemeChange();
-            UpdateThemeContent();
-            button.IsEnabled = true;
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
+            UpdateThemeButtonContent();
             if (ProfileButton.Flyout is Flyout)
             {
                 ProfileFlyout.ShowAt(ProfileButton);
             }
-        }
-
-        private void AccentButton_Click(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ToggleTheme();
         }
 
         #endregion
@@ -168,17 +135,17 @@ namespace MediaReviewUWP.View.HomePageView
 
         private async void LogoutSession()
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-            {
-
-                Frame.Navigate(typeof(WelcomePage));
-            });
             _sessionManager.RemoveUserFromStorage();
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High,async () =>
+            {
+                await WindowManager.CloseSettingsWindow();
+                Frame.Navigate(typeof(LandingPage));
+            });
         }
 
         public void RetrieveMedia()
         {
-            _viewModel.GetAllMedia();
+            _viewModel.GetAllMedia(0,10);
         }
 
 
@@ -186,6 +153,8 @@ namespace MediaReviewUWP.View.HomePageView
         {
             HomeContent.UpdateMedia(MediaList);
         }
+
+        
 
         private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
         {
@@ -202,37 +171,23 @@ namespace MediaReviewUWP.View.HomePageView
 
         private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //sender
             if(e.AddedItems == null || e.AddedItems.Count == 0)
             {
                 return;
             }
+
             var tabItem = e.AddedItems.FirstOrDefault();
             var tabViewItem = tabItem as TabViewItem;
-            if(tabViewItem.Content is PersonalisedMediaControl personalisedMediaPage)
+
+            if(tabViewItem.Content is ShowMediaListControl control)
             {
-                personalisedMediaPage.ReloadData();
+                _viewModel.GetAllMedia(0,control.MediaList.Count);
+            }
+
+            if(tabViewItem.Content is ITabItemContent personalizedMediaPage)
+            {
+                personalizedMediaPage.ReloadData();
             }          
-            if(tabViewItem.Content is ShowMediaListControl showMediaList)
-            {
-                showMediaList.ReloadData();
-            }
-            if(tabViewItem.Content is ShowMediaListControl mediaListControl)
-            {
-                _viewModel.GetAllMedia();
-            }
-            if (tabViewItem.Content is UserRatedMediaPage userRatedMediaPage)
-            {
-                userRatedMediaPage.ReloadData();   
-            }
-            if(tabViewItem.Content is MediaPage mediaPage)
-            {
-                mediaPage.ReloadData();
-            }
-            if (tabViewItem.Content is UserReviewPage userReviewPage)
-            {
-                userReviewPage.ReloadData();
-            }
         }
 
         private void FavoriteButton_Click(object sender, RoutedEventArgs e)
@@ -246,7 +201,6 @@ namespace MediaReviewUWP.View.HomePageView
                 }
             }
 
-            // Create a new TabViewItem
             TabViewItem newItem = new TabViewItem
             {
                 Tag = "favorites",
@@ -320,27 +274,29 @@ namespace MediaReviewUWP.View.HomePageView
 
         private async void SettingButton_Click(object sender, RoutedEventArgs e)
         {
-            var view = CoreApplication.CreateNewView();
-            
-            int id = 0;
-
-            await view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            if (!WindowManager.SettingsWindowExist())
             {
-                Window.Current.Content = new SettingsPage();
-                Window.Current.Activate();
-                id = ApplicationView.GetForCurrentView().Id;
-            });
-            Debug.WriteLine(id);
-            if (!WindowManager.CanCreateView(ViewType.SETTINGS, id))
-            {
-                id = WindowManager.GetSettingsId();
+                var settingsWindow = await AppWindow.TryCreateAsync();
+                Frame appWindowContentFrame = new Frame
+                {
+                    RequestedTheme = ThemeManager.CurrentElementTheme
+                };
+                WindowManager.SettingsWindow = settingsWindow;
+                appWindowContentFrame.Navigate(typeof(SettingsPage));
+                var titleBar = settingsWindow.TitleBar;
+                TitlebarManager.ChangeTitlebarTheme(titleBar);
+                settingsWindow.Title = "Settings";
+                settingsWindow.Closed += delegate
+                {
+                    WindowManager.SettingsWindow = null;
+                    appWindowContentFrame.Content = null;
+                    settingsWindow = null;
+                };
+                ElementCompositionPreview.SetAppWindowContent(settingsWindow, appWindowContentFrame);
+                await settingsWindow.TryShowAsync();
             }
-            else
-            {
-                WindowManager.AddSettingId(id);
-            }
-            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(id);
         }
+
 
         private void RatingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -391,6 +347,12 @@ namespace MediaReviewUWP.View.HomePageView
             newItem.Content = page;
             MainTabView.TabItems.Add(newItem);
             MainTabView.SelectedItem = newItem;
+        }
+
+        private void HomeContent_ListReachedEnd(object sender, ListReachedEndArgs e)
+        {
+            var currentLength = e.ExistingItemCount;
+            _viewModel.GetAllMedia(currentLength,5);
         }
     }
 }

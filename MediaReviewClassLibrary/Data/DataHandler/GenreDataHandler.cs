@@ -13,9 +13,9 @@ namespace MediaReviewClassLibrary.Data.DataHandler
     {
         private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IDatabaseAdapter>();
 
-        public Genre GetGenreById(long id)
+        public async Task<Genre> GetGenreById(long id)
         {
-            return _databaseAdapter.FindAsync<Genre>(id).Result;
+            return await _databaseAdapter.FindAsync<Genre>(id);
         }
 
         public async Task<List<Genre>> GetGenreByMediaId(long mediaId)
@@ -25,7 +25,7 @@ namespace MediaReviewClassLibrary.Data.DataHandler
             List<Genre> resultList = new List<Genre>();
             foreach (var item in result)
             {
-               resultList.Add(GetGenreById(item.GenreId));
+               resultList.Add(await GetGenreById(item.GenreId));
             }
             return resultList;
         }

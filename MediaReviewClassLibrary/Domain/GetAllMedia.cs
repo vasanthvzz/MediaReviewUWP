@@ -1,6 +1,5 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models;
-using MediaReviewClassLibrary.Models.Enitites;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -11,15 +10,17 @@ namespace MediaReviewClassLibrary.Domain
     public class GetAllMediaUseCase : UseCaseBase<GetAllMediaResponse>
     {
         private IGetAllMediaDataManager _dm;
+        private GetAllMediaRequest _request;
 
-        public GetAllMediaUseCase(GetAllMediaRequest req, IGetAllMediaPresenterCallback callback) : base(callback)
+        public GetAllMediaUseCase(GetAllMediaRequest request, IGetAllMediaPresenterCallback callback) : base(callback)
         {
             _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IGetAllMediaDataManager>();
+            _request = request;
         }
 
         public override void Action()
         {
-            _dm.GetAllMedia(new GetAllMediaUseCaseCallback(this));
+            _dm.GetAllMedia(_request, new GetAllMediaUseCaseCallback(this));
         }
     }
 
@@ -45,10 +46,20 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IGetAllMediaDataManager
     {
-        void GetAllMedia(ICallback<GetAllMediaResponse> callback);
+        void GetAllMedia(GetAllMediaRequest request, ICallback<GetAllMediaResponse> callback);
     }
 
-    public class GetAllMediaRequest { }
+    public class GetAllMediaRequest 
+    {
+        public long CurrentMediaCount { get; set; }
+        public long RequiredMediaCount {  get; set; }
+        
+        public GetAllMediaRequest(long currentMediaCount, long requiredMediaCount)
+        {
+            CurrentMediaCount = currentMediaCount;
+            RequiredMediaCount = requiredMediaCount;
+        }
+    }
 
     public class GetAllMediaResponse
     {

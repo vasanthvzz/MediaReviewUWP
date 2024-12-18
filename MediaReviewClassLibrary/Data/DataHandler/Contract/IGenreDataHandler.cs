@@ -10,7 +10,7 @@ namespace MediaReviewClassLibrary.Data.DataHandler.Contract
     public interface IGenreDataHandler
     {
         Task<List<Genre>> GetGenreByMediaId(long mediaId);
-        Genre GetGenreById(long id);
+        Task<Genre> GetGenreById(long id);
         List<long> GetMediaIdsByGenreId(long gereId);   
     }
 }

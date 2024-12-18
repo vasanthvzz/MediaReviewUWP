@@ -2,10 +2,10 @@
 using MediaReviewUWP.ViewObject;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 
 namespace MediaReviewUWP.View.HomePageView
@@ -14,6 +14,8 @@ namespace MediaReviewUWP.View.HomePageView
     {
 
         private bool ListViewSelected { get; set; } = false;
+        public event Action ScrollViewerEnd;
+
 
         public ObservableCollection<MediaTileVObj> MediaList
         {
@@ -40,7 +42,6 @@ namespace MediaReviewUWP.View.HomePageView
 
         private void MediaListViewUserControl_SizeChanged(object sender = null, SizeChangedEventArgs e = null)
         {
-            //Debug.WriteLine(ListViewSelected);
             if(this.ActualWidth > 1000)
             {
                 BothFocused.IsActive = true;
@@ -118,6 +119,52 @@ namespace MediaReviewUWP.View.HomePageView
         {
             ListViewSelected = false;
             MediaListViewUserControl_SizeChanged();
+        }
+
+
+        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            var scrollViewer = sender as ScrollViewer;
+
+            if (scrollViewer != null)
+            {
+                if (scrollViewer.VerticalOffset >= scrollViewer.ScrollableHeight)
+                {
+                    ScrollViewerEnd?.Invoke();
+                }
+            }
+        }
+
+        private void MediaListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var scrollViewer = FindScrollViewer(MediaListView);
+            if (scrollViewer != null)
+            {
+                scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                scrollViewer.ViewChanged -= ScrollViewer_ViewChanged;
+                scrollViewer.ViewChanged += ScrollViewer_ViewChanged;
+            }
+        }
+
+        private ScrollViewer FindScrollViewer(DependencyObject parent)
+        {
+            if (parent == null) return null;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is ScrollViewer scrollViewer)
+                {
+                    return scrollViewer;
+                }
+                else
+                {
+                    var result = FindScrollViewer(child);
+                    if (result != null) return result;
+                }
+            }
+            return null;
         }
     }
 }

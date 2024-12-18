@@ -10,7 +10,12 @@
     d:DesignWidth="400"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <local:RatingControlVisibility x:Key="RatingVisibility" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ResourceDictionary/ListViewDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:RatingControlVisibility x:Key="RatingVisibility" />
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid x:Name="CompactListGrid">
@@ -24,16 +29,17 @@
             VerticalAlignment="Top"
             IsItemClickEnabled="True"
             ItemClick="MediaListView_ItemClick"
+            ItemContainerStyle="{StaticResource MediaListViewItemContainer}"
             ItemsSource="{x:Bind MediaList}"
+            Loaded="MediaListView_Loaded"
             SelectedIndex="0"
             SelectionChanged="ListView_SelectionChanged"
             SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="viewobject:MediaTileVObj">
                     <Grid
-                        Margin="0,5,5,5"
+                        Margin="5"
                         Padding="10"
-                        Background="{ThemeResource MildBackground}"
                         CornerRadius="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -56,7 +62,9 @@
                                 Grid.Row="0"
                                 FontSize="24"
                                 FontWeight="Bold"
+                                MaxLines="2"
                                 Text="{x:Bind Title}"
+                                TextTrimming="WordEllipsis"
                                 TextWrapping="Wrap" />
                             <RatingControl
                                 x:Name="RatingControl"
@@ -64,12 +72,13 @@
                                 Margin="5"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Caption="{Binding MediaRating}"
+                                Caption="{Binding MediaRating, Mode=OneWay}"
                                 IsReadOnly="True"
                                 Visibility="{Binding MediaRating, Converter={StaticResource RatingVisibility}}"
-                                Value="{Binding MediaRating}">
+                                Value="{Binding MediaRating, Mode=OneWay}">
                                 <RatingControl.Resources>
                                     <SolidColorBrush x:Key="RatingControlSelectedForeground" Color="Gold" />
+                                    <SolidColorBrush x:Key="RatingControlUnselectedForeground" Color="Gray" />
                                 </RatingControl.Resources>
                             </RatingControl>
                             <TextBlock
@@ -114,27 +123,6 @@
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LayoutStates">
-                <!--<VisualState x:Name="WideLayout">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1000" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="ToggleViewButton.Visibility" Value="Collapsed" />
-                        <Setter Target="ListViewColumn.Width" Value="400" />
-                        <Setter Target="CompactMediaPresenter.Visibility" Value="Visible" />
-                    </VisualState.Setters>
-                </VisualState>-->
-                <!--<VisualState x:Name="NarrowLayout">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="ListViewColumn.Width" Value="Auto" />
-                        <Setter Target="ListViewColumn.Width" Value="0" />
-                        <Setter Target="ToggleViewButton.Visibility" Value="Visible" />
-                    </VisualState.Setters>
-                </VisualState>-->
-
                 <VisualState>
                     <VisualState.StateTriggers>
                         <StateTrigger x:Name="ListViewFocused" IsActive="False" />

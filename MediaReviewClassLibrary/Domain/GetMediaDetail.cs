@@ -2,6 +2,7 @@
 using MediaReviewClassLibrary.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 using static MediaReviewClassLibrary.Domain.GetMediaDetail;
 namespace MediaReviewClassLibrary.Domain
 {
@@ -48,7 +49,7 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IGetMediaDetailDataManager
     {
-        void GetMediaDetail(GetMediaDetailRequest request, GetMediaDetailUseCaseCallback callback);
+        Task GetMediaDetail(GetMediaDetailRequest request, GetMediaDetailUseCaseCallback callback);
     }
 
     public class GetMediaDetailUseCaseCallback : ICallback<GetMediaDetailResponse>

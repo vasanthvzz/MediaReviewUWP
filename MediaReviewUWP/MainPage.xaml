@@ -8,6 +8,6 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <Frame Name="Frame" />
+    <Frame Name="MainFrame" />
 
 </Page>

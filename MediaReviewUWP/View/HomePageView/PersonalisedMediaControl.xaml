@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MediaReviewUWP.View.HomePageView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewobjects="using:MediaReviewUWP.ViewObject"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
@@ -14,6 +15,8 @@
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ResourceDictionary/GridViewItemDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/ComboBoxDictionary.xaml" />
                 <ResourceDictionary>
                     <local:RatingControlVisibility x:Key="RatingVisibility" />
                     <DataTemplate x:Key="GridViewItemTemplate" x:DataType="viewobjects:MediaTileVObj">
@@ -23,8 +26,6 @@
                             Margin="5"
                             Padding="5"
                             Background="{ThemeResource MildBackground}"
-                            BorderBrush="{ThemeResource Shade3}"
-                            BorderThickness="1.5"
                             CornerRadius="5"
                             PointerEntered="MediaItemPointerEntered"
                             PointerExited="MediaItemPointerExited">
@@ -61,7 +62,7 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock
                                     Grid.Row="0"
-                                    Margin="0,10,0,10"
+                                    Margin="10"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     FontSize="18"
@@ -90,6 +91,7 @@
                                     Value="{Binding MediaRating}">
                                     <RatingControl.Resources>
                                         <SolidColorBrush x:Key="RatingControlSelectedForeground" Color="Gold" />
+                                        <SolidColorBrush x:Key="RatingControlUnselectedForeground" Color="Gray" />
                                     </RatingControl.Resources>
                                 </RatingControl>
                             </Grid>
@@ -201,7 +203,7 @@
 
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="100" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock
@@ -212,25 +214,33 @@
                 VerticalAlignment="Center"
                 FontSize="50"
                 Text="Your movie list is empty 😓"
-                TextWrapping="Wrap" />
-            <GridView
+                TextWrapping="Wrap"
+                Visibility="Collapsed" />
+
+            <ComboBox
                 x:Name="DisplayModeButton"
-                Margin="0,5,5,0"
+                Margin="10"
                 HorizontalAlignment="Right"
+                CornerRadius="10"
+                ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
+                SelectedIndex="0"
                 SelectionChanged="DisplayModeButton_SelectionChanged"
-                SelectionMode="Single">
-                <GridViewItem
-                    Width="50"
-                    Height="50"
-                    BorderBrush="{StaticResource Shade3}"
-                    Content="Grid"
-                    Style="{StaticResource GridViewItemExpanded}" />
-                <GridViewItem
-                    Width="50"
-                    Height="50"
-                    Content="List"
-                    Style="{StaticResource GridViewItemExpanded}" />
-            </GridView>
+                Style="{StaticResource ViewComboBoxStyle}">
+                <ComboBoxItem HorizontalAlignment="Center">
+                    <FontIcon
+                        FontFamily="Segoe Fluent Icons"
+                        FontSize="20"
+                        FontWeight="ExtraLight"
+                        Glyph="&#xF0E2;" />
+
+                </ComboBoxItem>
+                <ComboBoxItem HorizontalAlignment="Center">
+                    <FontIcon
+                        FontFamily="Segoe Fluent Icons"
+                        FontSize="20"
+                        Glyph="&#xEA4B;" />
+                </ComboBoxItem>
+            </ComboBox>
 
 
             <ContentPresenter
@@ -238,7 +248,7 @@
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 Content="{x:Bind MediaList, Mode=OneWay}"
-                ContentTemplate="{StaticResource ListViewTemplate}" />
+                ContentTemplate="{StaticResource GridViewTemplate}" />
 
         </Grid>
     </ScrollViewer>

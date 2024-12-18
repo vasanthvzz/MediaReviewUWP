@@ -25,11 +25,11 @@ namespace MediaReviewClassLibrary.DataManager
             return new MediaReviewBObj(review, reviewedUser,rating.Score,following);
         }
 
-        public async void GetMediaReviews(GetMediaReviewRequest request, GetMediaReviewUseCaseCallback callback)
+        public async Task GetMediaReviews(GetMediaReviewRequest request, GetMediaReviewUseCaseCallback callback)
         {
             try
             {
-                var reviewList = _reviewDataHandler.GetReviewsByMedia(request.MediaId).Result;
+                var reviewList = await _reviewDataHandler.GetReviewsByMedia(request.MediaId);
                 List<MediaReviewBObj> mediaReview = new List<MediaReviewBObj>();
                 foreach (var review in reviewList) 
                 {

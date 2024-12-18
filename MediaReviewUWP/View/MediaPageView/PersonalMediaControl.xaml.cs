@@ -52,7 +52,7 @@ namespace MediaReviewUWP.View.MediaPageView
 
         private void ChangebuttonContent()
         {
-            FavouriteStatusTb.Text = (bool)FavouriteTb.IsChecked ? "Favourited" : "Favourite";
+            FavouriteStatusTb.Text = (bool)FavouriteTb.IsChecked ? "Favorited" : "Favorite";
             MarkAsSeenStatusTb.Text = (bool)HasWatchedTb.IsChecked ? "Marked as seen" : "Mark as seen";
             WathcListStatusTb.Text = (bool)WatchlistTb.IsChecked ? "In Watchlist" : "Watch list";
         }
