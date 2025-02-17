@@ -5,6 +5,7 @@ using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.DataManager
 {
@@ -13,7 +14,7 @@ namespace MediaReviewClassLibrary.DataManager
         private IMediaDataHandler _mediaDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IMediaDataHandler>();
         private IReviewDataHandler _reviewDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IReviewDataHandler>();
 
-        public async void GetUserReview(GetUserReviewRequest request, ICallback<GetUserReviewResponse> callback)
+        public async Task GetUserReview(GetUserReviewRequest request, ICallback<GetUserReviewResponse> callback)
         {
             try
             {
@@ -23,8 +24,7 @@ namespace MediaReviewClassLibrary.DataManager
                 foreach (Review review in reviewList)
                 {
                     var media = await _mediaDataHandler.GetMediaById(review.MediaId);
-                    UserReviewBObj userRating = new UserReviewBObj(media, review);
-                    userReviewList.Add(userRating);
+                    if (media != null) userReviewList.Add(new UserReviewBObj(media, review));
                 }
                 ZResponse<GetUserReviewResponse> response = new ZResponse<GetUserReviewResponse>(new GetUserReviewResponse(userReviewList));
                 callback?.OnSuccess(response);

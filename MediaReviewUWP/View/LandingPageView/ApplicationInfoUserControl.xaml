@@ -42,7 +42,8 @@
                 HorizontalAlignment="Center"
                 FontSize="26"
                 FontWeight="SemiBold"
-                Text="Add reviews" />
+                Text="Add reviews"
+                TextWrapping="Wrap" />
             <TextBlock
                 x:Name="PagerDescription"
                 Grid.Row="2"
@@ -63,17 +64,16 @@
 
             <Button
                 x:Name="SignInButton"
+                x:Uid="SigninToAccount"
                 Grid.Row="4"
                 Margin="10,20,10,10"
                 HorizontalAlignment="Center"
                 Background="DodgerBlue"
                 Click="SignInButton_Click"
-                CornerRadius="5"
-                Width="200"
                 Content="Sign in to your Account"
+                CornerRadius="5"
                 FontSize="15"
                 Style="{StaticResource AdaptiveButtonStyle}" />
-
         </Grid>
     </ScrollViewer>
 </UserControl>

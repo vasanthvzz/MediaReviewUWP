@@ -1,16 +1,20 @@
-﻿using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Models;
-using MediaReviewUWP.ViewObject;
+﻿using MediaReviewClassLibrary.Models;
+using MediaReviewClassLibrary.Models.Enitites;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediaReviewUWP.View.Contract
 {
     public interface IManageReviewView
     {
         void UpdateMediaReviewList(List<MediaReviewBObj> mediaReviews);
-        void AddMediaReviewToList(MediaReviewBObj mediaReview);
-        void ChangeFolloweeStatus(long followeeId, bool isFollowing);
-        void DeleteReviewFromList(Review review);
-        void UpdateExistingReview(Review updatedReview);
+
+        Task AddMediaReviewToList(MediaReviewBObj mediaReview);
+
+        Task ChangeFolloweeStatus(long followeeId, bool isFollowing);
+
+        Task DeleteReviewFromList(Review review);
+
+        Task UpdateExistingReview(Review updatedReview);
     }
 }

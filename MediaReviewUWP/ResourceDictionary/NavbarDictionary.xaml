@@ -1,16 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style x:Key="NavbarSubheading" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="{StaticResource H2}" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Margin" Value="10" />
         <Setter Property="Foreground" Value="{ThemeResource MainShade}" />
     </Style>
 
-
     <Style x:Key="NavbarItem" TargetType="Button">
-        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontSize" Value="{StaticResource H3}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -42,7 +41,6 @@
                                     <VisualState.Setters>
                                         <Setter Target="RootGrid.(RevealBrush.State)" Value="PointerOver" />
                                         <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource MainShade}" />
-                                        <Setter Target="ContentPresenter.FontSize" Value="30" />
                                     </VisualState.Setters>
 
                                     <Storyboard>
@@ -70,17 +68,11 @@
                                         <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource ButtonForegroundDisabled}" />
                                     </VisualState.Setters>
                                 </VisualState>
-
                             </VisualStateGroup>
-
                         </VisualStateManager.VisualStateGroups>
                     </Grid>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
 </ResourceDictionary>

@@ -1,4 +1,5 @@
-﻿using MediaReviewClassLibrary.Models.Enitites;
+﻿using MediaReviewClassLibrary.Models.Constants;
+using MediaReviewClassLibrary.Models.Enitites;
 
 namespace MediaReviewClassLibrary.Models
 {
@@ -7,22 +8,25 @@ namespace MediaReviewClassLibrary.Models
         public long UserId { get; set; }
         public string UserName { get; set; }
         public string ProfilePicture { get; set; }
-        public bool Following { get; set; }
+        public bool IsFollow { get; set; }
+        public FollowType FollowType { get; set; }
 
-        public UserFollowBObj(long userId, string userName, string profilePicture, bool following)
+        public UserFollowBObj(long userId, string userName, string profilePicture, bool following,FollowType followType)
         {
             UserId = userId;
             UserName = userName;
             ProfilePicture = profilePicture;
-            Following = following;
+            IsFollow = following;
+            FollowType = followType;
         }
 
-        public UserFollowBObj(UserDetail user, FolloweeMapper follow)
+        public UserFollowBObj(UserDetail user, FolloweeMapper follow,FollowType followType)
         {
             UserId = user.UserId;
             UserName = user.UserName;
             ProfilePicture = user.ProfilePicture;
-            Following = follow.IsFollowing;
+            IsFollow = follow.IsFollow;
+            FollowType = followType;
         }
     }
 }

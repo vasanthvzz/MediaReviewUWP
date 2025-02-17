@@ -1,20 +1,20 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models;
+using MediaReviewClassLibrary.Models.Enitites;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
     public class GetAllMediaUseCase : UseCaseBase<GetAllMediaResponse>
     {
-        private IGetAllMediaDataManager _dm;
+        private IGetAllMediaDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IGetAllMediaDataManager>();
         private GetAllMediaRequest _request;
 
         public GetAllMediaUseCase(GetAllMediaRequest request, IGetAllMediaPresenterCallback callback) : base(callback)
         {
-            _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IGetAllMediaDataManager>();
             _request = request;
         }
 
@@ -46,14 +46,17 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IGetAllMediaDataManager
     {
-        void GetAllMedia(GetAllMediaRequest request, ICallback<GetAllMediaResponse> callback);
+        Task GetAllMedia(GetAllMediaRequest request, ICallback<GetAllMediaResponse> callback);
+
+        Task<MediaBObj> GetMediaBObj(Media media);
+        Task<MediaBObj> GetMediaBObj(long mediaId);
     }
 
-    public class GetAllMediaRequest 
+    public class GetAllMediaRequest
     {
         public long CurrentMediaCount { get; set; }
-        public long RequiredMediaCount {  get; set; }
-        
+        public long RequiredMediaCount { get; set; }
+
         public GetAllMediaRequest(long currentMediaCount, long requiredMediaCount)
         {
             CurrentMediaCount = currentMediaCount;
@@ -64,13 +67,13 @@ namespace MediaReviewClassLibrary.Domain
     public class GetAllMediaResponse
     {
         public List<MediaBObj> MediaList { get; }
+
         public GetAllMediaResponse(List<MediaBObj> mediaList)
         {
             MediaList = mediaList;
         }
     }
 
-    public interface IGetAllMediaPresenterCallback : ICallback<GetAllMediaResponse> { }
+    public interface IGetAllMediaPresenterCallback : ICallback<GetAllMediaResponse>
+    { }
 }
-
-

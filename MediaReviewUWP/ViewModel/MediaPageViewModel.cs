@@ -1,21 +1,20 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary;
+using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Utlis;
+using MediaReviewClassLibrary.Utility;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
-using static MediaReviewClassLibrary.Domain.GetMediaDetail;
 
 namespace MediaReviewUWP.ViewModel
 {
     public class MediaPageViewModel : IMediaPageViewModel
     {
-        private ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
         private IMediaPage _view;
 
         public MediaPageViewModel(IMediaPage mediaPage)
@@ -24,9 +23,10 @@ namespace MediaReviewUWP.ViewModel
         }
 
         #region Fetch Media Details
+
         public void GetMediaDetail(long mediaId)
         {
-            UserDetail userDetail = _sessionManager.RetriveUserFromStorage();
+            UserDetail userDetail = SessionManager.User;
             GetMediaDetailRequest request = new GetMediaDetailRequest(userDetail.UserId, mediaId);
             IGetMediaDetailPresenterCallback callback = new GetMediaPresenterCallback(this);
             GetMediaDetailUseCase uc = new GetMediaDetailUseCase(request, callback);
@@ -41,6 +41,7 @@ namespace MediaReviewUWP.ViewModel
         private class GetMediaPresenterCallback : IGetMediaDetailPresenterCallback
         {
             private IMediaPageViewModel _vm;
+
             public GetMediaPresenterCallback(MediaPageViewModel vm)
             {
                 _vm = vm;
@@ -48,7 +49,7 @@ namespace MediaReviewUWP.ViewModel
 
             public void OnSuccess(ZResponse<GetMediaDetailResponse> response)
             {
-                _vm.SendMediaDetail(response.Data.MediaDetails);
+                _vm?.SendMediaDetail(response.Data.MediaDetails);
             }
 
             public void OnFailure(Exception exception)
@@ -56,6 +57,7 @@ namespace MediaReviewUWP.ViewModel
                 Debug.WriteLine(exception);
             }
         }
-        #endregion
+
+        #endregion Fetch Media Details
     }
 }

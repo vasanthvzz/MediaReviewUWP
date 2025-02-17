@@ -3,8 +3,9 @@
     <Style x:Name="ViewComboBoxStyle" TargetType="ComboBox">
         <Setter Property="Padding" Value="12,5,0,7" />
         <Setter Property="MaxDropDownHeight" Value="504" />
-        <Setter Property="Foreground" Value="{ThemeResource ComboBoxForeground}" />
-        <Setter Property="Background" Value="{ThemeResource ComboBoxBackground}" />
+        <Setter Property="RequestedTheme" Value="Default" />
+        <!--<Setter Property="Foreground" Value="{ThemeResource NegativeStrongBackground}" />-->
+        <Setter Property="Background" Value="{ThemeResource MildBackground}" />
         <Setter Property="BorderBrush" Value="{ThemeResource ComboBoxBorderBrush}" />
         <Setter Property="BorderThickness" Value="{ThemeResource ComboBoxBorderThemeThickness}" />
         <Setter Property="TabNavigation" Value="Once" />
@@ -137,7 +138,6 @@
                             Margin="0,2,2,2"
                             HorizontalAlignment="Right"
                             x:Load="False"
-                            Background="Transparent"
                             Visibility="Collapsed" />
                         <FontIcon
                             x:Name="DropDownGlyph"
@@ -161,14 +161,15 @@
                             x:Load="False"
                             Content="{TemplateBinding Description}"
                             Foreground="{ThemeResource SystemControlDescriptionTextForegroundBrush}" />
-                        <Popup x:Name="Popup">
+                        <Popup
+                            x:Name="Popup"
+                            Margin="5"
+                            RequestedTheme="{TemplateBinding RequestedTheme}">
                             <Border
                                 x:Name="PopupBorder"
-                                Margin="0,-1,0,-1"
                                 Padding="{ThemeResource ComboBoxDropdownBorderPadding}"
                                 HorizontalAlignment="Stretch"
-                                Background="{ThemeResource Shade3}"
-                                BackgroundSizing="OuterBorderEdge"
+                                Background="{ThemeResource MildBackground}"
                                 BorderBrush="{ThemeResource ComboBoxDropDownBorderBrush}"
                                 BorderThickness="{ThemeResource ComboBoxDropdownBorderThickness}"
                                 CornerRadius="10">
@@ -244,7 +245,6 @@
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
-
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="FocusStates">
                                 <VisualState x:Name="Focused">
@@ -305,7 +305,6 @@
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
-
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="DropDownStates">
                                 <VisualState x:Name="Opened">
@@ -328,7 +327,6 @@
                                             OpenedTargetName="PopupBorder" />
                                     </Storyboard>
                                 </VisualState>
-
                             </VisualStateGroup>
 
                             <VisualStateGroup x:Name="EditableModeStates">
@@ -363,12 +361,9 @@
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="TextBoxUnfocused" />
-
                             </VisualStateGroup>
-
                         </VisualStateManager.VisualStateGroups>
                     </Grid>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -378,7 +373,6 @@
         <Setter Property="Padding" Value="12,4" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="{ThemeResource ComboBoxItemForeground}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Template">
@@ -405,7 +399,8 @@
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}" />
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Foreground="{TemplateBinding Foreground}" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal" />
@@ -426,6 +421,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 </ResourceDictionary>

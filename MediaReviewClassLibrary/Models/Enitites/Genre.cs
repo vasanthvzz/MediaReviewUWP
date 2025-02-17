@@ -19,6 +19,7 @@ namespace MediaReviewClassLibrary.Models.Enitites
             GenreName = tagName;
         }
 
-        public Genre() { }
+        public Genre()
+        { }
     }
 }

@@ -1,41 +1,57 @@
-﻿using MediaReviewClassLibrary;
+﻿using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Constants;
 using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Utlis;
-using MediaReviewUWP.Utils;
+using MediaReviewUWP.Utility;
+using MediaReviewUWP.View.AddMovieView;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.View.LandingPageView;
 using MediaReviewUWP.View.MediaPageView;
 using MediaReviewUWP.View.SettingsView;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
-
+using static MediaReviewUWP.Components.UserProfilePicturePresenter;
 
 namespace MediaReviewUWP.View.HomePageView
 {
     public sealed partial class HomePage : Page, IHomePageView
     {
-        private ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
         private IHomePageViewModel _viewModel;
         private UserDetail _user;
+        private ObservableCollection<Genre> _genreList;
+
+        public UserDTBObj UserDt {  get; set; }
 
         public HomePage()
         {
             this.InitializeComponent();
+            _user = SessionManager.User;
+            UserDt = new UserDTBObj(_user);
+            _genreList = new ObservableCollection<Genre>();
             _viewModel = new HomePageViewModel(this);
-            _user = _sessionManager.RetriveUserFromStorage();
+            GlobalEventManager.OnMediaAdded += GlobalEventManager_OnMediaAdded;
         }
+
+        private void GlobalEventManager_OnMediaAdded(object sender, MediaAddedEventArgs e)
+        {
+            //Get media by id if the release date is greater than the current
+
+        }
+
+
+        #region Page Initilization Methods
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -45,34 +61,13 @@ namespace MediaReviewUWP.View.HomePageView
         private void LoadContentPage()
         {
             RetrieveMedia();
-        }    
-
-        private void MediaTileSelected(object sender, MediaTileEventArgs e)
-        {
-            foreach (TabViewItem item in MainTabView.TabItems)
-            {
-                if (item.Tag != null && item.Tag.Equals(e.MediaId))
-                {
-                    MainTabView.SelectedItem = item;
-                    return;
-                }
-            }
-
-            TabViewItem newItem = new TabViewItem
-            {
-                Tag = e.MediaId,
-                Header = $"{e.Title}",
-                IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.Pictures }
-            };
-           
-            var page = new MediaPage();
-            page.Init(e.MediaId);
-            newItem.Content = page;
-            MainTabView.TabItems.Add(newItem);
-            MainTabView.SelectedItem = newItem;
+            RetrieveTags();
         }
 
-        #region Page Initilization Methods
+        private void RetrieveTags()
+        {
+            _viewModel.GetAllGenre();
+        }
 
         private void UpdateThemeButtonContent()
         {
@@ -80,23 +75,219 @@ namespace MediaReviewUWP.View.HomePageView
             ThemeButton.Content = currentTheme == ElementTheme.Dark ? "☾" : "☼";
         }
 
-        #endregion
+        #endregion Page Initilization Methods
+
+        #region Tab items operations
+
+        private TabViewItem GetTabItem(string tag)
+        {
+            foreach (TabViewItem item in MainTabView.TabItems)
+            {
+                if (item.Tag != null && item.Tag.Equals(tag))
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        private TabViewItem CreateTabItem(string tag, string header, Symbol symbol)
+        {
+            TabViewItem newItem = new TabViewItem
+            {
+                Tag = tag,
+                Header = header,
+                IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = symbol }
+            };
+            MainTabView.TabItems.Add(newItem);
+            return newItem;
+        }
+
+        private void MediaTileSelected(object sender, MediaTileEventArgs e)
+        {
+            var tabItem = GetTabItem(e.MediaId.ToString()) ?? CreateTabItem(e.MediaId.ToString(), e.Title, Symbol.Pictures);
+            var page = new MediaPage();
+            page.Init(e.MediaId);
+            tabItem.Content = page;
+            MainTabView.SelectedItem = tabItem;
+        }
+
+        private void FavoriteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var loader = new ResourceLoader();
+            var tabItem = GetTabItem("favourites") ?? CreateTabItem("favourites", loader.GetString("MyFavourites"), Symbol.Favorite);
+            CreatePersonalisedMediaTab(PersonalMediaType.FAVOURITE, tabItem);
+            MainTabView.SelectedItem = tabItem;
+        }
+
+
+        private void CreatePersonalisedMediaTab(PersonalMediaType type, TabViewItem tabItem)
+        {
+            var page = new PersonalisedMediaControl();
+            page.Init(type);
+            page.PersonalisedMediaTileClicked -= MediaTileSelected;
+            page.PersonalisedMediaTileClicked += MediaTileSelected;
+            tabItem.Content = page;
+        }
+
+        //private void CreateFolloweeTab(FollowType followType,TabViewItem tabItem)
+        //{
+        //    var page = new FollowListControl();
+        //    page.Init(followType);
+        //    tabItem.Content = page;
+        //}
+
+        //private void MyFolloweeButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var loader = new ResourceLoader();
+        //    var tabItem = GetTabItem("followees") ?? CreateTabItem("followees",loader.GetString("PeopleIFollow") , Symbol.Contact);
+        //    CreateFolloweeTab(FollowType.FOLLOWEE, tabItem);
+        //    MainTabView.SelectedItem = tabItem;
+        //}
+
+        //private void FollowersButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var loader = new ResourceLoader();
+        //    var tabItem = GetTabItem("followers") ?? CreateTabItem("followers",loader.GetString("MyFollowers"), Symbol.People);
+        //    CreateFolloweeTab(FollowType.FOLLOWER, tabItem);
+        //    MainTabView.SelectedItem = tabItem;
+        //}
+
+        private void HasWatchedButton_Click(object sender, RoutedEventArgs e)
+        {
+            var loader = new ResourceLoader();
+            var tabItem = GetTabItem("hasWatched") ?? CreateTabItem("hasWatched", loader.GetString("MyWatchedlist"), Symbol.Bookmarks);
+            CreatePersonalisedMediaTab(PersonalMediaType.HAS_WATCHED, tabItem);
+            MainTabView.SelectedItem = tabItem;
+        }
+
+        private void WatchListButton_Click(object sender, RoutedEventArgs e)
+        {
+            var loader = new ResourceLoader();
+            var tabItem = GetTabItem("watchlist") ?? CreateTabItem("watchlist", loader.GetString("MyWatchlist"), Symbol.Emoji);
+            CreatePersonalisedMediaTab(PersonalMediaType.WATCHLIST, tabItem);
+            MainTabView.SelectedItem = tabItem;
+        }
+
+        private void RatingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var loader = new ResourceLoader();
+            var tabItem = GetTabItem("myRatings") ?? CreateTabItem("myRatings", loader.GetString("MyRatings"), Symbol.OutlineStar);
+            var page = new UserRatedMediaPage();
+            tabItem.Content = page;
+            page.RatedMediaClick -= MediaTileSelected;
+            page.RatedMediaClick += MediaTileSelected;
+            MainTabView.SelectedItem = tabItem;
+        }
+
+        private void SearchMedia()
+        {
+            var searchText = UniversalSearchBox.Text;
+            if (string.IsNullOrWhiteSpace(searchText)) { return; }
+            var loader = new ResourceLoader();
+            var tabItem = GetTabItem("search") ?? CreateTabItem("search", loader.GetString("Search"), Symbol.Find);
+
+            if (tabItem.Content is SearchResultPage searchPage)
+            {
+                searchPage.Init(UniversalSearchBox.Text);
+            }
+            else
+            {
+                var page = new SearchResultPage();
+                tabItem.Content = page;
+                page.SearchResultClick -= Page_SearchResultClick;
+                page.SearchResultClick += Page_SearchResultClick;
+                page.Init(searchText);
+            }
+            MainTabView.SelectedItem = tabItem;
+        }
+
+        private void Page_SearchResultClick(object sender, MediaTileEventArgs e)
+        {
+            var tabItem = GetTabItem(e.MediaId.ToString()) ?? CreateTabItem(e.MediaId.ToString(), e.Title, Symbol.Pictures);
+            var page = new MediaPage();
+            tabItem.Content = page;
+            page.Init(e.MediaId);
+            MainTabView.SelectedItem = tabItem;
+        }
+
+        private void ApplyFilterBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (GenreListView.SelectedItems.Count != 0)
+            {
+                FilterBtn.Flyout.Hide();
+                List<Genre> genreList = new List<Genre>();
+                foreach (var genre in GenreListView.SelectedItems)
+                {
+                    genreList.Add(genre as Genre);
+                };
+                var loader = new ResourceLoader();
+                var tabItem = GetTabItem("filteredMovies") ?? CreateTabItem("filteredMovies", loader.GetString("FilteredMovies"), Symbol.Pictures);
+                FilteredMediaPage page = tabItem.Content as FilteredMediaPage;
+                if (page == null)
+                {
+                    page = new FilteredMediaPage();
+                    page.TileClicked -= MediaTileSelected;
+                    page.TileClicked += MediaTileSelected;
+                    tabItem.Content = page;
+                }
+                page.Init(genreList);
+                MainTabView.SelectedItem = tabItem;
+            }
+        }
+
+        private void ReviewsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var loader = new ResourceLoader();
+            var tabItem = GetTabItem("myReviews") ?? CreateTabItem("myReviews", loader.GetString("MyReviews"), Symbol.Edit);
+            var page = new UserReviewPage();
+            tabItem.Content = page;
+            page.MediaReviewClicked -= MediaTileSelected;
+            page.MediaReviewClicked += MediaTileSelected;
+            MainTabView.SelectedItem = tabItem;
+        }
+
+        private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
+        {
+            sender.TabItems.Remove(args.Tab);
+        }
+
+        private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems == null || e.AddedItems.Count == 0)
+            {
+                return;
+            }
+
+            var tabItem = e.AddedItems.FirstOrDefault();
+            var tabViewItem = tabItem as TabViewItem;
+
+            if (tabViewItem.Content is ShowMediaListControl control)
+            {
+                _viewModel.GetAllMedia(0, control.MediaList.Count);
+                control.ReloadPageContent();
+            }
+
+            if (tabViewItem.Content is ITabItemContent MediaPage)
+            {
+                MediaPage.ReloadPageContent();
+            }
+        }
+
+        #endregion Tab items operations
 
         #region Button Clicks
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            LogoutSession();
+            _ = LogoutSession();
         }
 
         private void ThemeButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             ThemeManager.RequestThemeChange();
             UpdateThemeButtonContent();
-            if (ProfileFlyout != null)
-            {
-                ProfileFlyout.Hide();
-            }
+            ProfileFlyout?.Hide();
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
@@ -108,7 +299,7 @@ namespace MediaReviewUWP.View.HomePageView
             }
         }
 
-        #endregion
+        #endregion Button Clicks
 
         #region Navbar Actions
 
@@ -120,45 +311,48 @@ namespace MediaReviewUWP.View.HomePageView
         private void NavBar_PaneOpening(SplitView sender, object args)
         {
             MyMovieListTb.Visibility = Visibility.Visible;
-            SocialTb.Visibility = Visibility.Visible;
+            //SocialTb.Visibility = Visibility.Visible;
             MyActionTb.Visibility = Visibility.Visible;
         }
 
         private void NavBar_PaneClosing(SplitView sender, SplitViewPaneClosingEventArgs args)
         {
             MyMovieListTb.Visibility = Visibility.Collapsed;
-            SocialTb.Visibility = Visibility.Collapsed;
+            //SocialTb.Visibility = Visibility.Collapsed;
             MyActionTb.Visibility = Visibility.Collapsed;
         }
 
-        #endregion
+        #endregion Navbar Actions
 
-        private async void LogoutSession()
+        private async Task LogoutSession()
         {
-            _sessionManager.RemoveUserFromStorage();
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High,async () =>
+            await Task.Run(async () =>
             {
-                await WindowManager.CloseSettingsWindow();
-                Frame.Navigate(typeof(LandingPage));
+                await WindowManager.CloseSettingsWindow(this.Dispatcher);
+                await WindowManager.CloseCreateMovieWindow(this.Dispatcher);
             });
+
+            //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, async () =>
+            //{
+            //    Frame.Navigate(typeof(LandingPage));
+
+            //    await Task.Delay(500);
+            //    WindowManager.MainWindow.Activate();
+            //});
+
+            await Task.Run(() => SessionManager.RemoveUserFromStorage());
+
+            _ = CoreApplication.RequestRestartAsync("");
         }
 
         public void RetrieveMedia()
         {
-            _viewModel.GetAllMedia(0,10);
+            _viewModel.GetAllMedia(0, 10);
         }
-
 
         public void UpdateMediaList(List<MediaBObj> MediaList)
         {
             HomeContent.UpdateMedia(MediaList);
-        }
-
-        
-
-        private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
-        {
-            sender.TabItems.Remove(args.Tab);
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
@@ -169,110 +363,12 @@ namespace MediaReviewUWP.View.HomePageView
             MainTabView.SelectedItem = homeItem;
         }
 
-        private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SettingButton_Click(object sender, RoutedEventArgs e)
         {
-            if(e.AddedItems == null || e.AddedItems.Count == 0)
-            {
-                return;
-            }
-
-            var tabItem = e.AddedItems.FirstOrDefault();
-            var tabViewItem = tabItem as TabViewItem;
-
-            if(tabViewItem.Content is ShowMediaListControl control)
-            {
-                _viewModel.GetAllMedia(0,control.MediaList.Count);
-            }
-
-            if(tabViewItem.Content is ITabItemContent personalizedMediaPage)
-            {
-                personalizedMediaPage.ReloadData();
-            }          
+            _ = OpenSettingsWindow();
         }
 
-        private void FavoriteButton_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (TabViewItem item in MainTabView.TabItems)
-            {
-                if (item.Tag != null && item.Tag.Equals("favorites"))
-                {
-                    MainTabView.SelectedItem = item;
-                    return;
-                }
-            }
-
-            TabViewItem newItem = new TabViewItem
-            {
-                Tag = "favorites",
-                Header = "My Favorites",
-                IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.Favorite }
-            };
-
-            var page = new PersonalisedMediaControl();
-            page.Init(PersonalMediaType.FAVOURITE);
-            page.PersonalisedMediaTileClicked -= MediaTileSelected;
-            page.PersonalisedMediaTileClicked += MediaTileSelected;
-            newItem.Content = page;
-            MainTabView.TabItems.Add(newItem);
-            MainTabView.SelectedItem = newItem;
-        }
-
-        private void HasWatchedButton_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (TabViewItem item in MainTabView.TabItems)
-            {
-                if (item.Tag != null && item.Tag.Equals("hasWatched"))
-                {
-                    MainTabView.SelectedItem = item;
-                    return;
-                }
-            }
-
-            // Create a new TabViewItem
-            TabViewItem newItem = new TabViewItem
-            {
-                Tag = "hasWatched",
-                Header = "Watched Movies",
-                IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.Bookmarks }
-            };
-
-            var page = new PersonalisedMediaControl();
-            page.Init(PersonalMediaType.HAS_WATCHED);
-            page.PersonalisedMediaTileClicked -= MediaTileSelected;
-            page.PersonalisedMediaTileClicked += MediaTileSelected;
-            newItem.Content = page;
-            MainTabView.TabItems.Add(newItem);
-            MainTabView.SelectedItem = newItem;
-        }
-
-        private void WatchListButton_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (TabViewItem item in MainTabView.TabItems)
-            {
-                if (item.Tag != null && item.Tag.Equals("watchlist"))
-                {
-                    MainTabView.SelectedItem = item;
-                    return;
-                }
-            }
-
-            TabViewItem newItem = new TabViewItem
-            {
-                Tag = "watchlist",
-                Header = "Watch list",
-                IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.Emoji }
-            };
-
-            var page = new PersonalisedMediaControl();
-            page.Init(PersonalMediaType.WATCHLIST);
-            page.PersonalisedMediaTileClicked -= MediaTileSelected;
-            page.PersonalisedMediaTileClicked += MediaTileSelected;
-            newItem.Content = page;
-            MainTabView.TabItems.Add(newItem);
-            MainTabView.SelectedItem = newItem;
-        }
-
-        private async void SettingButton_Click(object sender, RoutedEventArgs e)
+        private async Task OpenSettingsWindow()
         {
             if (!WindowManager.SettingsWindowExist())
             {
@@ -284,7 +380,8 @@ namespace MediaReviewUWP.View.HomePageView
                 WindowManager.SettingsWindow = settingsWindow;
                 appWindowContentFrame.Navigate(typeof(SettingsPage));
                 var titleBar = settingsWindow.TitleBar;
-                TitlebarManager.ChangeTitlebarTheme(titleBar);
+
+                TitleBarManager.ChangeTitleBarTheme(titleBar);
                 settingsWindow.Title = "Settings";
                 settingsWindow.Closed += delegate
                 {
@@ -295,67 +392,72 @@ namespace MediaReviewUWP.View.HomePageView
                 ElementCompositionPreview.SetAppWindowContent(settingsWindow, appWindowContentFrame);
                 await settingsWindow.TryShowAsync();
             }
+            else
+            {
+                await WindowManager.SettingsWindow.TryShowAsync();
+            }
         }
 
-
-        private void RatingsButton_Click(object sender, RoutedEventArgs e)
+        private async Task OpenAddMovieWindow()
         {
-            foreach (TabViewItem item in MainTabView.TabItems)
+            if (!WindowManager.CreateMovieWindowExist())
             {
-                if (item.Tag != null && item.Tag.Equals("myRatings"))
+                var movieWindow = await AppWindow.TryCreateAsync();
+                Frame appWindowContentFrame = new Frame
                 {
-                    MainTabView.SelectedItem = item;
-                    return;
-                }
+                    RequestedTheme = ThemeManager.CurrentElementTheme
+                };
+                WindowManager.CreateMovieWindow = movieWindow;
+                appWindowContentFrame.Navigate(typeof(AddMoviePage));
+                var titleBar = movieWindow.TitleBar;
+                
+                TitleBarManager.ChangeTitleBarTheme(titleBar);
+                movieWindow.Title = "Add Movie";
+                movieWindow.Closed += delegate
+                {
+                    WindowManager.CreateMovieWindow = null;
+                    appWindowContentFrame.Content = null;
+                    movieWindow = null;
+                };
+                ElementCompositionPreview.SetAppWindowContent(movieWindow, appWindowContentFrame);
+                await movieWindow.TryShowAsync();
             }
-
-            TabViewItem newItem = new TabViewItem
+            else
             {
-                Tag = "myRatings",
-                Header = "My Ratings",
-                IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.OutlineStar }
-            };
-
-            var page = new UserRatedMediaPage();
-            newItem.Content = page;
-            page.RatedMediaClick -= MediaTileSelected;
-            page.RatedMediaClick += MediaTileSelected;
-            MainTabView.TabItems.Add(newItem);
-            MainTabView.SelectedItem = newItem;
+                await WindowManager.CreateMovieWindow.TryShowAsync();
+            }
         }
 
-        private void ReviewsButton_Click(object sender, RoutedEventArgs e)
+        private void AddMovieBtn_Click(object sender, RoutedEventArgs e)
         {
-
-            foreach (TabViewItem item in MainTabView.TabItems)
-            {
-                if (item.Tag != null && item.Tag.Equals("myReviews"))
-                {
-                    MainTabView.SelectedItem = item;
-                    return;
-                }
-            }
-
-            TabViewItem newItem = new TabViewItem
-            {
-                Tag = "myReviews",
-                Header = "My Reviews",
-                IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.Edit }
-            };
-
-            var page = new UserReviewPage();
-            newItem.Content = page;
-            MainTabView.TabItems.Add(newItem);
-            MainTabView.SelectedItem = newItem;
+            _ = OpenAddMovieWindow();
         }
 
         private void HomeContent_ListReachedEnd(object sender, ListReachedEndArgs e)
         {
             var currentLength = e.ExistingItemCount;
-            _viewModel.GetAllMedia(currentLength,5);
+            _viewModel.GetAllMedia(currentLength, 5);
+        }
+
+        private void SearchBox_SearchButtonClicked()
+        {
+            SearchMedia();
+        }
+
+        private void SearchBox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                SearchMedia();
+            }
+        }
+
+        public void UpdateGenreList(List<Genre> genreList)
+        {
+            _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                foreach (var genre in genreList) { _genreList.Add(genre); }
+            });
         }
     }
 }
-
-
-

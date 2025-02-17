@@ -14,22 +14,24 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ResourceDictionary/ListboxDictionary.xaml" />
                 <ResourceDictionary Source="/ResourceDictionary/GridViewItemDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/ComboBoxDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/SplitButtonDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource StrongBackground}">
+    <Grid Background="{ThemeResource MildBackground}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <TextBlock
+                x:Uid="Appearance"
                 Margin="0,20,0,20"
                 HorizontalAlignment="Center"
-                FontSize="30"
-                FontWeight="SemiBold"
-                Text="Appearance" />
+                FontSize="{StaticResource H2}"
+                FontWeight="SemiBold" />
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -39,25 +41,27 @@
 
                 <Grid
                     Margin="10"
-                    Background="{ThemeResource MildBackground}"
+                    Background="{ThemeResource SemiStrongBackground}"
                     CornerRadius="5"
                     RowSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="50" />
                         <RowDefinition Height="Auto" />
-
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
                     <TextBlock
+                        x:Uid="AccentColor"
                         Margin="10"
-                        FontSize="18"
-                        FontWeight="SemiBold"
-                        Text="Accent Color" />
+                        FontSize="{StaticResource H3}"
+                        FontWeight="SemiBold" />
                     <ListBox
                         x:Name="AccentListBox"
                         Grid.Column="1"
@@ -118,79 +122,18 @@
                             </Grid>
                         </ListBoxItem>
                     </ListBox>
-                    <!--<TextBlock
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="10"
-                        VerticalAlignment="Center"
-                        FontSize="18"
-                        FontWeight="SemiBold"
-                        Text="Preferred Layout" />-->
-                    <!--<ListBox
-                        x:Name="LayoutListBox"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        HorizontalAlignment="Right"
-                        Background="Transparent"
-                        ItemContainerStyle="{StaticResource ToggleButtonListBox}"
-                        ScrollViewer.HorizontalScrollMode="Auto"
-                        ScrollViewer.VerticalScrollMode="Auto"
-                        SelectedIndex="0"
-                        SelectionChanged="LayoutListBox_SelectionChanged"
-                        SelectionMode="Single">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBoxItem>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <FontIcon
-                                    Margin="0,0,8,0"
-                                    FontFamily="Segoe Fluent Icons"
-                                    FontSize="30"
-                                    Glyph="&#xEA4B;" />
-                                <TextBlock
-                                    Grid.Column="1"
-                                    VerticalAlignment="Center"
-                                    Text="List Pane" />
-                            </Grid>
 
-                        </ListBoxItem>
-                        <ListBoxItem>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <FontIcon
-                                    Margin="0,0,8,0"
-                                    FontFamily="Segoe Fluent Icons"
-                                    FontSize="25"
-                                    FontWeight="ExtraLight"
-                                    Glyph="&#xF0E2;" />
-                                <TextBlock
-                                    Grid.Column="1"
-                                    VerticalAlignment="Center"
-                                    Text="Grid" />
-                            </Grid>
-                        </ListBoxItem>
-                    </ListBox>-->
                     <TextBlock
-                        Grid.Row="2"
+                        x:Uid="Theme"
+                        Grid.Row="1"
                         Grid.Column="0"
                         Margin="10"
                         VerticalAlignment="Center"
-                        FontSize="18"
-                        FontWeight="SemiBold"
-                        Text="Change Theme" />
+                        FontSize="{StaticResource H3}"
+                        FontWeight="SemiBold" />
                     <ListBox
                         x:Name="ThemeChangeListBox"
-                        Grid.Row="2"
+                        Grid.Row="1"
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         Background="Transparent"
@@ -214,14 +157,15 @@
                                 <FontIcon
                                     Margin="0,0,8,0"
                                     FontFamily="Segoe Fluent Icons"
-                                    FontSize="20"
-                                    Glyph="&#xE706;" />
+                                    FontSize="{StaticResource H3}"
+                                    FontWeight="SemiLight"
+                                    Glyph="&#xEC46;" />
                                 <TextBlock
+                                    x:Uid="Dark"
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
-                                    Text="Dark" />
+                                    FontSize="{StaticResource H3}" />
                             </Grid>
-
                         </ListBoxItem>
                         <ListBoxItem>
                             <Grid>
@@ -232,19 +176,100 @@
                                 <FontIcon
                                     Margin="0,0,8,0"
                                     FontFamily="Segoe Fluent Icons"
-                                    FontSize="20"
-                                    Glyph="&#xEC46;" />
+                                    FontSize="{StaticResource H3}"
+                                    Glyph="&#xE706;" />
 
                                 <TextBlock
+                                    x:Uid="Light"
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
-                                    Text="Light" />
+                                    FontSize="{StaticResource H3}"
+                                    FontWeight="SemiLight" />
                             </Grid>
                         </ListBoxItem>
                     </ListBox>
+
+                    <TextBlock
+                        x:Uid="Language"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource H3}"
+                        FontWeight="SemiBold" />
+
+                    <!--<ComboBox
+                        x:Name="LanguageBox"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        CornerRadius="10"
+                        DropDownOpened="MyComboBox_DropDownOpened"
+                        Loaded="LanguageBox_Loaded"
+                        SelectionChanged="LanguageBox_SelectionChanged"
+                        Style="{StaticResource ViewComboBoxStyle}">
+
+                        <ComboBoxItem
+                            x:Name="English"
+                            HorizontalAlignment="Center"
+                            Content="English">
+                        </ComboBoxItem>
+                        <ComboBoxItem
+                            x:Name="Tamil"
+                            HorizontalAlignment="Center"
+                            Content="tamil">
+                        </ComboBoxItem>
+                    </ComboBox>-->
+                    <TextBlock
+                        x:Uid="ChangeLanguageNote"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="0,0,10,10"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        FontSize="{StaticResource H4}"
+                        TextWrapping="Wrap" />
+                    <SplitButton
+                        x:Name="LanguageSplitButton"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        CornerRadius="10"
+                        Loaded="LanguageSplitButton_Loaded"
+                        Style="{StaticResource LanguageSplitButtonStyle}">
+
+                        <SplitButton.Content>
+                            <TextBlock
+                                x:Name="SelectedLanguageText"
+                                FontSize="{StaticResource H3}"
+                                Text="English" />
+
+                        </SplitButton.Content>
+
+                        <SplitButton.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem
+                                    x:Name="EnglishOption"
+                                    Click="LanguageOption_Click"
+                                    FontSize="{StaticResource H3}"
+                                    Tag="en"
+                                    Text="English" />
+                                <MenuFlyoutItem
+                                    x:Name="TamilOption"
+                                    Click="LanguageOption_Click"
+                                    FontSize="{StaticResource H3}"
+                                    Tag="ta"
+                                    Text="தமிழ்" />
+                            </MenuFlyout>
+                        </SplitButton.Flyout>
+                    </SplitButton>
+
                 </Grid>
             </Grid>
         </Grid>
-
     </Grid>
 </Page>

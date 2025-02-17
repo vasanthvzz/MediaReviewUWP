@@ -33,7 +33,9 @@
                 <TextBlock
                     x:Name="FavouriteStatusTb"
                     Margin="8,0,0,0"
-                    Text="Favourite" />
+                    Text="Favourite"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="Wrap" />
             </StackPanel>
             <ToolTipService.ToolTip>
                 <ToolTip Content="Favourite" />
@@ -51,7 +53,8 @@
                 <TextBlock
                     x:Name="MarkAsSeenStatusTb"
                     Margin="8,0,0,0"
-                    Text="Mark as seen" />
+                    Text="Mark as seen"
+                    TextTrimming="CharacterEllipsis" />
             </StackPanel>
             <ToolTipService.ToolTip>
                 <ToolTip Content="Mark as seen" />
@@ -69,7 +72,8 @@
                 <TextBlock
                     x:Name="WathcListStatusTb"
                     Margin="8,0,0,0"
-                    Text="Watchlist" />
+                    Text="Watchlist"
+                    TextTrimming="CharacterEllipsis" />
             </StackPanel>
             <ToolTipService.ToolTip>
                 <ToolTip Content="Watch list" />
@@ -90,8 +94,11 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="FavouriteTb.Margin" Value="0,5,0,5" />
+                        <Setter Target="FavouriteTb.Width" Value="125" />
                         <Setter Target="HasWatchedTb.Margin" Value="5,5,0,5" />
+                        <Setter Target="HasWatchedTb.Width" Value="125" />
                         <Setter Target="WatchlistTb.Margin" Value="5,5,0,5" />
+                        <Setter Target="WatchlistTb.Width" Value="125" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

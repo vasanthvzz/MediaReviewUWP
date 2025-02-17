@@ -28,9 +28,8 @@
         </RatingControl>
 
         <TextBlock
+            x:Uid="RateMovieTb"
             Grid.Row="1"
-            Margin="20,0,0,0"
-            Text="Rate Movie" />
+            Margin="0,0,0,0" />
     </Grid>
-
 </UserControl>

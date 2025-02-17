@@ -2,6 +2,7 @@
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Domain;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.DataManager
 {
@@ -9,13 +10,13 @@ namespace MediaReviewClassLibrary.DataManager
     {
         private IReviewDataHandler _reviewDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IReviewDataHandler>();
 
-        public async void DeleteReview(DeleteReviewRequest request, DeleteReviewUseCaseCallback callback)
+        public async Task DeleteReview(DeleteReviewRequest request, DeleteReviewUseCaseCallback callback)
         {
             try
             {
                 var review = await _reviewDataHandler.GetReviewById(request.ReviewId);
                 bool success = false;
-                if (review.UserId == request.UserId) 
+                if (review?.UserId == request.UserId)
                 {
                     await _reviewDataHandler.DeleteReview(review.ReviewId);
                     success = true;

@@ -1,14 +1,14 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models.Enitites;
-using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
     public class UpdatePersonalMediaUseCase : UseCaseBase<UpdatePersonalMediaResponse>
     {
         private UpdatePersonalMediaRequest _request;
-        private IUpdatePersonalMediaDataManager _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IUpdatePersonalMediaDataManager>();
+        private IUpdatePersonalMediaDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IUpdatePersonalMediaDataManager>();
 
         public UpdatePersonalMediaUseCase(UpdatePersonalMediaRequest request, ICallback<UpdatePersonalMediaResponse> callback) : base(callback)
         {
@@ -44,6 +44,7 @@ namespace MediaReviewClassLibrary.Domain
     public class UpdatePersonalMediaRequest
     {
         public PersonalMedia UserPersonalMedia { get; }
+
         public UpdatePersonalMediaRequest(PersonalMedia personalMedia)
         {
             UserPersonalMedia = personalMedia;
@@ -54,6 +55,7 @@ namespace MediaReviewClassLibrary.Domain
     {
         public bool Success { get; set; }
         public PersonalMedia UpdatedPersonalMedia { get; set; }
+
         public UpdatePersonalMediaResponse(bool success, PersonalMedia updatedPersonalMedia)
         {
             Success = success;
@@ -63,8 +65,9 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IUpdatePersonalMediaDataManager
     {
-        void UpdatePersonalMedia(UpdatePersonalMediaRequest request, UpdatePersonalMediaUseCaseCallback usecase);
+        Task UpdatePersonalMedia(UpdatePersonalMediaRequest request, UpdatePersonalMediaUseCaseCallback usecase);
     }
 
-    public interface IUpdatePersonalMediaPresenterCallback : ICallback<UpdatePersonalMediaResponse> { }
+    public interface IUpdatePersonalMediaPresenterCallback : ICallback<UpdatePersonalMediaResponse>
+    { }
 }

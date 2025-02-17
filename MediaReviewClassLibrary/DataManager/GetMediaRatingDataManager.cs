@@ -2,14 +2,15 @@
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Domain;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.DataManager
 {
     public class GetMediaRatingDataManager : IGetMediaRatingDataManager
     {
-        private IRatingDataHandler _ratingDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IRatingDataHandler>();  
+        private IRatingDataHandler _ratingDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IRatingDataHandler>();
 
-        public async void GetMediaRating(GetMediaRatingRequest request , ICallback<GetMediaRatingResponse> callback)
+        public async Task GetMediaRating(GetMediaRatingRequest request, ICallback<GetMediaRatingResponse> callback)
         {
             try
             {

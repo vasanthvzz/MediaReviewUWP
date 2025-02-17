@@ -1,43 +1,27 @@
-﻿using MediaReviewUWP.Settings;
-using MediaReviewUWP.Utils;
+﻿using MediaReviewUWP.Utility;
 using System;
-using System.Collections.Generic;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Globalization;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace MediaReviewUWP
 {
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
-    sealed partial class App : Application
+    public sealed partial class App : Application
     {
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
-        public static AccentShade ThemeSettingsInstance { get; } = AccentManager.GetAccentShade();
+        //public static AccentShade ThemeSettingsInstance { get; } = AccentManager.GetAccentShade();
+
         public App()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            SetLanguage();
-            
-        }
-
-        private void SetLanguage()
-        {
-            //ApplicationLanguages.PrimaryLanguageOverride = "ta";
-            ApplicationLanguages.PrimaryLanguageOverride = "en";
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Current.Resources["AccentShade"] = AccentManager.GetAccentShade();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -79,7 +63,7 @@ namespace MediaReviewUWP
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load View " + e.SourcePageType.FullName);
         }

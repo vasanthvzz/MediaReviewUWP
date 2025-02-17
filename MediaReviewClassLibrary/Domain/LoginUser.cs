@@ -1,19 +1,18 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models.Enitites;
-using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
     public class LoginUserUseCase : UseCaseBase<LoginUserResponse>
     {
         private LoginUserRequest _request;
-        private ILoginUserDataManager _dm;
+        private ILoginUserDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<ILoginUserDataManager>();
 
-        public LoginUserUseCase(LoginUserRequest req, ILoginUserPresenterCallback callback) : base(callback)
+        public LoginUserUseCase(LoginUserRequest request, ILoginUserPresenterCallback callback) : base(callback)
         {
-            _request = req;
-            _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ILoginUserDataManager>();
+            _request = request;
         }
 
         public override void Action()
@@ -44,7 +43,7 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface ILoginUserDataManager
     {
-        void ValidateUser(LoginUserRequest request, LoginUserUseCaseCallback useCaseCallback);
+        Task ValidateUser(LoginUserRequest request, LoginUserUseCaseCallback useCaseCallback);
     }
 
     public class LoginUserRequest
@@ -75,5 +74,6 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public interface ILoginUserPresenterCallback : ICallback<LoginUserResponse> { }
+    public interface ILoginUserPresenterCallback : ICallback<LoginUserResponse>
+    { }
 }

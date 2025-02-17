@@ -4,45 +4,26 @@ using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models.Constants;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.DataManager
 {
     public class RemovePersonalisedMediaDataManager : IRemovePersonalisedMediaDataManager
     {
-        private IPersonalMediaDataHandler _personalMediaDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IPersonalMediaDataHandler>();
-        public async void RemovePersonalisedMedia(RemovePersonalisedMediaRequest request, RemovePersonalisedMediaUseCaseCallback callback)
+        private IPersonalMediaDataHandler _personalMediaDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IPersonalMediaDataHandler>();
+
+        public async Task RemovePersonalisedMedia(RemovePersonalisedMediaRequest request, RemovePersonalisedMediaUseCaseCallback callback)
         {
             try
             {
                 long mediaId = 0;
-                switch (request.PersonalisedMediaType)
-                {
-                    case PersonalMediaType.FAVOURITE : 
-                    {
-                        mediaId = await  _personalMediaDataHandler.RemoveFromFavourite(request.UserId,request.MediaId);
-                        break;
-                    }
-                    case PersonalMediaType.HAS_WATCHED :
-                        {
-                            mediaId = await _personalMediaDataHandler.RemoveFromHasWatched(request.UserId, request.MediaId);
-                            break;
-                    }
-                    case PersonalMediaType.WATCHLIST :
-                        {
-                            mediaId = await _personalMediaDataHandler.RemoveFromWatchList(request.UserId, request.MediaId);
-                            break;
-                    }
-                    default:
-                        {
-                            break;
-                        }
-                }
+                mediaId = await _personalMediaDataHandler.RemoveFromPersonalisedList(request.UserId, request.MediaId,request.PersonalisedMediaType);
                 bool success = mediaId != 0;
-                RemovePersonalisedMediaResponse response = new RemovePersonalisedMediaResponse( mediaId,success);
+                RemovePersonalisedMediaResponse response = new RemovePersonalisedMediaResponse(mediaId, success);
                 ZResponse<RemovePersonalisedMediaResponse> zResponse = new ZResponse<RemovePersonalisedMediaResponse>(response);
                 callback?.OnSuccess(zResponse);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 callback?.OnFailure(e);
             }

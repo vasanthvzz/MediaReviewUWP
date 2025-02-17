@@ -1,6 +1,4 @@
-﻿using Windows.UI.Core;
-
-namespace MediaReviewUWP.ViewModel.Contract
+﻿namespace MediaReviewUWP.ViewModel.Contract
 {
     public interface ILoginUserViewModel
     {

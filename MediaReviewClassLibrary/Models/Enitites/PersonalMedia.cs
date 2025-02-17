@@ -5,7 +5,6 @@ namespace MediaReviewClassLibrary.Models.Enitites
     [Table("personal_media")]
     public class PersonalMedia
     {
-
         [Column("user_id")]
         public long UserId { get; set; }
 
@@ -36,6 +35,7 @@ namespace MediaReviewClassLibrary.Models.Enitites
             HasWatched = hasWatched;
         }
 
-        public PersonalMedia() { }
+        public PersonalMedia()
+        { }
     }
 }

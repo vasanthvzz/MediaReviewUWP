@@ -1,13 +1,11 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary;
+using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Constants;
-using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Utlis;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel.Contract;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,31 +15,28 @@ namespace MediaReviewUWP.ViewModel
     public class PersonalisedMediaViewModel : IPersonalisedMediaViewModel
     {
         private IPersonalisedMediaView _view;
-        private ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
 
-        public PersonalisedMediaViewModel(IPersonalisedMediaView personalisedMediaControl)
+        public PersonalisedMediaViewModel(IPersonalisedMediaView view)
         {
-            this._view = personalisedMediaControl;
+            this._view = view;
         }
 
-        public void GetPersonlisedMedia(PersonalMediaType personalisedMediaType)
+        public void GetPersonalisedMedia(PersonalMediaType personalisedMediaType)
         {
-            var userId = _sessionManager.RetriveUserFromStorage().UserId;
+            var userId = SessionManager.User.UserId;
             GetPersonalisedMediaRequest request = new GetPersonalisedMediaRequest(userId, personalisedMediaType);
-
-            GetPersonlisedMediaPresenterCallback callback = new GetPersonlisedMediaPresenterCallback(this);
+            GetPersonalisedMediaPresenterCallback callback = new GetPersonalisedMediaPresenterCallback(this);
             GetPersonalisedMediaUseCase uc = new GetPersonalisedMediaUseCase(request, callback);
             uc.Execute();
         }
 
-        public void RemovePersonalisedMedia(long mediaId,PersonalMediaType personalisedMediaType) 
+        public void RemovePersonalisedMedia(long mediaId, PersonalMediaType personalisedMediaType)
         {
-            var userId = _sessionManager.RetriveUserFromStorage().UserId;
-            RemovePersonalisedMediaRequest request = new RemovePersonalisedMediaRequest(userId,mediaId, personalisedMediaType);
+            var userId = SessionManager.User.UserId;
+            RemovePersonalisedMediaRequest request = new RemovePersonalisedMediaRequest(userId, mediaId, personalisedMediaType);
             RemovePersonalisedMediaPresenterCallback callback = new RemovePersonalisedMediaPresenterCallback(this);
             RemovePersonalisedMediaUseCase uc = new RemovePersonalisedMediaUseCase(request, callback);
             uc.Execute();
-
         }
 
         public void SendData(List<MediaBObj> mediaList)
@@ -49,18 +44,19 @@ namespace MediaReviewUWP.ViewModel
             _view.UpdateMedia(mediaList);
         }
 
-        public void RemoveFromMediaList(long mediaId) 
+        public void RemoveFromMediaList(long mediaId)
         {
             _view.RemoveMedia(mediaId);
         }
     }
 
-    public class GetPersonlisedMediaPresenterCallback : IGetPersonalisedMediaPresenterCallback
+    public class GetPersonalisedMediaPresenterCallback : IGetPersonalisedMediaPresenterCallback
     {
         private IPersonalisedMediaViewModel _vm;
-        public GetPersonlisedMediaPresenterCallback(IPersonalisedMediaViewModel vm) 
+
+        public GetPersonalisedMediaPresenterCallback(IPersonalisedMediaViewModel vm)
         {
-            _vm = vm;   
+            _vm = vm;
         }
 
         public void OnFailure(Exception exception)
@@ -70,7 +66,7 @@ namespace MediaReviewUWP.ViewModel
 
         public void OnSuccess(ZResponse<GetPersonalisedMediaResponse> response)
         {
-            _vm.SendData(response.Data.MediaList);
+            _vm?.SendData(response.Data.MediaList);
         }
     }
 
@@ -93,7 +89,7 @@ namespace MediaReviewUWP.ViewModel
         {
             if (response.Data != null && response.Data.Success)
             {
-                _vm.RemoveFromMediaList(response.Data.MediaId);
+                _vm?.RemoveFromMediaList(response.Data.MediaId);
             }
         }
     }

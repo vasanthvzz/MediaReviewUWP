@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediaReviewClassLibrary.Models;
 
 namespace MediaReviewUWP.View.Contract
 {
     public interface IShowMediaListView
     {
+        void AddMedia(MediaDetailBObj mediaDetails);
     }
 }

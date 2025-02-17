@@ -1,28 +1,23 @@
-﻿using MediaReviewClassLibrary;
-using MediaReviewClassLibrary.Utlis;
+﻿using MediaReviewClassLibrary.Data;
+using MediaReviewUWP.Utility;
 using MediaReviewUWP.View.HomePageView;
-using Microsoft.Extensions.DependencyInjection;
-using Windows.UI.ViewManagement;
+using MediaReviewUWP.View.LandingPageView;
+using System;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.ApplicationModel.Core;
-using MediaReviewUWP.Utils;
-using System;
-using MediaReviewUWP.View.LandingPageView;
-using System.Threading.Tasks;
-
 namespace MediaReviewUWP
 {
     public sealed partial class MainPage : Page
     {
-        private readonly ISessionManager _sessionManager;
-
         public MainPage()
         {
             this.InitializeComponent();
-            _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
+            FontManager.UpdateFont();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -30,8 +25,6 @@ namespace MediaReviewUWP
             InitializeTheme();
             UpdateThemeInTitleBar();
             RedirectPage();
-            //ThemeManager.ThemeChanged -= ThemeManager_ThemeChanged;
-            //ThemeManager.ThemeChanged += ThemeManager_ThemeChanged;
             AccentManager.ChangeAccent -= AccentManager_AccentChanged;
             AccentManager.ChangeAccent += AccentManager_AccentChanged;
             LandingPage.LoginSuccess -= OnLoginSuccess;
@@ -56,11 +49,6 @@ namespace MediaReviewUWP
             });
         }
 
-        private void ThemeManager_ThemeChanged()
-        {
-            UpdateThemeInTitleBar();
-        }
-            
         private void UpdateThemeInTitleBar()
         {
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
@@ -68,7 +56,7 @@ namespace MediaReviewUWP
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
             var color = ThemeManager.CurrentElementTheme == ElementTheme.Dark ?
                 (Color)Application.Current.Resources["MildDarkColor"] : (Color)Application.Current.Resources["MildLightColor"];
-            titleBar.BackgroundColor = titleBar.ButtonBackgroundColor= titleBar.InactiveBackgroundColor = titleBar.ButtonInactiveBackgroundColor = color;
+            titleBar.BackgroundColor = titleBar.ButtonBackgroundColor = titleBar.InactiveBackgroundColor = titleBar.ButtonInactiveBackgroundColor = color;
         }
 
         public void InitializeTheme()
@@ -82,7 +70,7 @@ namespace MediaReviewUWP
 
         private void RedirectPage()
         {
-            if (_sessionManager.RetriveUserFromStorage() != null)
+            if (SessionManager.User != null)
             {
                 OnLoginSuccess();
             }
@@ -106,4 +94,3 @@ namespace MediaReviewUWP
         }
     }
 }
-

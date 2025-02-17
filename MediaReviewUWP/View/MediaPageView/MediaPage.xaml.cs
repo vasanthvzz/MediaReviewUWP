@@ -1,13 +1,13 @@
 ﻿using MediaReviewClassLibrary.Models;
+using MediaReviewUWP.Utility;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
 using MediaReviewUWP.ViewObject;
 using Microsoft.Graphics.Canvas.Effects;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Numerics;
+using System.Threading.Tasks;
 using Windows.UI.Composition;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -17,12 +17,16 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MediaReviewUWP.View.MediaPageView
 {
-    public sealed partial class MediaPage : Page, IMediaPage , ITabItemContent
+    public sealed partial class MediaPage : Page, IMediaPage, ITabItemContent
     {
         private IMediaPageViewModel _viewModel;
-        private Compositor _compositor;
-        private SpriteVisual _blurVisual;
-        public MediaPageVObj MediaDetail { get; set; }
+
+        public MediaPageVObj MediaDetail
+        {
+            get
+            { return this.DataContext as MediaPageVObj; }
+            set { this.DataContext = value; }
+        }
 
         public MediaPage()
         {
@@ -36,29 +40,31 @@ namespace MediaReviewUWP.View.MediaPageView
             MediaDetailControlComponent.UserRatingComponent.UserRatingChanged += UserRatingChanged;
         }
 
-        private void UserRatingChanged(object sender , UserRatingChangedEventArgs e)
+        private void UserRatingChanged(object sender, UserRatingChangedEventArgs e)
         {
             ReviewSectionComponent.UserRatingChanged(e);
         }
 
-
-        private void AdjustScrollViewer(object sender, WindowSizeChangedEventArgs e)
+        public void ScrollToTop()
         {
-            double windowHeight = Window.Current.Bounds.Height;
-            BackgroundImageElement.Height = windowHeight;
-            MainScrollViewer.Height = windowHeight;
-        }
-
-        private void AdaptiveSize(object sender, RoutedEventArgs e)
-        {
-            MainScrollViewer.Height = BackgroundContainer.ActualHeight;
+            this.MainScrollViewer?.ChangeView(0, 0, 1);
         }
 
         #region Background Blur Operations
 
-        private void ApplyBlurEffect()
+        private async Task ApplyBlurEffect()
         {
-            _compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
+            OnImageOpened(null, null);
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                BackgroundImageElement.ImageOpened -= OnImageOpened;
+                BackgroundImageElement.ImageOpened += OnImageOpened;
+            });
+        }
+
+        private void OnImageOpened(object sender, RoutedEventArgs e)
+        {
+            Compositor _compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
 
             var backgroundImageVisual = ElementCompositionPreview.GetElementVisual(BackgroundImageElement);
 
@@ -68,39 +74,37 @@ namespace MediaReviewUWP.View.MediaPageView
             var blurEffect = new GaussianBlurEffect
             {
                 Name = "Blur",
-                BlurAmount = 4.0f,
+                BlurAmount = 8.0f,
                 BorderMode = EffectBorderMode.Soft,
-                Optimization = EffectOptimization.Speed,
+                Optimization = EffectOptimization.Quality,
                 Source = new CompositionEffectSourceParameter("source")
+              
             };
 
-            // Create an effect factory
             var effectFactory = _compositor.CreateEffectFactory(blurEffect);
+            
             var effectBrush = effectFactory.CreateBrush();
             effectBrush.SetSourceParameter("source", backdropBrush);
 
-            // Create a visual for the background image and apply the blur effect to it
-            _blurVisual = _compositor.CreateSpriteVisual();
+            SpriteVisual _blurVisual = _compositor.CreateSpriteVisual();
             _blurVisual.Brush = effectBrush;
             _blurVisual.Size = new Vector2((float)BackgroundContainer.ActualWidth, (float)BackgroundContainer.ActualHeight);
-
-            // Apply the blur effect only to the background image (targeting the background image element)var
-            Debug.Write(MediaDetail?.PosterPath);
             ElementCompositionPreview.SetElementChildVisual(BackgroundImageElement, _blurVisual);
 
-            BackgroundContainer.SizeChanged += (s, e) =>
+            BackgroundContainer.SizeChanged += (s, args) =>
             {
                 _blurVisual.Size = new Vector2((float)BackgroundContainer.ActualWidth, (float)BackgroundContainer.ActualHeight);
             };
         }
 
-        #endregion
+        #endregion Background Blur Operations
 
-        public async void UpdateMediaPage(MediaDetailBObj mediaDetailBObj)
+        public async Task UpdateMediaPage(MediaDetailBObj mediaDetailBObj)
         {
-            MediaDetailVObj mediaDetailVObj = new MediaDetailVObj(mediaDetailBObj) ;
-            await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
+                MediaDetailVObj mediaDetailVObj = new MediaDetailVObj(mediaDetailBObj);
+                MainGrid.Visibility = Visibility.Visible;
                 MediaDetail.UpdateFrom(mediaDetailBObj);
                 MediaDetailControlComponent.MediaDetail = mediaDetailVObj;
             });
@@ -109,20 +113,28 @@ namespace MediaReviewUWP.View.MediaPageView
         public void Init(long mediaId)
         {
             MediaDetail = new MediaPageVObj(mediaId);
-            ReviewSectionComponent.MediaId = MediaDetail.MediaId;
-            ReloadData();
+            ReviewSectionComponent.MediaId = mediaId;
+            ReloadPageContent();
         }
 
-        public void ReloadData()
+        public void ReloadPageContent()
         {
-            _viewModel.GetMediaDetail(MediaDetail.MediaId);
-            ReviewSectionComponent.ReloadData();
-            ApplyBlurEffect();
+            if(MediaDetail != null && MediaDetail.MediaId != 0)
+            {
+                _viewModel.GetMediaDetail(MediaDetail.MediaId);
+                ReviewSectionComponent.ReloadData();
+                ApplyBlurEffect();
+            }
         }
 
         private void BackgroundImageElement_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-
+            if (sender is Image image)
+            {
+                image.Source = new BitmapImage(new Uri(ImageManager.GetDefaultPosterImagePath()));
+            }
         }
+
+
     }
 }

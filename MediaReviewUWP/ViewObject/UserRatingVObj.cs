@@ -1,4 +1,5 @@
 ﻿using MediaReviewClassLibrary.Models;
+using MediaReviewUWP.Utility;
 using System.ComponentModel;
 
 namespace MediaReviewUWP.ViewObject
@@ -7,8 +8,9 @@ namespace MediaReviewUWP.ViewObject
     {
         public long MediaId { get; set; }
         public string MediaName { get; set; }
-        public string ImagePath {  get; set; }
+        public string ImagePath { get; set; }
         private short _userRating;
+
         public short UserRating
         {
             get => _userRating;
@@ -19,10 +21,11 @@ namespace MediaReviewUWP.ViewObject
             }
         }
 
-        public UserRatingVObj(long mediaId, string mediaName,string imagePath, short userRating)
+        public UserRatingVObj(long mediaId, string mediaName, string imagePath, short userRating)
         {
             MediaId = mediaId;
             MediaName = mediaName;
+            ImagePath = string.IsNullOrWhiteSpace(imagePath) ? ImageManager.GetDefaultTileImagePath() : imagePath;
             ImagePath = imagePath;
             UserRating = userRating;
         }
@@ -31,7 +34,7 @@ namespace MediaReviewUWP.ViewObject
         {
             MediaId = rating.MediaId;
             MediaName = rating.MediaName;
-            ImagePath = rating.ImagePath;
+            ImagePath = string.IsNullOrWhiteSpace(rating.ImagePath) ? ImageManager.GetDefaultTileImagePath() : rating.ImagePath;
             UserRating = rating.UserRating;
         }
 

@@ -35,8 +35,8 @@ namespace MediaReviewUWP.ViewModel
     {
         private IUserRatingViewModel _vm;
 
-        public UpdateUserRatingPresenterCallback(IUserRatingViewModel vm) 
-        { 
+        public UpdateUserRatingPresenterCallback(IUserRatingViewModel vm)
+        {
             _vm = vm;
         }
 

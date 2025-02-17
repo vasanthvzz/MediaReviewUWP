@@ -3,16 +3,17 @@ using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
 using MediaReviewUWP.ViewObject;
 using System;
+using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
-
 
 namespace MediaReviewUWP.View.MediaPageView
 {
     public sealed partial class MediaDetailControl : UserControl, IMediaDetailControl
     {
         private IMediaDetailViewModel _vm;
+
         public event EventHandler<MediaRatingChangeEventArgs> MediaRatingChanged;
 
         public MediaDetailVObj MediaDetail
@@ -35,9 +36,9 @@ namespace MediaReviewUWP.View.MediaPageView
         {
             this.InitializeComponent();
             _vm = new MediaDetailViewModel(this);
-            this.DataContextChanged += (s, e) => { 
+            this.DataContextChanged += (s, e) =>
+            {
                 Bindings.Update();
-                InitAfterDetailFetched();
                 PersonalMediaContentComponent.UserPersonalMedia = MediaDetail?.UserPersonalMedia;
                 UserRatingComponent.UserRating = MediaDetail?.UserRating;
             };
@@ -54,37 +55,27 @@ namespace MediaReviewUWP.View.MediaPageView
             _vm.GetMediaRating(MediaDetail.MediaId);
         }
 
-        private void InitAfterDetailFetched()
-        {
-            if (MediaDetail != null && MediaDetail.Runtime.Trim().Length == 0)
-            {
-                FirstDotIcon.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            }
-        }
-
         private void MediaImage_ImageFailed(object sender, Windows.UI.Xaml.ExceptionRoutedEventArgs e)
         {
             if (sender is Image image)
             {
                 image.Source = new BitmapImage(new Uri("ms-appx:///Assets/DefaultMediaImage.png"));
-                image.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
             }
         }
 
-        public async void UpdateMediaRating(float mediaRating)
+        public async Task UpdateMediaRating(float mediaRating)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 MediaDetail.MediaRating = mediaRating;
                 OnMediaRatingChanged(mediaRating);
-            }
-            );
+            });
         }
     }
 
-    public class MediaRatingChangeEventArgs : EventArgs 
+    public class MediaRatingChangeEventArgs : EventArgs
     {
-        public float MediaRating {  get; set; }
+        public float MediaRating { get; set; }
 
         public MediaRatingChangeEventArgs(float mediaRating)
         {

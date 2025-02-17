@@ -1,22 +1,20 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Constants;
-using MediaReviewClassLibrary.Models.Enitites;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
     public class GetPersonalisedMediaUseCase : UseCaseBase<GetPersonalisedMediaResponse>
     {
         private GetPersonalisedMediaRequest _request;
-        private IGetPersonalisedMediaDataManager _dm;
+        private IGetPersonalisedMediaDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IGetPersonalisedMediaDataManager>();
 
         public GetPersonalisedMediaUseCase(GetPersonalisedMediaRequest request, ICallback<GetPersonalisedMediaResponse> callback) : base(callback)
         {
             _request = request;
-            _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IGetPersonalisedMediaDataManager>();
         }
 
         public override void Action()
@@ -70,8 +68,9 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IGetPersonalisedMediaDataManager
     {
-        void GetPersonalisedMedia(GetPersonalisedMediaRequest request, PersonalisedMediaUseCaseCallback callback);
+        Task GetPersonalisedMedia(GetPersonalisedMediaRequest request, PersonalisedMediaUseCaseCallback callback);
     }
 
-    public interface IGetPersonalisedMediaPresenterCallback : ICallback<GetPersonalisedMediaResponse> { }
+    public interface IGetPersonalisedMediaPresenterCallback : ICallback<GetPersonalisedMediaResponse>
+    { }
 }

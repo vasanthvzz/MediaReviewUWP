@@ -1,47 +1,25 @@
-﻿using MediaReviewUWP.ViewObject;
+﻿using MediaReviewUWP.Utility;
+using MediaReviewUWP.ViewObject;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MediaReviewUWP.View.HomePageView
 {
     public sealed partial class MediaGridViewUserControl : UserControl
     {
         public event EventHandler<MediaTileEventArgs> TileClicked;
+
         public event Action ScrollViewerEnd;
-
-        public ObservableCollection<MediaTileVObj> MediaList
-        {
-            get { return (ObservableCollection<MediaTileVObj>)GetValue(MediaListProperty); }
-            set
-            {
-                SetValue(MediaListProperty, value);
-            }
-        }
-
-        public static readonly DependencyProperty MediaListProperty =
-      DependencyProperty.Register("MediaList", typeof(ObservableCollection<MediaTileVObj>), typeof(MediaGridViewUserControl), new PropertyMetadata(null));
-
-
 
         public MediaGridViewUserControl()
         {
             this.InitializeComponent();
-            MediaList = new ObservableCollection<MediaTileVObj>();
-            
         }
 
         private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -92,10 +70,12 @@ namespace MediaReviewUWP.View.HomePageView
             }
         }
 
-
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-
+            if (sender is Image image)
+            {
+                image.Source = new BitmapImage(new Uri(ImageManager.GetDefaultTileImagePath()));
+            }
         }
 
         private void MediaTileClick(object sender, ItemClickEventArgs e)
@@ -146,7 +126,6 @@ namespace MediaReviewUWP.View.HomePageView
                     if (result != null) return result;
                 }
             }
-
             return null;
         }
     }

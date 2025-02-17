@@ -4,7 +4,6 @@ namespace CommonClassLibrary
 {
     public abstract class UseCaseBase<R>
     {
-
         public ICallback<R> PresenterCallback { get; set; }
 
         public abstract void Action();

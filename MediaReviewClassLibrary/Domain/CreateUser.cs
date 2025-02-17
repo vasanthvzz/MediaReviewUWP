@@ -8,12 +8,12 @@ namespace MediaReviewClassLibrary.Domain
 {
     public class CreateUserUseCase : UseCaseBase<CreateUserResponse>
     {
+        private ICreateUserDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<ICreateUserDataManager>();
         private CreateUserRequest _request;
-        private ICreateUserDataManager _dm;
+
         public CreateUserUseCase(CreateUserRequest request, ICallback<CreateUserResponse> callback) : base(callback)
         {
             _request = request;
-            _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ICreateUserDataManager>();
         }
 
         public override void Action()
@@ -25,9 +25,10 @@ namespace MediaReviewClassLibrary.Domain
     public class CreateUserRequest
     {
         public string UserName { get; }
-        public string ProfilePicture {  get; }
+        public string ProfilePicture { get; }
         public string Password { get; }
-        public CreateUserRequest(string userName , string password,string profilePicture = "")
+
+        public CreateUserRequest(string userName, string password, string profilePicture = "")
         {
             UserName = userName;
             Password = password;
@@ -39,6 +40,7 @@ namespace MediaReviewClassLibrary.Domain
     {
         public bool Success { get; }
         public UserDetail User { get; }
+
         public CreateUserResponse(bool success, UserDetail user)
         {
             Success = success;
@@ -49,6 +51,7 @@ namespace MediaReviewClassLibrary.Domain
     public class CreateUserUseCaseCallback : ICallback<CreateUserResponse>
     {
         private CreateUserUseCase _usecase;
+
         public CreateUserUseCaseCallback(CreateUserUseCase usecase)
         {
             _usecase = usecase;
@@ -70,5 +73,6 @@ namespace MediaReviewClassLibrary.Domain
         Task CreateUserAccount(CreateUserRequest request, CreateUserUseCaseCallback callback);
     }
 
-    public interface ICreateUserPresenterCallback : ICallback<CreateUserResponse> { }
+    public interface ICreateUserPresenterCallback : ICallback<CreateUserResponse>
+    { }
 }

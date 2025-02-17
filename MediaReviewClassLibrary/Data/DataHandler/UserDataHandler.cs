@@ -1,8 +1,7 @@
 ﻿using MediaReviewClassLibrary.Data.Contract;
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Utlis;
-using Microsoft.Extensions.DependencyInjection;
+using MediaReviewClassLibrary.Utility;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,22 +9,19 @@ namespace MediaReviewClassLibrary.Data.DataHandler
 {
     public class UserDataHandler : IUserDataHandler
     {
-        private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IDatabaseAdapter>();
-        private IPasswordAdapter _passwordAdapter = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IPasswordAdapter>();
+        private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetRequiredService<IDatabaseAdapter>();
+        private IPasswordAdapter _passwordAdapter = MediaReviewDIServiceProvider.GetRequiredService<IPasswordAdapter>();
 
-        public async Task<UserDetail> CreateUser(string username, string password,string profilePicture)
+        public async Task<UserDetail> CreateUser(string username, string password, string profilePicture)
         {
-            //Generate unique id for user id
-            long userId = IdentityManager.GenerateUniqueId();
-
-            //Check whether the user name is already taken
             if (await IsUserExist(username))
             {
                 return null;
             }
             else
             {
-                UserDetail user = new UserDetail(userId, username,profilePicture);
+                long userId = IdentityManager.GenerateUniqueId();
+                UserDetail user = new UserDetail(userId, username, profilePicture);
                 await _databaseAdapter.InsertAsync<UserDetail>(user);
                 _passwordAdapter.AddUser(username, password);
                 return user;
@@ -35,7 +31,6 @@ namespace MediaReviewClassLibrary.Data.DataHandler
         public async Task<UserDetail> GetUserById(long id)
         {
             return await _databaseAdapter.FindAsync<UserDetail>(id);
-
         }
 
         public async Task<UserDetail> GetUserByName(string username)

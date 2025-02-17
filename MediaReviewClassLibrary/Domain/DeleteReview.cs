@@ -1,6 +1,7 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models.Enitites;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
@@ -23,6 +24,7 @@ namespace MediaReviewClassLibrary.Domain
     public class DeleteReviewUseCaseCallback : ICallback<DeleteReviewResponse>
     {
         private DeleteReviewUseCase _uc;
+
         public DeleteReviewUseCaseCallback(DeleteReviewUseCase uc)
         {
             _uc = uc;
@@ -41,18 +43,19 @@ namespace MediaReviewClassLibrary.Domain
 
     public class DeleteReviewResponse
     {
-        public bool Success {  get; set; }
+        public bool Success { get; set; }
         public Review DeletedReview { get; set; }
-        public DeleteReviewResponse(bool success, Review deletedReview) 
+
+        public DeleteReviewResponse(bool success, Review deletedReview)
         {
-            Success = success; 
-            DeletedReview = deletedReview; 
+            Success = success;
+            DeletedReview = deletedReview;
         }
     }
-    
+
     public class DeleteReviewRequest
     {
-        public long ReviewId {  get; set; }
+        public long ReviewId { get; set; }
         public long UserId { get; set; }
 
         public DeleteReviewRequest(long reviewId, long userId)
@@ -62,9 +65,11 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public interface IDeleteReviewPresenterCallback : ICallback<DeleteReviewResponse> { }
+    public interface IDeleteReviewPresenterCallback : ICallback<DeleteReviewResponse>
+    { }
+
     public interface IDeleteReviewDataManager
     {
-        void DeleteReview(DeleteReviewRequest request, DeleteReviewUseCaseCallback deleteReviewUseCaseCallback);
+        Task DeleteReview(DeleteReviewRequest request, DeleteReviewUseCaseCallback deleteReviewUseCaseCallback);
     }
 }

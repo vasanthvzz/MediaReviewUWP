@@ -1,25 +1,26 @@
 ﻿using CommonClassLibrary;
+using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Models;
+using MediaReviewClassLibrary.Models.Constants;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
-
     public class GetUserFollowUseCase : UseCaseBase<GetUserFollowResponse>
     {
         private GetUserFollowRequest _request;
-        private IGetUserFollowDataManager _dm;
+        private IGetUserFollowDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IGetUserFollowDataManager>();
 
-        public GetUserFollowUseCase(GetUserFollowRequest request,ICallback<GetUserFollowResponse> callback) : base(callback)
+        public GetUserFollowUseCase(GetUserFollowRequest request, ICallback<GetUserFollowResponse> callback) : base(callback)
         {
             _request = request;
         }
 
         public override void Action()
         {
-            GetUserFollowUseCaseCallback callback = new GetUserFollowUseCaseCallback(this);
-            _dm.GetUserFollow(_request, callback);
+            _dm.GetUserFollow(_request, new GetUserFollowUseCaseCallback(this));
         }
     }
 
@@ -43,19 +44,13 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public enum FollowType
-    {
-        FOLLOWER,
-        FOLLOWEE
-    }
-
     public class GetUserFollowRequest
     {
-        public long UserId {  get; set; }
+        public long UserId { get; set; }
         public FollowType UserFollowType { get; set; }
         public bool IsFollowing { get; set; }
 
-        public GetUserFollowRequest(long userId, FollowType userFollowType, bool isFollowing)
+        public GetUserFollowRequest(long userId, FollowType userFollowType, bool isFollowing = true)
         {
             UserId = userId;
             UserFollowType = userFollowType;
@@ -73,10 +68,11 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public interface IGetUserFollowDataManager 
-    { 
-        void GetUserFollow(GetUserFollowRequest request,ICallback<GetUserFollowResponse> callback );
+    public interface IGetUserFollowDataManager
+    {
+        Task GetUserFollow(GetUserFollowRequest request, ICallback<GetUserFollowResponse> callback);
     }
 
-    public interface IGetUserFollowPresenterCallback : ICallback<GetUserFollowResponse> { }
+    public interface IGetUserFollowPresenterCallback : ICallback<GetUserFollowResponse>
+    { }
 }

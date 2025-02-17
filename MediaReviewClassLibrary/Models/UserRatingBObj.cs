@@ -1,9 +1,4 @@
 ﻿using MediaReviewClassLibrary.Models.Enitites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Models
 {
@@ -14,7 +9,7 @@ namespace MediaReviewClassLibrary.Models
         public string ImagePath { get; set; }
         public short UserRating { get; set; }
 
-        public UserRatingBObj(Media media,  short userRating)
+        public UserRatingBObj(Media media, short userRating)
         {
             MediaId = media.MediaId;
             MediaName = media.Title;

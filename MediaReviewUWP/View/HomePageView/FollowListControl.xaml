@@ -1,0 +1,92 @@
+﻿<Page
+    x:Class="MediaReviewUWP.View.HomePageView.FollowListControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:component="using:MediaReviewUWP.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:MediaReviewUWP.View.HomePageView"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    xmlns:viewobject="using:MediaReviewUWP.ViewObject"
+    Background="{ThemeResource StrongBackground}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <local:UserFollowButtonContentConverter x:Key="UserFollowButtonContentConv" />
+                    <local:NoFollowTextConverter x:Key="NoFollowTextConv" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock
+            x:Name="NoFollowTb"
+            Margin="10,20"
+            HorizontalAlignment="Center"
+            FontSize="{StaticResource H1}"
+            Text="{x:Bind _followType, Converter={StaticResource NoFollowTextConv}}"
+            TextWrapping="Wrap"
+            Visibility="Collapsed" />
+        <GridView
+            HorizontalAlignment="Center"
+            ItemsSource="{x:Bind FollowList}"
+            SelectionMode="None">
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <toolkit:WrapPanel />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="viewobject:UserFollowVObj">
+                    <Grid
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        Background="{ThemeResource MildBackground}"
+                        BorderBrush="{ThemeResource Shade3}"
+                        BorderThickness="1"
+                        CornerRadius="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <component:UserProfilePicturePresenter
+                            Grid.Column="0"
+                            Width="40"
+                            Height="40"
+                            Margin="0,10,0,0"
+                            VerticalAlignment="Top" />
+                        <!--
+                            UserName="{x:Bind UserName}"
+                            UserProfilePicture="{x:Bind ProfilePicture}" />
+                        -->
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Margin="10,5"
+                            HorizontalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Text="{x:Bind UserName, Mode=OneWay}"
+                            TextWrapping="Wrap" />
+                        <Button
+                            x:Name="FollowButton"
+                            Grid.Row="2"
+                            Margin="10,5"
+                            HorizontalAlignment="Center"
+                            Click="FollowButton_Click"
+                            Content="{x:Bind IsFollow, Mode=OneWay, Converter={StaticResource UserFollowButtonContentConv}}" />
+
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</Page>

@@ -1,7 +1,8 @@
 ﻿using MediaReviewClassLibrary.Models;
-using MediaReviewUWP.Utils;
-using System;
+using MediaReviewUWP.Components;
+using MediaReviewUWP.Utility;
 using System.ComponentModel;
+using static MediaReviewUWP.Components.UserProfilePicturePresenter;
 
 namespace MediaReviewUWP.ViewObject
 {
@@ -10,11 +11,13 @@ namespace MediaReviewUWP.ViewObject
         public long ReviewId { get; set; }
         public long UserId { get; set; }
         public long MediaId { get; set; }
-        public string UserProfilePicture {  get; set; }
+        public UserDTBObj UserDT { get; set; }
+        public string ProfilePicture { get; set; }
         public string UserName { get; set; }
         public string Timestamp { get; set; }
 
         private bool _isEdited;
+
         public bool IsEdited
         {
             get => _isEdited;
@@ -29,6 +32,7 @@ namespace MediaReviewUWP.ViewObject
         }
 
         private bool _following;
+
         public bool Following
         {
             get => _following;
@@ -43,6 +47,7 @@ namespace MediaReviewUWP.ViewObject
         }
 
         private string _description;
+
         public string Description
         {
             get => _description;
@@ -77,12 +82,13 @@ namespace MediaReviewUWP.ViewObject
             UserId = review.UserId;
             MediaId = review.MediaId;
             IsEdited = review.IsEdited;
-            Timestamp = DateManager.RelativeToCurrent(review.Timestamp);
+            Timestamp = DateManager.GetDateRelativeToCurrent(review.Timestamp);
             Description = review.Description;
-            UserName = "@"+review.UserName;
-            UserProfilePicture = review.ProfileImage;
+            UserName = review.UserName;
+            ProfilePicture = review.ProfileImage;
             UserRating = review.UserRating;
             Following = review.Following;
+            UserDT = new UserDTBObj(UserName, ProfilePicture);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -94,9 +100,10 @@ namespace MediaReviewUWP.ViewObject
 
         public void UpdateFrom(MediaReviewBObj review)
         {
-            if(ReviewId == review.ReviewId)
+            if (ReviewId == review.ReviewId)
             {
                 Description = review.Description;
+                Following = review.Following;
             }
         }
     }

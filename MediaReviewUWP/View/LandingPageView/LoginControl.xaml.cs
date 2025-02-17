@@ -2,15 +2,18 @@
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
 using System;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace MediaReviewUWP.View.LandingPageView
 {
-    public sealed partial class LoginControl : UserControl , ILoginUserView
+    public sealed partial class LoginControl : UserControl, ILoginUserView
     {
         public event Action CreateAccountClicked;
+
         public event Action LoginCompleted;
+
         private ILoginUserViewModel _vm;
 
         public LoginControl()
@@ -23,7 +26,6 @@ namespace MediaReviewUWP.View.LandingPageView
         {
             CreateAccountClicked?.Invoke();
         }
-
 
         private void RevealModeCheckbox_Changed(object sender, RoutedEventArgs e)
         {
@@ -41,10 +43,10 @@ namespace MediaReviewUWP.View.LandingPageView
         {
             string userName = UsernameTb.Text;
             string password = PasswordTb.Password;
-            _vm.LoginUser(userName,password);
+            _vm.LoginUser(userName, password);
         }
 
-        public async void LoginFailure()
+        public async Task LoginFailure()
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {

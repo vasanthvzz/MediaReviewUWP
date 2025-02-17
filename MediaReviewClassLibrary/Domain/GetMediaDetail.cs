@@ -1,35 +1,30 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using static MediaReviewClassLibrary.Domain.GetMediaDetail;
 namespace MediaReviewClassLibrary.Domain
 {
-    public class GetMediaDetail
+    public class GetMediaDetailUseCase : UseCaseBase<GetMediaDetailResponse>
     {
-        public class GetMediaDetailUseCase : UseCaseBase<GetMediaDetailResponse>
+        private GetMediaDetailRequest _request;
+        private IGetMediaDetailDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IGetMediaDetailDataManager>();
+
+        public GetMediaDetailUseCase(GetMediaDetailRequest request, IGetMediaDetailPresenterCallback callback) : base(callback)
         {
-            private GetMediaDetailRequest _request;
-            private IGetMediaDetailDataManager _dm;
+            _request = request;
+        }
 
-            public GetMediaDetailUseCase(GetMediaDetailRequest request, IGetMediaDetailPresenterCallback callback)
-        : base(callback)
-            {
-                _request = request;
-                _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IGetMediaDetailDataManager>();
-            }
-
-            public override void Action()
-            {
-                _dm.GetMediaDetail(_request, new GetMediaDetailUseCaseCallback(this));
-            }
+        public override void Action()
+        {
+            _dm.GetMediaDetail(_request, new GetMediaDetailUseCaseCallback(this));
         }
     }
+
     public class GetMediaDetailRequest
     {
         public long MediaId { get; }
         public long UserId { get; }
+
         public GetMediaDetailRequest(long userId, long mediaId)
         {
             UserId = userId;
@@ -55,6 +50,7 @@ namespace MediaReviewClassLibrary.Domain
     public class GetMediaDetailUseCaseCallback : ICallback<GetMediaDetailResponse>
     {
         private GetMediaDetailUseCase _uc;
+
         public GetMediaDetailUseCaseCallback(GetMediaDetailUseCase useCase)
         {
             _uc = useCase;
@@ -64,6 +60,7 @@ namespace MediaReviewClassLibrary.Domain
         {
             _uc?.PresenterCallback?.OnSuccess(response);
         }
+
         public void OnFailure(Exception exception)
         {
             _uc?.PresenterCallback?.OnFailure(exception);
@@ -72,5 +69,4 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IGetMediaDetailPresenterCallback : ICallback<GetMediaDetailResponse>
     { }
-
 }

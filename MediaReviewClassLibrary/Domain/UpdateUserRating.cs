@@ -1,14 +1,14 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models.Enitites;
-using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
     public class UpdateUserRatingUseCase : UseCaseBase<UpdateUserRatingResponse>
     {
         private UpdateUserRatingRequest _request;
-        private IUpdateUserRatingDataManager _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IUpdateUserRatingDataManager>();
+        private IUpdateUserRatingDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IUpdateUserRatingDataManager>();
 
         public UpdateUserRatingUseCase(UpdateUserRatingRequest request, ICallback<UpdateUserRatingResponse> callback) : base(callback)
         {
@@ -24,7 +24,7 @@ namespace MediaReviewClassLibrary.Domain
     public class UpdateUserRatingUsecaseCallback : ICallback<UpdateUserRatingResponse>
     {
         private UpdateUserRatingUseCase _usecase;
-        
+
         public UpdateUserRatingUsecaseCallback(UpdateUserRatingUseCase usecase)
         {
             _usecase = usecase;
@@ -41,9 +41,9 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public class UpdateUserRatingResponse 
-    { 
-        public bool Success {  get; set; }
+    public class UpdateUserRatingResponse
+    {
+        public bool Success { get; set; }
         public Rating UserRating { get; set; }
 
         public UpdateUserRatingResponse(bool success, Rating userRating)
@@ -53,9 +53,9 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public class UpdateUserRatingRequest 
+    public class UpdateUserRatingRequest
     {
-        public Rating UserRating { get; set;}
+        public Rating UserRating { get; set; }
 
         public UpdateUserRatingRequest(Rating userRating)
         {
@@ -65,8 +65,9 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IUpdateUserRatingDataManager
     {
-        void UpdateUserRating(UpdateUserRatingRequest request, UpdateUserRatingUsecaseCallback updateUserRatingUsecaseCallback);
+        Task UpdateUserRating(UpdateUserRatingRequest request, UpdateUserRatingUsecaseCallback updateUserRatingUsecaseCallback);
     }
 
-    public interface IUpdateUserRatingPresenterCallback : ICallback<UpdateUserRatingResponse> { }
+    public interface IUpdateUserRatingPresenterCallback : ICallback<UpdateUserRatingResponse>
+    { }
 }

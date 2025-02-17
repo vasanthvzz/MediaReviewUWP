@@ -1,4 +1,6 @@
-﻿using MediaReviewClassLibrary.Models;
+﻿using CommunityToolkit.WinUI.Collections;
+using MediaReviewClassLibrary.Models;
+using MediaReviewUWP.Utility;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
@@ -9,16 +11,19 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-
 
 namespace MediaReviewUWP.View.HomePageView
 {
-    public sealed partial class ShowMediaListControl : Page,IShowMediaListView, ITabItemContent
+    public sealed partial class ShowMediaListControl : Page, IShowMediaListView, ITabItemContent
     {
         private IShowMediaListViewModel _vm;
+
         public event EventHandler<MediaTileEventArgs> TileClicked;
+
         public event EventHandler<ListReachedEndArgs> ListReachedEnd;
+        public AdvancedCollectionView MediaCollectionView {  get; private set; }
 
         public ObservableCollection<MediaTileVObj> MediaList
         {
@@ -31,15 +36,33 @@ namespace MediaReviewUWP.View.HomePageView
 
         public ShowMediaListControl()
         {
-            this.InitializeComponent();
             MediaList = new ObservableCollection<MediaTileVObj>();
+            MediaCollectionView = new AdvancedCollectionView(MediaList);
+            MediaList.CollectionChanged += MediaList_CollectionChanged;
+            GlobalEventManager.OnMediaAdded += GlobalEventManager_OnMediaAdded;
             _vm = new ShowMediaListViewModel(this);
+            this.InitializeComponent();
+        }
+
+        private void GlobalEventManager_OnMediaAdded(object sender, MediaAddedEventArgs e)
+        {
+            var medialist = new List<MediaTileVObj>(MediaList);
+            var minReleaseDate = medialist.Min(media => media.ReleaseDate);
+            if(minReleaseDate != null && minReleaseDate <= e.ReleaseDate)
+            {
+                _vm.GetMedia(e.MediaId);
+            }
+        }
+
+        private void MediaList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs args)
         {
-            //TO DO : Get the user preference and the view
-
+            MediaCollectionView.SortDescriptions.Clear();
+            MediaCollectionView.SortDescriptions.Add(new SortDescription("ReleaseDate", SortDirection.Descending));
+            MediaCollectionView.Refresh();
         }
 
         public void UpdateMedia(List<MediaBObj> mediaList)
@@ -47,34 +70,25 @@ namespace MediaReviewUWP.View.HomePageView
             foreach (var media in mediaList)
             {
                 var existingMedia = MediaList.FirstOrDefault(m => m.MediaId == media.MediaId);
-                if (existingMedia != null)
+                if (existingMedia == null)
                 {
-                    existingMedia.UpdateFrom(media);
+                    MediaList.Add(new MediaTileVObj(media));
                 }
                 else
                 {
-                    MediaList.Add(new MediaTileVObj(media));
+                    existingMedia.UpdateFrom(media);
                 }
             }
         }
 
         private void DisplayModeButton_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(MainContentPresenter == null)
+            if (MainContentPresenter != null)
             {
-                return;
-            }
-            if (DisplayModeButton.SelectedIndex == 0)
-            {
-                MainContentPresenter.ContentTemplate = (DataTemplate)Resources["GridViewTemplate"];
-            }
-            else
-            {
-                MainContentPresenter.ContentTemplate = (DataTemplate)Resources["ListViewTemplate"];
-
+                MainContentPresenter.ContentTemplate = (DataTemplate)Resources[
+                DisplayModeButton.SelectedIndex == 0 ? "GridViewTemplate" : "ListViewTemplate"];
             }
         }
-
 
         private void MediaTileClick(object sender, ItemClickEventArgs e)
         {
@@ -90,15 +104,37 @@ namespace MediaReviewUWP.View.HomePageView
             if (sender is Image image)
             {
                 image.Source = new BitmapImage(new Uri("ms-appx:///Assets/DefaultMediaImage.png"));
-                image.Stretch =  Windows.UI.Xaml.Media.Stretch.Uniform;
+                image.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
+            }
+        }
+        
+        public void ReloadPageContent()
+        {
+            if (MainContentPresenter.ContentTemplate == (DataTemplate)Resources["ListViewTemplate"])
+            {
+                var mediaControl = FindChild<MediaListViewUserControl>(MainContentPresenter);
+                mediaControl?.ReloadCurrentMedia();
             }
         }
 
-
-
-        public void ReloadData()
+        private T FindChild<T>(DependencyObject parent) where T : DependencyObject
         {
-            _vm.GetPresentMediaDetails();
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T foundChild)
+                {
+                    return foundChild;
+                }
+
+                var childOfChild = FindChild<T>(child);
+                if (childOfChild != null)
+                {
+                    return childOfChild;
+                }
+            }
+            return null;
         }
 
         private void MediaGridViewUserControl_TileClicked(object sender, MediaTileEventArgs e)
@@ -111,6 +147,16 @@ namespace MediaReviewUWP.View.HomePageView
             ListReachedEndArgs args = new ListReachedEndArgs(MediaList.Count);
             ListReachedEnd?.Invoke(this, args);
         }
+
+        public void AddMedia(MediaDetailBObj mediaDetails)
+        {
+            MediaTileVObj mediaTile = new MediaTileVObj(mediaDetails);
+            _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            {
+                MediaList.Add(mediaTile);
+                MediaCollectionView.Refresh();
+            });
+        }
     }
 
     public class MediaTileEventArgs : EventArgs
@@ -122,6 +168,12 @@ namespace MediaReviewUWP.View.HomePageView
         {
             MediaId = media.MediaId;
             Title = media.Title;
+        }
+
+        public MediaTileEventArgs(UserReviewVObj review)
+        {
+            MediaId = review.MediaId;
+            Title = review.MediaName;
         }
 
         public MediaTileEventArgs(UserRatingVObj media)

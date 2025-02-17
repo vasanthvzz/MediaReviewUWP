@@ -35,4 +35,3 @@ namespace MediaReviewUWP.View.LandingPageView
         }
     }
 }
-

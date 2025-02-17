@@ -2,22 +2,26 @@
     x:Class="MediaReviewUWP.View.HomePageView.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="using:MediaReviewUWP.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MediaReviewUWP.View.HomePageView"
+    xmlns:local1="using:MediaReviewUWP.Components"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    Background="{ThemeResource MildBackground}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
-
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <local:ImageToBrushConverter x:Name="ImageToBrushConv" />
+                    <local:AdminComponentVisibility x:Name="AdminComponent" />
                 </ResourceDictionary>
                 <ResourceDictionary Source="/ResourceDictionary/ButtonDictionary.xaml" />
                 <ResourceDictionary Source="/ResourceDictionary/NavbarDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/ListViewDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/TextboxDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/FlyoutStyleDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -41,41 +45,87 @@
                 Click="HomeButton_Click"
                 CornerRadius="0"
                 RelativePanel.AlignLeftWithPanel="True"
-                Style="{StaticResource CircleButton}">
+                Style="{StaticResource NavbarItem}">
                 <SymbolIcon Symbol="Home" />
             </Button>
-
-            <AutoSuggestBox RelativePanel.AlignHorizontalCenterWithPanel="True" />
+            <local1:SearchBox
+                x:Name="UniversalSearchBox"
+                x:Uid="SearchBox"
+                Width="350"
+                Margin="0,5,0,0"
+                HorizontalAlignment="Center"
+                KeyDown="SearchBox_KeyDown"
+                RelativePanel.AlignHorizontalCenterWithPanel="True"
+                SearchButtonClicked="SearchBox_SearchButtonClicked" />
+            <Button
+                x:Name="FilterBtn"
+                Margin="5"
+                VerticalAlignment="Center"
+                RelativePanel.RightOf="UniversalSearchBox">
+                <Button.Content>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE71C;" />
+                </Button.Content>
+                <Button.Flyout>
+                    <Flyout FlyoutPresenterStyle="{StaticResource GenreFlyoutPresenter}">
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="300" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ListView
+                                x:Name="GenreListView"
+                                Margin="0,10"
+                                IsMultiSelectCheckBoxEnabled="True"
+                                ItemContainerStyle="{StaticResource FilterGenreListViewItem}"
+                                ItemsSource="{x:Bind _genreList}"
+                                SelectionMode="Multiple"
+                                Style="{StaticResource GenreListViewStyle}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Margin="10" Text="{Binding GenreName}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <Border
+                                Grid.Row="1"
+                                BorderBrush="{ThemeResource MildBackground}"
+                                BorderThickness="0,1,0,0">
+                                <Button
+                                    x:Name="ApplyFilterBtn"
+                                    x:Uid="ApplyFilterBtn"
+                                    Margin="0,15"
+                                    HorizontalAlignment="Center"
+                                    Background="{ThemeResource MainShade}"
+                                    Click="ApplyFilterBtn_Click"
+                                    Content="Apply Filter"
+                                    CornerRadius="5"
+                                    Style="{StaticResource AdaptiveButtonStyle}" />
+                            </Border>
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
             <Button
                 x:Name="ProfileButton"
+                Background="Transparent"
                 BorderThickness="2"
                 Click="ProfileButton_Click"
                 RelativePanel.AlignRightWithPanel="True"
-                Style="{StaticResource ProfileButton}">
-                <Button.Background>
-                    <ImageBrush ImageSource="{x:Bind _user.ProfilePicture, Mode=OneWay}" />
-                </Button.Background>
+                Style="{StaticResource TextBlockButtonStyle}"
+                Visibility="Visible">
+                <Button.Content>
+                    <local1:UserProfilePicturePresenter UserDt="{x:Bind UserDt}" />
+                </Button.Content>
                 <Button.Flyout>
                     <Flyout x:Name="ProfileFlyout">
-                        <Grid Width="150">
+                        <Grid Width="200">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <Ellipse
-                                Grid.Row="0"
-                                Width="75"
-                                Height="75"
-                                Fill="{x:Bind _user.ProfilePicture, Mode=OneWay, Converter={StaticResource ImageToBrushConv}}" />
-                            <!--<Image
-                                Grid.Row="0"
-                                Width="75"
-                                Height="75"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Source="{x:Bind _user.ProfilePicture, Mode=OneWay}" />-->
+                            <local1:UserProfilePicturePresenter Grid.Row="0" UserDt="{x:Bind UserDt}" />
 
                             <Button
                                 x:Name="ThemeButton"
@@ -99,21 +149,19 @@
                                 FontWeight="Bold"
                                 Text="{x:Bind _user.UserName, Mode=OneWay}" />
 
-
                             <Button
+                                x:Uid="LogoutBtn"
                                 Grid.Row="2"
                                 HorizontalAlignment="Center"
                                 Background="Red"
                                 Click="LogoutButton_Click"
-                                Content="Logout"
                                 CornerRadius="10"
-                                FontWeight="SemiBold"
-                                Style="{StaticResource LogoutButtonStyle}" />
+                                Foreground="White"
+                                Style="{StaticResource AdaptiveButtonStyle}" />
                         </Grid>
                     </Flyout>
                 </Button.Flyout>
             </Button>
-
 
         </RelativePanel>
         <SplitView
@@ -134,7 +182,6 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <StackPanel>
-                        <!--  Hamburger Button  -->
                         <Button
                             x:Name="HamburgerButton"
                             HorizontalAlignment="Stretch"
@@ -144,20 +191,17 @@
                             Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon Margin="5" Glyph="&#xE700;" />
-                                <TextBlock
-                                    Margin="30,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="18" />
+                                <TextBlock Margin="30,0,0,0" VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
 
                         <TextBlock
                             x:Name="MyMovieListTb"
+                            x:Uid="MyMovieListTb"
                             Style="{StaticResource NavbarSubheading}"
                             Text="My Movie List"
                             Visibility="Collapsed" />
 
-                        <!--  My Favourites Menu Item  -->
                         <Button
                             x:Name="FavouriteButton"
                             HorizontalAlignment="Stretch"
@@ -171,14 +215,13 @@
                                     FontFamily="Segoe Fluent Icons"
                                     Glyph="&#xEB52;" />
                                 <TextBlock
+                                    x:Uid="MyFavouritesTb"
                                     Margin="30,0,0,0"
                                     VerticalAlignment="Center"
-                                    FontSize="18"
                                     Text="My Favourites" />
                             </StackPanel>
                         </Button>
 
-                        <!--  Contact Menu Item  -->
                         <Button
                             x:Name="HasWatchedButton"
                             HorizontalAlignment="Stretch"
@@ -193,10 +236,9 @@
                                     FontFamily="Segoe Fluent Icons"
                                     Glyph="&#xE7B3;" />
                                 <TextBlock
+                                    x:Uid="WatchedTb"
                                     Margin="30,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Text="I've Watched" />
+                                    VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
 
@@ -210,25 +252,24 @@
                             <StackPanel Orientation="Horizontal">
                                 <SymbolIcon Margin="5" Symbol="Flag" />
                                 <TextBlock
+                                    x:Uid="WatchlistTb"
                                     Margin="30,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Text="Watch list" />
+                                    VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
 
-                        <TextBlock
+                        <!--<TextBlock
                             x:Name="SocialTb"
+                            x:Uid="SocialTb"
                             Style="{StaticResource NavbarSubheading}"
-                            Text="Social"
                             Visibility="Collapsed" />
 
-                        <!--  Back Menu Item  -->
                         <Button
-                            x:Name="MyFollowButton"
+                            x:Name="MyFolloweeButton"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
+                            Click="MyFolloweeButton_Click"
                             Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon
@@ -236,10 +277,9 @@
                                     FontFamily="Segoe MDL2 Assets"
                                     Glyph="&#xE77B;" />
                                 <TextBlock
+                                    x:Uid="PeopleIFollowTb"
                                     Margin="30,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Text="People I Follow" />
+                                    VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
 
@@ -248,6 +288,7 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Background="Transparent"
+                            Click="FollowersButton_Click"
                             Style="{StaticResource NavbarItem}">
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon
@@ -255,17 +296,16 @@
                                     FontFamily="Segoe MDL2 Assets"
                                     Glyph="&#xE716;" />
                                 <TextBlock
+                                    x:Uid="MyFollowersTb"
                                     Margin="30,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Text="My Followers" />
+                                    VerticalAlignment="Center" />
                             </StackPanel>
-                        </Button>
+                        </Button>-->
 
                         <TextBlock
                             x:Name="MyActionTb"
+                            x:Uid="MyActionsTb"
                             Style="{StaticResource NavbarSubheading}"
-                            Text="My Actions"
                             Visibility="Collapsed" />
 
                         <Button
@@ -282,10 +322,9 @@
                                     Glyph="&#xE70F;" />
 
                                 <TextBlock
+                                    x:Uid="ReviewsTb"
                                     Margin="30,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Text="Reviews" />
+                                    VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
 
@@ -303,10 +342,30 @@
                                     Glyph="&#xE734;" />
 
                                 <TextBlock
+                                    x:Uid="RatingsTb"
+                                    Margin="30,0,0,0"
+                                    VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button
+                            x:Name="AddMovieBtn"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Click="AddMovieBtn_Click"
+                            Style="{StaticResource NavbarItem}"
+                            Visibility="{x:Bind _user.IsAdmin, Converter={StaticResource AdminComponent}}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon
+                                    Margin="5"
+                                    FontFamily="Segoe Fluent Icons"
+                                    Glyph="&#xE710;" />
+                                <TextBlock
+                                    x:Uid="AddMovie"
                                     Margin="30,0,0,0"
                                     VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Text="Rating" />
+                                    Text="Add Movie" />
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -322,22 +381,16 @@
                         Click="SettingButton_Click"
                         Style="{StaticResource NavbarItem}">
                         <StackPanel Orientation="Horizontal">
-                            <FontIcon
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                FontFamily="Segoe MDL2 Assets"
-                                Glyph="&#xE713;" />
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" />
 
                             <TextBlock
+                                x:Uid="SettingsTb"
                                 Margin="30,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Text="Settings" />
+                                VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </Grid>
             </SplitView.Pane>
-
 
             <SplitView.Content>
                 <Grid>
@@ -356,17 +409,24 @@
                         SelectionChanged="MainTabView_SelectionChanged"
                         TabCloseRequested="TabView_TabCloseRequested">
 
-                        <muxc:TabViewItem IsClosable="False" Tag="home">
+                        <muxc:TabViewItem
+                            CanDrag="False"
+                            IsClosable="False"
+                            Tag="home">
                             <muxc:TabViewItem.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock
-                                        Margin="1,0,0,0"
+                                        VerticalAlignment="Center"
                                         FontFamily="Segoe Fluent Icons"
                                         FontSize="18"
                                         Text="&#xe80f;" />
-                                    <TextBlock Margin="5,0,0,0" Text="Home" />
+                                    <TextBlock
+                                        x:Uid="HomeTb"
+                                        Margin="10,0,0,0"
+                                        FontSize="{StaticResource H4}" />
                                 </StackPanel>
                             </muxc:TabViewItem.Header>
+
                             <local:ShowMediaListControl
                                 x:Name="HomeContent"
                                 Background="{ThemeResource StrongBackground}"
@@ -382,5 +442,26 @@
                 </Grid>
             </SplitView.Content>
         </SplitView>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="LayoutStates">
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="UniversalSearchBox.Width" Value="350" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="UniversalSearchBox.Width" Value="250" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
+
 </Page>

@@ -18,6 +18,14 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <AppInstallerUri>\\vasanthvz/mrs</AppInstallerUri>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -120,29 +128,51 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\SearchBox.cs" />
+    <Compile Include="Components\UserProfilePicturePresenter.xaml.cs">
+      <DependentUpon>UserProfilePicturePresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converter\DateTimeToStringConverter.cs" />
+    <Compile Include="Converter\InitialsConverter.cs" />
+    <Compile Include="Converter\NameToColorConverter.cs" />
+    <Compile Include="Converter\PosterImageConverter.cs" />
+    <Compile Include="Converter\StringToImageBrushConverter.cs" />
+    <Compile Include="Converter\TileImageConverter.cs" />
+    <Compile Include="DataTemplateSelectors\ProfileTemplateSelector.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ResourceDictionary\ColorHelper.cs" />
     <Compile Include="ResourceDictionary\ColorManipulationConverter.cs" />
     <Compile Include="ResourceDictionary\ColorConverter.cs" />
-    <Compile Include="Utils\AccentShade.cs" />
-    <Compile Include="Utils\DateManager.cs" />
-    <Compile Include="Utils\Accent.cs" />
-    <Compile Include="Utils\AccentManager.cs" />
-    <Compile Include="Utils\ThemeManager.cs" />
-    <Compile Include="Utils\TitlebarManager.cs" />
-    <Compile Include="Utils\WindowManager.cs" />
+    <Compile Include="Utility\AccentShade.cs" />
+    <Compile Include="Utility\DateManager.cs" />
+    <Compile Include="Utility\Accent.cs" />
+    <Compile Include="Utility\AccentManager.cs" />
+    <Compile Include="Utility\FileManager.cs" />
+    <Compile Include="Utility\FontManager.cs" />
+    <Compile Include="Utility\GlobalEventManager.cs" />
+    <Compile Include="Utility\ImageManager.cs" />
+    <Compile Include="Utility\ThemeManager.cs" />
+    <Compile Include="Utility\TitleBarManager.cs" />
+    <Compile Include="Utility\WindowManager.cs" />
+    <Compile Include="ViewModel\AddMovieViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IAddMovieViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IFilteredMediaViewModel.cs" />
+    <Compile Include="ViewModel\Contract\IFollowListViewModel.cs" />
     <Compile Include="ViewModel\Contract\IHomePageViewModel.cs" />
     <Compile Include="ViewModel\Contract\IMediaDetailViewModel.cs" />
     <Compile Include="ViewModel\Contract\IReviewSectionViewModel.cs" />
     <Compile Include="ViewModel\Contract\IMediaPageViewModel.cs" />
     <Compile Include="ViewModel\Contract\IPersonalisedMediaViewModel.cs" />
     <Compile Include="ViewModel\Contract\IPersonalMediaViewModel.cs" />
+    <Compile Include="ViewModel\Contract\ISearchPageViewModel.cs" />
     <Compile Include="ViewModel\Contract\IShowMediaListViewModel.cs" />
     <Compile Include="ViewModel\Contract\IUserRatedMediaViewModel.cs" />
     <Compile Include="ViewModel\Contract\IUserRatingViewModel.cs" />
     <Compile Include="ViewModel\Contract\IUserReviewViewModel.cs" />
+    <Compile Include="ViewModel\FilteredMediaViewModel.cs" />
+    <Compile Include="ViewModel\FollowListViewModel.cs" />
     <Compile Include="ViewModel\HomePageViewModel.cs" />
     <Compile Include="ViewModel\Contract\ISignupUserViewModel.cs" />
     <Compile Include="ViewModel\Contract\ILoginUserViewModel.cs" />
@@ -151,6 +181,7 @@
     <Compile Include="ViewModel\MediaPageViewModel.cs" />
     <Compile Include="ViewModel\PersonalisedMediaViewModel.cs" />
     <Compile Include="ViewModel\PersonalMediaViewModel.cs" />
+    <Compile Include="ViewModel\SearchPageViewModel.cs" />
     <Compile Include="ViewModel\ShowMediaListViewModel.cs" />
     <Compile Include="ViewModel\SignupUserViewModel.cs" />
     <Compile Include="ViewModel\LoginUserViewModel.cs" />
@@ -164,7 +195,13 @@
     <Compile Include="ViewObject\UserFollowVObj.cs" />
     <Compile Include="ViewObject\UserRatingVObj.cs" />
     <Compile Include="ViewObject\UserReviewVObj.cs" />
-    <Compile Include="View\Contract\IFavouriteMediaView.cs" />
+    <Compile Include="ViewObject\UserVObj.cs" />
+    <Compile Include="View\AddMovieView\AddMoviePage.xaml.cs">
+      <DependentUpon>AddMoviePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Contract\IAddMovieView.cs" />
+    <Compile Include="View\Contract\IFilteredMediaPage.cs" />
+    <Compile Include="View\Contract\IFollowListControlView.cs" />
     <Compile Include="View\Contract\IHomePageView.cs" />
     <Compile Include="View\Contract\ILoginUserView.cs" />
     <Compile Include="View\Contract\IManageReviewView.cs" />
@@ -172,6 +209,7 @@
     <Compile Include="View\Contract\IMediaPage.cs" />
     <Compile Include="View\Contract\IPersonalisedMediaView.cs" />
     <Compile Include="View\Contract\IPersonalMediaControl.cs" />
+    <Compile Include="View\Contract\ISearchPageView.cs" />
     <Compile Include="View\Contract\IShowMediaListView.cs" />
     <Compile Include="View\Contract\ISignupUserView.cs" />
     <Compile Include="View\Contract\ITabItemContent.cs" />
@@ -179,8 +217,12 @@
     <Compile Include="View\Contract\IUserRatingView.cs" />
     <Compile Include="View\Contract\IUserReviewPage.cs" />
     <Compile Include="View\Contract\IView.cs" />
-    <Compile Include="View\HomePageView\FolloweeListControl.xaml.cs">
-      <DependentUpon>FolloweeListControl.xaml</DependentUpon>
+    <Compile Include="View\HomePageView\AdminComponentVisibility.cs" />
+    <Compile Include="View\HomePageView\FilteredMediaPage.xaml.cs">
+      <DependentUpon>FilteredMediaPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HomePageView\FollowListControl.xaml.cs">
+      <DependentUpon>FollowListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomePageView\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
@@ -192,13 +234,18 @@
     <Compile Include="View\HomePageView\MediaListViewUserControl.xaml.cs">
       <DependentUpon>MediaListViewUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\HomePageView\NoFollowTextConverter.cs" />
     <Compile Include="View\HomePageView\PersonalisedMediaControl.xaml.cs">
       <DependentUpon>PersonalisedMediaControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomePageView\RatingControlVisibility.cs" />
+    <Compile Include="View\HomePageView\SearchResultPage.xaml.cs">
+      <DependentUpon>SearchResultPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\HomePageView\ShowMediaListControl.xaml.cs">
       <DependentUpon>ShowMediaListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\HomePageView\UserFollowButtonContentConverter.cs" />
     <Compile Include="View\HomePageView\UserRatedMediaPage.xaml.cs">
       <DependentUpon>UserRatedMediaPage.xaml</DependentUpon>
     </Compile>
@@ -218,7 +265,7 @@
       <DependentUpon>SignupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MediaPageView\FollowButtonContentConverter.cs" />
-    <Compile Include="View\MediaPageView\FollowButtonVisiblityConverter.cs" />
+    <Compile Include="View\MediaPageView\FollowButtonVisibilityConverter.cs" />
     <Compile Include="View\MediaPageView\MediaDetailControl.xaml.cs">
       <DependentUpon>MediaDetailControl.xaml</DependentUpon>
     </Compile>
@@ -232,20 +279,12 @@
     <Compile Include="View\MediaPageView\ReviewSectionControl.xaml.cs">
       <DependentUpon>ReviewSectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MediaPageView\StringToImageSourceConverter.cs" />
     <Compile Include="View\MediaPageView\UserRatingControl.xaml.cs">
       <DependentUpon>UserRatingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SettingsView\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\WelcomePageView\LoginUserControl.xaml.cs">
-      <DependentUpon>LoginUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\WelcomePageView\SignupUserControl.xaml.cs">
-      <DependentUpon>SignupUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\WelcomePageView\WelcomePage.xaml.cs">
-      <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -258,17 +297,63 @@
     <Content Include="Assets\bookmark-icon.png" />
     <Content Include="Assets\bookmark-icon.svg" />
     <Content Include="Assets\defaultMediaImage.png" />
+    <Content Include="Assets\defaultPosterImage.jpg" />
+    <Content Include="Assets\LargeTile.scale-100.png" />
+    <Content Include="Assets\LargeTile.scale-125.png" />
+    <Content Include="Assets\LargeTile.scale-150.png" />
+    <Content Include="Assets\LargeTile.scale-200.png" />
+    <Content Include="Assets\LargeTile.scale-400.png" />
     <Content Include="Assets\ListViewIcon.png" />
     <Content Include="Assets\movie-elements.png" />
     <Content Include="Assets\PiperImage1.png" />
     <Content Include="Assets\PiperImage2.png" />
+    <Content Include="Assets\SmallTile.scale-100.png" />
+    <Content Include="Assets\SmallTile.scale-125.png" />
+    <Content Include="Assets\SmallTile.scale-150.png" />
+    <Content Include="Assets\SmallTile.scale-200.png" />
+    <Content Include="Assets\SmallTile.scale-400.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\tempImage.jpg" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
@@ -276,15 +361,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Components\UserProfilePicturePresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ResourceDictionary\AutoSuggestBoxDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResourceDictionary\ButtonDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ResourceDictionary\CalendarDatePickerDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\CheckboxDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourceDictionary\ComboBoxDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\FlyoutStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -312,11 +417,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ResourceDictionary\PasswordBoxDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\RatingControlDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionary\SplitButtonDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourceDictionary\TextboxDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\HomePageView\FolloweeListControl.xaml">
+    <Page Include="View\AddMovieView\AddMoviePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePageView\FilteredMediaPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePageView\FollowListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -333,6 +458,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\HomePageView\PersonalisedMediaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePageView\SearchResultPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -388,20 +517,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\WelcomePageView\LoginUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\WelcomePageView\SignupUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\WelcomePageView\WelcomePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Uwp.Collections">
+      <Version>8.1.240916</Version>
+    </PackageReference>
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives">
+      <Version>8.1.240916</Version>
+    </PackageReference>
     <PackageReference Include="CommunityToolkit.Uwp.Media">
       <Version>8.1.240916</Version>
     </PackageReference>
@@ -412,7 +535,7 @@
       <Version>2.8.6</Version>
     </PackageReference>
     <PackageReference Include="Win2D.uwp">
-      <Version>1.28.0</Version>
+      <Version>1.28.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

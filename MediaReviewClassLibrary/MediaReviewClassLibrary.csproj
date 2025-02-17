@@ -120,19 +120,24 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DataManager\AddMediaDataManager.cs" />
     <Compile Include="DataManager\AddReviewDataManager.cs" />
     <Compile Include="DataManager\CreateUserDataManager.cs" />
     <Compile Include="DataManager\DeleteReviewDataManager.cs" />
+    <Compile Include="DataManager\GetAllGenreDataManager.cs" />
     <Compile Include="DataManager\GetAllMediaDataManager.cs" />
+    <Compile Include="DataManager\GetFilteredMediaDataManager.cs" />
     <Compile Include="DataManager\GetMediaDetailDataManager.cs" />
     <Compile Include="DataManager\GetMediaRatingDataManager.cs" />
     <Compile Include="DataManager\GetMediaReviewDataManager.cs" />
     <Compile Include="DataManager\GetPersonalisedMediaDataManager.cs" />
     <Compile Include="DataManager\EditReviewDataManager.cs" />
+    <Compile Include="DataManager\GetUserDetailDataManager.cs" />
     <Compile Include="DataManager\GetUserFollowDataManager.cs" />
     <Compile Include="DataManager\GetUserRatedMediaDataManager.cs" />
     <Compile Include="DataManager\GetUserReviewDataManager.cs" />
     <Compile Include="DataManager\LoginUserDataManager.cs" />
+    <Compile Include="DataManager\UniversalSearchDataManager.cs" />
     <Compile Include="DataManager\UpdateFollowDataManager.cs" />
     <Compile Include="DataManager\RemovePersonalisedMediaDataManager.cs" />
     <Compile Include="DataManager\UpdatePersonalMediaDataManager.cs" />
@@ -154,28 +159,31 @@
     <Compile Include="Data\DataHandler\RatingDataHandler.cs" />
     <Compile Include="Data\DataHandler\ReviewDataHandler.cs" />
     <Compile Include="Data\DataHandler\UserDataHandler.cs" />
-    <Compile Include="Data\DataLoader.cs" />
     <Compile Include="Data\PasswordAdapter.cs" />
+    <Compile Include="Domain\AddMedia.cs" />
     <Compile Include="Domain\AddReview.cs" />
     <Compile Include="Domain\DeleteReview.cs" />
     <Compile Include="Domain\EditReview.cs" />
+    <Compile Include="Domain\GetAllGenre.cs" />
     <Compile Include="Domain\GetAllMedia.cs" />
+    <Compile Include="Domain\GetFilteredMedia.cs" />
     <Compile Include="Domain\GetMediaDetail.cs" />
     <Compile Include="Domain\GetMediaRating.cs" />
     <Compile Include="Domain\GetMediaReview.cs" />
     <Compile Include="Domain\GetPersonalisedMedia.cs" />
+    <Compile Include="Domain\GetUserDetail.cs" />
     <Compile Include="Domain\GetUserFollow.cs" />
     <Compile Include="Domain\GetUserRatedMedia.cs" />
     <Compile Include="Domain\GetUserReview.cs" />
+    <Compile Include="Domain\UniversalSearch.cs" />
     <Compile Include="Domain\UpdateFollow.cs" />
     <Compile Include="Domain\RemovePersonalisedMedia.cs" />
     <Compile Include="Domain\UpdatePersonalMedia.cs" />
     <Compile Include="Domain\UpdateUserRating.cs" />
+    <Compile Include="Models\AddMediaBObj.cs" />
+    <Compile Include="Models\Constants\FollowType.cs" />
     <Compile Include="Models\Constants\PersonalMediaType.cs" />
     <Compile Include="Models\Constants\ReactionType.cs" />
-    <Compile Include="Models\Enitites\ActorMapper.cs" />
-    <Compile Include="Models\Enitites\Artist.cs" />
-    <Compile Include="Models\Enitites\DirectorMapper.cs" />
     <Compile Include="Models\Enitites\FolloweeMapper.cs" />
     <Compile Include="Models\Enitites\Genre.cs" />
     <Compile Include="Models\Enitites\GenreMapper.cs" />
@@ -184,23 +192,21 @@
     <Compile Include="Models\Enitites\Rating.cs" />
     <Compile Include="Models\Enitites\Review.cs" />
     <Compile Include="Models\MediaBObj.cs" />
-    <Compile Include="Models\Enitites\Reaction.cs" />
     <Compile Include="Models\MediaDetailBObj.cs" />
     <Compile Include="Models\MediaReviewBObj.cs" />
+    <Compile Include="Models\UserBObj.cs" />
     <Compile Include="Models\UserFollowBObj.cs" />
     <Compile Include="Models\UserRatingBObj.cs" />
     <Compile Include="Models\UserReviewBObj.cs" />
-    <Compile Include="Utlis\AvatarGenerator.cs" />
-    <Compile Include="Utlis\Contract\ISessionManager.cs" />
-    <Compile Include="Utlis\SessionManager.cs" />
+    <Compile Include="Utility\SessionManager.cs" />
     <Compile Include="Domain\CreateUser.cs" />
     <Compile Include="Domain\LoginUser.cs" />
     <Compile Include="MediaReviewDIServiceProvider.cs" />
     <Compile Include="Models\Enitites\UserDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utlis\AuthManager.cs" />
-    <Compile Include="Utlis\HashManager.cs" />
-    <Compile Include="Utlis\IdentityManager.cs" />
+    <Compile Include="Utility\AuthManager.cs" />
+    <Compile Include="Utility\HashManager.cs" />
+    <Compile Include="Utility\IdentityManager.cs" />
     <EmbeddedResource Include="Properties\MediaReviewClassLibrary.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -213,9 +219,6 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
     </PackageReference>
-    <PackageReference Include="SkiaSharp">
-      <Version>2.88.9</Version>
-    </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.9.172</Version>
     </PackageReference>
@@ -226,6 +229,7 @@
       <Name>CommonClassLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

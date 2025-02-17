@@ -1,11 +1,11 @@
-﻿using MediaReviewClassLibrary.Models.Enitites;
+﻿using System.Threading.Tasks;
 
 namespace MediaReviewUWP.View.Contract
 {
     public interface ILoginUserView : IView
     {
-        void LoginFailure();
-        void LoginSuccess();
+        Task LoginFailure();
 
+        void LoginSuccess();
     }
 }

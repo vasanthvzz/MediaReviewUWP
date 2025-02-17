@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MediaReviewUWP.View.HomePageView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converter="using:MediaReviewUWP.Converter"
     xmlns:viewobjects="using:MediaReviewUWP.ViewObject"
     d:DesignHeight="300"
     d:DesignWidth="400"
@@ -12,7 +13,13 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <local:RatingControlVisibility x:Key="RatingVisibility" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <local:RatingControlVisibility x:Key="RatingVisibility" />
+                    <converter:DateTimeToStringConverter x:Key="DateTimeToString" />
+                </ResourceDictionary>
+                <ResourceDictionary Source="/ResourceDictionary/GridViewItemDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -21,7 +28,8 @@
         HorizontalAlignment="Center"
         IsItemClickEnabled="True"
         ItemClick="MediaTileClick"
-        ItemsSource="{x:Bind MediaList}"
+        ItemContainerStyle="{StaticResource MediaGridViewItem}"
+        ItemsSource="{Binding}"
         Loaded="MediaGridView_Loaded"
         SelectionMode="None">
 
@@ -30,18 +38,16 @@
                 <Grid
                     Width="250"
                     Height="400"
-                    Margin="10"
+                    Margin="2"
                     Background="{ThemeResource MildBackground}"
                     CornerRadius="5"
                     PointerEntered="Grid_PointerEntered"
                     PointerExited="Grid_PointerExited">
-                    <!--  Overlapping rows for image and overlay  -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <!--  Image Section  -->
                     <Border>
                         <Image
                             HorizontalAlignment="Stretch"
@@ -49,8 +55,6 @@
                             Source="{Binding ImagePath}"
                             Stretch="UniformToFill" />
                     </Border>
-
-                    <!--  Overlay Text Section  -->
                     <Grid
                         x:Name="OverlayGrid"
                         Grid.Row="0"
@@ -68,7 +72,6 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <!--  Title  -->
                         <TextBlock
                             Margin="10,5,10,10"
                             HorizontalAlignment="Center"
@@ -81,7 +84,6 @@
                             TextTrimming="WordEllipsis"
                             TextWrapping="Wrap" />
 
-                        <!--  Release Date  -->
                         <TextBlock
                             Grid.Row="1"
                             Margin="10,0,10,5"
@@ -89,7 +91,7 @@
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="White"
-                            Text="{Binding ReleaseDate}" />
+                            Text="{Binding ReleaseDate, Converter={StaticResource DateTimeToString}}" />
                         <RatingControl
                             x:Name="RatingControl"
                             Grid.Row="2"
@@ -108,8 +110,6 @@
                     </Grid>
                 </Grid>
             </DataTemplate>
-
-
         </GridView.ItemTemplate>
     </GridView>
 </UserControl>

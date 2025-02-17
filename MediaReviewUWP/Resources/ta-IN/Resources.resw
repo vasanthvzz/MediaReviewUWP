@@ -129,23 +129,11 @@
   <data name="CreateAccountH2.Text" xml:space="preserve">
     <value>அணுக புகுபதிவு செய்யவும்</value>
   </data>
-  <data name="CreateAccountH2.FontSize" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="SigninH2.FontSize" xml:space="preserve">
-    <value>12</value>
-  </data>
   <data name="Username.PlaceholderText" xml:space="preserve">
     <value> பயனர் பெயர்</value>
   </data>
   <data name="Password.PlaceholderText" xml:space="preserve">
     <value>கடவுச்சொல்</value>
-  </data>
-  <data name="Username.FontSize" xml:space="preserve">
-    <value>15</value>
-  </data>
-  <data name="Password.FontSize" xml:space="preserve">
-    <value>15</value>
   </data>
   <data name="ShowPasswordBtn.Content" xml:space="preserve">
     <value>கடவுச்சொல்லை காட்டவும்</value>
@@ -156,17 +144,8 @@
   <data name="DontHaveAccount.Text" xml:space="preserve">
     <value>கணக்கு இல்லைவா?</value>
   </data>
-  <data name="DontHaveAccount.FontSize" xml:space="preserve">
-    <value>12</value>
-  </data>
   <data name="CreateAccountBtn.Content" xml:space="preserve">
     <value>கணக்கு உருவாக்கவும்</value>
-  </data>
-  <data name="CreateAccountBtn.FontSize" xml:space="preserve">
-    <value>15</value>
-  </data>
-  <data name="AlreadyHaveAccount.FontSize" xml:space="preserve">
-    <value>12</value>
   </data>
   <data name="AlreadyHaveAccount.Text" xml:space="preserve">
     <value>கணக்கு ஏற்கனவே உள்ளது?</value>
@@ -175,15 +154,8 @@
     <value>உள்நுழையவும்</value>
     <comment>உள்நுழையவும்</comment>
   </data>
-  <data name="LoginAccountSmallBtn.FontSize" xml:space="preserve">
-    <value>12</value>
-    <comment>உள்நுழையவும்</comment>
-  </data>
   <data name="UsernamePasswordMissmatch.Subtitle" xml:space="preserve">
     <value>பயனர் பெயர் அல்லது கடவுச்சொல் தவறானது</value>
-  </data>
-  <data name="UsernamePasswordMissmatch.FontSize" xml:space="preserve">
-    <value>12</value>
   </data>
   <data name="UsernameError1" xml:space="preserve">
     <value>பயனர் பெயரில் 4 முதல் 16 எழுத்துகள் இருக்க வேண்டும்</value>
@@ -197,5 +169,296 @@
   </data>
   <data name="UsernameError3" xml:space="preserve">
     <value>இந்த பயனர் பெயர் ஏற்கனவே எடுக்கப்பட்டுள்ளது. மற்றொரு பெயரை தேர்ந்தெடுக்கவும்.</value>
+  </data>
+  <data name="MyFavouritesTb.Text" xml:space="preserve">
+    <value>என் விருப்பங்கள்</value>
+  </data>
+  <data name="WatchlistTb.Text" xml:space="preserve">
+    <value>பார்வை பட்டியல்</value>
+  </data>
+  <data name="WatchedTb.Text" xml:space="preserve">
+    <value>பார்த்தது</value>
+  </data>
+  <data name="MyMovieListTb.Text" xml:space="preserve">
+    <value>திரைப்பட பட்டியல்</value>
+  </data>
+  <data name="SocialTb.Text" xml:space="preserve">
+    <value>சமூக</value>
+  </data>
+  <data name="RatingsTb.Text" xml:space="preserve">
+    <value>மதிப்பீடுகள்</value>
+  </data>
+  <data name="ReviewsTb.Text" xml:space="preserve">
+    <value>விமர்சனங்கள்</value>
+  </data>
+  <data name="MyActionsTb.Text" xml:space="preserve">
+    <value>என் செயல்கள்</value>
+  </data>
+  <data name="SettingsTb.Text" xml:space="preserve">
+    <value>அமைப்புகள்</value>
+  </data>
+  <data name="PeopleIFollowTb.Text" xml:space="preserve">
+    <value>பின்பற்றும் மக்கள்</value>
+  </data>
+  <data name="MyFollowersTb.Text" xml:space="preserve">
+    <value>பின்தொடர்பவர்கள்</value>
+  </data>
+  <data name="HomeTb.Text" xml:space="preserve">
+    <value>முகப்பு</value>
+  </data>
+  <data name="SearchBox.PlaceholderText" xml:space="preserve">
+    <value>தேடல்</value>
+  </data>
+  <data name="Favourite" xml:space="preserve">
+    <value>விருப்பம்</value>
+  </data>
+  <data name="Favourited" xml:space="preserve">
+    <value>விருப்பமான</value>
+  </data>
+  <data name="MarkAsSeen" xml:space="preserve">
+    <value>பார்த்த பட்டியல்</value>
+  </data>
+  <data name="MarkedAsSeen" xml:space="preserve">
+    <value>பார்த்த பட்டியலில்</value>
+  </data>
+  <data name="Watchlist" xml:space="preserve">
+    <value>பார்வை பட்டியல்</value>
+  </data>
+  <data name="InWatchlist" xml:space="preserve">
+    <value>பார்வை பட்டியலில்</value>
+  </data>
+  <data name="RateMovieTb.Text" xml:space="preserve">
+    <value>திரைப்படத்தை மதிப்பிடு</value>
+  </data>
+  <data name="LeaveAReviewTb.PlaceholderText" xml:space="preserve">
+    <value>விமர்சனம் இடு</value>
+  </data>
+  <data name="SubmitBtn.Content" xml:space="preserve">
+    <value>சமர்ப்பி</value>
+  </data>
+  <data name="Follow" xml:space="preserve">
+    <value>பின்தொடர்</value>
+  </data>
+  <data name="Following" xml:space="preserve">
+    <value>பின்தொடர்கிறேன்</value>
+  </data>
+  <data name="FollowButton.Width" xml:space="preserve">
+    <value>150</value>
+  </data>
+  <data name="EditTb.Text" xml:space="preserve">
+    <value>திருத்து</value>
+  </data>
+  <data name="DeleteTb.Text" xml:space="preserve">
+    <value>அகற்று</value>
+  </data>
+  <data name="MyFavourites" xml:space="preserve">
+    <value>என் விருப்பங்கள்</value>
+  </data>
+  <data name="MyWatchlist" xml:space="preserve">
+    <value>எனது பார்வை பட்டியல்</value>
+  </data>
+  <data name="MyWatchedList" xml:space="preserve">
+    <value>நான் பார்த்த பட்டியல்</value>
+  </data>
+  <data name="MyReviews" xml:space="preserve">
+    <value>எனது விமர்சனங்கள்</value>
+  </data>
+  <data name="MyRatings" xml:space="preserve">
+    <value>எனது மதிப்பீடுகள்</value>
+  </data>
+  <data name="NotRatedMovies.Text" xml:space="preserve">
+    <value>நீங்கள் எதுவும் திரைப்படங்களை மதிப்பீடு செய்யவில்லை</value>
+  </data>
+  <data name="NotReviewedMovies.Text" xml:space="preserve">
+    <value>நீங்கள் இன்னும் எந்த திரைப்படங்களையும் விமர்சனம் செய்யவில்லை</value>
+  </data>
+  <data name="YourMovieListEmpty.Text" xml:space="preserve">
+    <value> உங்கள் திரைப்பட பட்டியல் காலியாக உள்ளது</value>
+  </data>
+  <data name="SortTb.Text" xml:space="preserve">
+    <value>வகைப்படுத்து</value>
+  </data>
+  <data name="RatingLowToHighBtn.Content" xml:space="preserve">
+    <value>மதிப்பீடு குறைந்தது முதல் அதிகம் வரை</value>
+  </data>
+  <data name="RatingHighToLowBtn.Content" xml:space="preserve">
+    <value>மதிப்பீடு அதிகம் முதல் குறைவாக</value>
+  </data>
+  <data name="LogoutBtn.Content" xml:space="preserve">
+    <value>வெளியேறு</value>
+  </data>
+  <data name="AppearanceTb.Text" xml:space="preserve">
+    <value>தோற்றம்</value>
+  </data>
+  <data name="Appearance.Text" xml:space="preserve">
+    <value>தோற்றம்</value>
+  </data>
+  <data name="AccentColor.Text" xml:space="preserve">
+    <value>முக்கிய நிறம்</value>
+  </data>
+  <data name="Theme.Text" xml:space="preserve">
+    <value>தீம்</value>
+  </data>
+  <data name="Dark.Text" xml:space="preserve">
+    <value>இருள்</value>
+  </data>
+  <data name="Light.Text" xml:space="preserve">
+    <value>ஒளி</value>
+  </data>
+  <data name="Language.Text" xml:space="preserve">
+    <value>மொழி</value>
+  </data>
+  <data name="ChangeLanguageNote.Text" xml:space="preserve">
+    <value>குறிப்பு: மொழி மாற்றம் செயலியை புதுப்பிக்கும்.</value>
+  </data>
+  <data name="Remove.Text" xml:space="preserve">
+    <value>அகற்று</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>தேடல்</value>
+  </data>
+  <data name="AddMovieMenu.Text" xml:space="preserve">
+    <value>திரைப்படம் சேர்க்கு</value>
+  </data>
+  <data name="Title.Text" xml:space="preserve">
+    <value>பெயர்</value>
+  </data>
+  <data name="Description.Text" xml:space="preserve">
+    <value>விவரம்</value>
+  </data>
+  <data name="TileImage.Text" xml:space="preserve">
+    <value>டைல் படம்</value>
+  </data>
+  <data name="PosterImage.Text" xml:space="preserve">
+    <value>போஸ்டர் படம்</value>
+  </data>
+  <data name="Runtime.Text" xml:space="preserve">
+    <value>இருப்புகாலம் (நிமி.)</value>
+  </data>
+  <data name="SelectGenres.PlaceholderText" xml:space="preserve">
+    <value>பாகங்கள் தேர்ந்தெடு</value>
+  </data>
+  <data name="SearchResult.Text" xml:space="preserve">
+    <value>தேடல் முடிவு :</value>
+  </data>
+  <data name="PeopleIFollow" xml:space="preserve">
+    <value>நான் பின்தொடர்பவர்கள்</value>
+  </data>
+  <data name="MyFollowers" xml:space="preserve">
+    <value>என்னை பின்தொடர்பவர்கள்</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>திருப்பு</value>
+  </data>
+  <data name="RemoveText" xml:space="preserve">
+    <value>அகற்று</value>
+  </data>
+  <data name="NoFollower" xml:space="preserve">
+    <value>நீங்கள் எவரும் உங்களை பின்தொடரவில்லை.</value>
+  </data>
+  <data name="NoFollowee" xml:space="preserve">
+    <value>நீங்கள் எவரையும் பின்தொடரவில்லை.</value>
+  </data>
+  <data name="AddMovie.Text" xml:space="preserve">
+    <value>படத்தை சேர்</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>நிமி</value>
+  </data>
+  <data name="PipsPageTitle1" xml:space="preserve">
+    <value>கண்டுபிடிக்கவும், ஆராயவும் - உங்கள் உலகம்!</value>
+  </data>
+  <data name="PipsPageDesc1" xml:space="preserve">
+    <value>என்றும் புதிதாக, நீங்கள் அறியாத ஊடக உலகில் தங்களை மூழ்க விடுங்கள். உங்களுக்கு பொருத்தமான திரைப்படங்கள், தொலைக்காட்சி நிகழ்ச்சிகள் மற்றும் கவர்ச்சிகரமான கதைகளை கண்டுபிடிக்கவும். ஒரு தனிப்பட்ட அனுபவத்தில் உங்கள் உடன்படுகையில் பிரபஞ்சம் குளியுங்கள்!</value>
+  </data>
+  <data name="PipsPageTitle2" xml:space="preserve">
+    <value>மதிப்பீடு &amp; மதிப்புரை</value>
+  </data>
+  <data name="PipsPageDesc2" xml:space="preserve">
+    <value>உங்கள் கருத்துக்களை பகிர்ந்து உங்கள் வாயை கேட்கவைக்கவும். உங்கள் பிடித்த நிகழ்ச்சிகளை மதிப்பிடுங்கள், விரிவான மதிப்புரைகள் இடுங்கள், மற்றவர்களுக்கு அவர்களின் அடுத்த மிக அர்ப்பணிப்பான அனுபவத்தை கண்டுபிடிக்க உதவுங்கள்.</value>
+  </data>
+  <data name="PipsPageTitle3" xml:space="preserve">
+    <value>இணையவும் &amp; ஈடுபடவும்</value>
+  </data>
+  <data name="PipsPageDesc3" xml:space="preserve">
+    <value>திரைப்பட ஆர்வலர்களின் வளர்ச்சியான சமூகத்தில் சேர்ந்துகொள்ளுங்கள். பிற பயனர்களை பின்தொடர்ந்து, அவர்களின் மதிப்புரைகளுடன் தொடர்பு கொள்ளுங்கள், மற்றும் ஊடக நிபுணராக உங்கள் சுயவிவரத்தை கட்டமைக்கவும்.</value>
+  </data>
+  <data name="UnableToAddMovieError.Text" xml:space="preserve">
+    <value>திரைப்படத்தைச் சேர்க்க முடியவில்லை.</value>
+  </data>
+  <data name="MovieTitleEmptyError.Text" xml:space="preserve">
+    <value>திரைப்படத்தின் தலைப்பு காலியாக இருக்கக்கூடாது</value>
+  </data>
+  <data name="MovieReleaseDateError.Text" xml:space="preserve">
+    <value>வெளியீட்டு தேதி அவசியமாக இருக்க வேண்டும்</value>
+  </data>
+  <data name="MovieRuntimeError.Text" xml:space="preserve">
+    <value>கால அளவு 300 நிமிடங்களை மீறக்கூடாது.</value>
+  </data>
+  <data name="Grid.Text" xml:space="preserve">
+    <value>கட்டம்</value>
+  </data>
+  <data name="List.Text" xml:space="preserve">
+    <value>பட்டியல்</value>
+  </data>
+  <data name="FilteredMediaByGenre.Text" xml:space="preserve">
+    <value>வகை அடிப்படையில் வடிகட்டப்பட்டது</value>
+  </data>
+  <data name="ApplyFilterBtn.Content" xml:space="preserve">
+    <value>வடிகட்டு</value>
+  </data>
+  <data name="FilteredMovies" xml:space="preserve">
+    <value>வடிகட்டப்பட்ட திரைப்படங்கள்</value>
+  </data>
+  <data name="ReleaseDate.Text" xml:space="preserve">
+    <value>வெளியீட்டு தேதி</value>
+  </data>
+  <data name="GenreList.Text" xml:space="preserve">
+    <value>வகை பட்டியல்</value>
+  </data>
+  <data name="MediaAddedSuccess.Text" xml:space="preserve">
+    <value>படம் வெற்றிகரமாக சேர்க்கப்பட்டது</value>
+  </data>
+  <data name="SigninToAccount.Content" xml:space="preserve">
+    <value>உங்கள் கணக்கில் உள்நுழையவும்</value>
+  </data>
+  <data name="EditTb.Width" xml:space="preserve">
+    <value>60</value>
+  </data>
+  <data name="DeleteTb.Width" xml:space="preserve">
+    <value>60</value>
+  </data>
+  <data name="EditReview.Text" xml:space="preserve">
+    <value>விமர்சனத்தை திருத்தவும்</value>
+  </data>
+  <data name="CancelBtn.Content" xml:space="preserve">
+    <value>ரத்துசெய்</value>
+  </data>
+  <data name="AskDeleteReview.Text" xml:space="preserve">
+    <value>நீங்கள் விமர்சனத்தை நீக்க விரும்புகிறீர்களா?</value>
+  </data>
+  <data name="ActionCannotUndone.Text" xml:space="preserve">
+    <value> குறிப்பு: இந்த செயல்பாட்டை திரும்பப்பெற முடியாது</value>
+  </data>
+  <data name="DeleteBtn.Content" xml:space="preserve">
+    <value>நீக்கு</value>
+  </data>
+  <data name="ReviewLengthError.Text" xml:space="preserve">
+    <value>விமர்சனம் காலியாக இருக்கக்கூடாது மற்றும் 512 எழுத்துகளை மிஞ்சக்கூடாது</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>இப்போது</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>நிமிடம்</value>
+  </data>
+  <data name="Ago" xml:space="preserve">
+    <value>முன்பு</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>இன்று</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>நேற்று</value>
   </data>
 </root>

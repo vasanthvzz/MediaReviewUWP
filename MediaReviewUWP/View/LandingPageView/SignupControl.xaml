@@ -14,10 +14,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ResourceDictionary/ButtonDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/TextboxDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/PasswordboxDictionary.xaml" />
+                <ResourceDictionary Source="/ResourceDictionary/CheckboxDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-
 
     <Grid
         Width="500"
@@ -57,28 +59,32 @@
         <TextBox
             x:Name="UsernameBox"
             x:Uid="Username"
-            TextChanging="UserEntering"
             Grid.Row="4"
             Width="280"
             Height="35"
             Margin="0,20,0,0"
-            HorizontalAlignment="Left" />
+            HorizontalAlignment="Left"
+            Style="{StaticResource TextBoxStyle}"
+            TextChanging="UserEntering" />
         <StackPanel Grid.Row="5">
             <PasswordBox
                 x:Name="PasswordBox"
                 x:Uid="Password"
-                PasswordChanging="UserEntering"
                 Grid.Row="5"
                 Width="280"
                 Height="35"
                 Margin="0,20,0,5"
-                HorizontalAlignment="Left" />
+                HorizontalAlignment="Left"
+                CornerRadius="5"
+                PasswordChanging="UserEntering"
+                Style="{StaticResource PasswordBoxStyle}" />
             <CheckBox
                 Name="revealModeCheckBox"
                 x:Uid="ShowPasswordBtn"
                 Margin="2,0,0,0"
                 Checked="RevealModeCheckbox_Changed"
                 IsChecked="False"
+                Style="{StaticResource CheckboxStyle}"
                 Unchecked="RevealModeCheckbox_Changed" />
         </StackPanel>
         <Button
@@ -91,7 +97,6 @@
             Click="CreateAccountBtn_Click"
             CornerRadius="5"
             Style="{StaticResource AdaptiveButtonStyle}" />
-
 
         <StackPanel Grid.Row="7" Orientation="Horizontal">
             <TextBlock

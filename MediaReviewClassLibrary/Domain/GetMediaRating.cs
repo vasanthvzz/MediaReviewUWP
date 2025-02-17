@@ -1,21 +1,22 @@
 ﻿using CommonClassLibrary;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
     public class GetMediaRatingUseCase : UseCaseBase<GetMediaRatingResponse>
     {
         private GetMediaRatingRequest _request;
-        private IGetMediaRatingDataManager _dataManager = MediaReviewDIServiceProvider.GetRequiredService<IGetMediaRatingDataManager>();
+        private IGetMediaRatingDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IGetMediaRatingDataManager>();
 
-        public GetMediaRatingUseCase(GetMediaRatingRequest request , ICallback<GetMediaRatingResponse> callback) : base(callback)
+        public GetMediaRatingUseCase(GetMediaRatingRequest request, ICallback<GetMediaRatingResponse> callback) : base(callback)
         {
             _request = request;
         }
 
         public override void Action()
         {
-            _dataManager.GetMediaRating(_request, new GetMediaRatingUseCaseCallback(this));
+            _dm.GetMediaRating(_request, new GetMediaRatingUseCaseCallback(this));
         }
     }
 
@@ -39,10 +40,10 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public class GetMediaRatingRequest 
-    { 
-        public long MediaId {  get; set; }
-        
+    public class GetMediaRatingRequest
+    {
+        public long MediaId { get; set; }
+
         public GetMediaRatingRequest(long mediaId)
         {
             MediaId = mediaId;
@@ -57,16 +58,17 @@ namespace MediaReviewClassLibrary.Domain
 
         public GetMediaRatingResponse(long mediaId, float ratingScore, long ratedUserCount)
         {
-            MediaId= mediaId;
+            MediaId = mediaId;
             RatedUserCount = ratedUserCount;
             RatingScore = ratingScore;
         }
     }
 
-    public interface IGetMediaRatingDataManager 
+    public interface IGetMediaRatingDataManager
     {
-        void GetMediaRating(GetMediaRatingRequest request, ICallback<GetMediaRatingResponse> callback);
+        Task GetMediaRating(GetMediaRatingRequest request, ICallback<GetMediaRatingResponse> callback);
     }
 
-    public interface IGetMediaRatingPresenterCallback : ICallback<GetMediaRatingResponse> { }
+    public interface IGetMediaRatingPresenterCallback : ICallback<GetMediaRatingResponse>
+    { }
 }

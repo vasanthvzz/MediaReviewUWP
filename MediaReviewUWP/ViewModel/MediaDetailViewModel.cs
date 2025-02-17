@@ -11,7 +11,7 @@ namespace MediaReviewUWP.ViewModel
     {
         private IMediaDetailControl _view;
 
-        public MediaDetailViewModel(IMediaDetailControl view) 
+        public MediaDetailViewModel(IMediaDetailControl view)
         {
             _view = view;
         }
@@ -34,7 +34,7 @@ namespace MediaReviewUWP.ViewModel
             private IMediaDetailViewModel _vm;
 
             public GetMediaRatingPresenterCallback(IMediaDetailViewModel vm)
-            { 
+            {
                 _vm = vm;
             }
 
@@ -45,7 +45,7 @@ namespace MediaReviewUWP.ViewModel
 
             public void OnSuccess(ZResponse<GetMediaRatingResponse> response)
             {
-                _vm.SendUpdatedMediaRating(response.Data.RatingScore);
+                _vm?.SendUpdatedMediaRating(response.Data.RatingScore);
             }
         }
     }

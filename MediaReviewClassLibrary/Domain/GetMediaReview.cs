@@ -1,7 +1,6 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ namespace MediaReviewClassLibrary.Domain
     public class GetMediaReviewUseCase : UseCaseBase<GetMediaReviewResponse>
     {
         private GetMediaReviewRequest _request;
-        private IGetMediaReviewDataManager _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IGetMediaReviewDataManager>();
+        private IGetMediaReviewDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IGetMediaReviewDataManager>();
 
         public GetMediaReviewUseCase(GetMediaReviewRequest request, ICallback<GetMediaReviewResponse> callback) : base(callback)
         {
@@ -44,9 +43,9 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public class GetMediaReviewResponse 
-    { 
-        public List<MediaReviewBObj> MediaReviews { get; set; } 
+    public class GetMediaReviewResponse
+    {
+        public List<MediaReviewBObj> MediaReviews { get; set; }
 
         public GetMediaReviewResponse(List<MediaReviewBObj> mediaReviews)
         {
@@ -55,20 +54,22 @@ namespace MediaReviewClassLibrary.Domain
     }
 
     public class GetMediaReviewRequest
-    { 
-        public long MediaId {  get; set; }
-        public long UserId {  get; set; }
+    {
+        public long MediaId { get; set; }
+        public long UserId { get; set; }
+
         public GetMediaReviewRequest(long mediaId, long userId)
         {
             MediaId = mediaId;
             UserId = userId;
         }
     }
-    
+
     public interface IGetMediaReviewDataManager
     {
-        Task GetMediaReviews(GetMediaReviewRequest request,GetMediaReviewUseCaseCallback callback);
-        Task<MediaReviewBObj> GetReviewBObj(Review review,long userId);
+        Task GetMediaReviews(GetMediaReviewRequest request, GetMediaReviewUseCaseCallback callback);
+
+        Task<MediaReviewBObj> GetReviewBObj(Review review, long userId);
     }
 
     public interface IGetMediaReviewPresenterCallback : ICallback<GetMediaReviewResponse>

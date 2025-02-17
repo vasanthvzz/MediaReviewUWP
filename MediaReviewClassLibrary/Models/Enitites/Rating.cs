@@ -12,15 +12,15 @@ namespace MediaReviewClassLibrary.Models.Enitites
         [Column("media_id")]
         public long MediaId { get; set; }
 
-        
         private short _score;
+
         [Column("score")]
         public short Score
         {
-            get { return _score; }  
+            get { return _score; }
             set
             {
-                if (value <= 5 && value >= -1)  
+                if (value <= 5 && value >= -1)
                 {
                     _score = value;
                 }
@@ -30,7 +30,6 @@ namespace MediaReviewClassLibrary.Models.Enitites
                 }
             }
         }
-
 
         public Rating(long userId, long mediaId)
         {
@@ -46,7 +45,8 @@ namespace MediaReviewClassLibrary.Models.Enitites
             Score = score;
         }
 
-        public Rating() { }
+        public Rating()
+        { }
 
         public override bool Equals(object obj)
         {
@@ -56,6 +56,5 @@ namespace MediaReviewClassLibrary.Models.Enitites
             }
             return false;
         }
-
     }
 }

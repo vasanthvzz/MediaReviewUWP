@@ -1,5 +1,7 @@
-﻿using MediaReviewClassLibrary.Models;
+﻿using CommunityToolkit.WinUI.Collections;
+using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
+using MediaReviewUWP.Utility;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
@@ -17,48 +19,40 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Imaging;
-using static MediaReviewUWP.View.HomePageView.ShowMediaListControl;
-
 
 namespace MediaReviewUWP.View.HomePageView
 {
-
-    public sealed partial class UserRatedMediaPage : Page, IUserRatedMediaPage, INotifyPropertyChanged , ITabItemContent
+    public sealed partial class UserRatedMediaPage : Page, IUserRatedMediaPage, INotifyPropertyChanged, ITabItemContent
     {
-        public ObservableCollection<UserRatingVObj> UserRatingList { get; set; }
         private IUserRatedMediaViewModel _vm;
+
         public event EventHandler<MediaTileEventArgs> RatedMediaClick;
+
         public event PropertyChangedEventHandler PropertyChanged;
-        private CollectionViewSource _sortedUserRatingView;
+
+        public AdvancedCollectionView MediaCollectionView {  get; private set; }
+        public ObservableCollection<UserRatingVObj> UserRatingList { get; private set; }
 
         public UserRatedMediaPage()
         {
+            UserRatingList = new ObservableCollection<UserRatingVObj>();
+            MediaCollectionView = new AdvancedCollectionView(UserRatingList);
             this.InitializeComponent();
             _vm = new UserRatedMediaViewModel(this);
-            UserRatingList = new ObservableCollection<UserRatingVObj>();
-            _sortedUserRatingView = new CollectionViewSource
-            {
-                Source = UserRatingList
-            };
-            RatedMediaGrid.ItemsSource = _sortedUserRatingView.View;
             UserRatingList.CollectionChanged += UserRatingList_CollectionChanged;
-        }
-
-        private void UserRatingList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            CheckUserRating();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs args)
         {
-            //MainScrollViewer.Height = Window.Current.Bounds.Height - 100;
-            //Window.Current.SizeChanged += (s, e) =>
-            //{
-            //    MainScrollViewer.Height = e.Size.Height - 100;
-            //};
+            //CheckUserRatingList();
         }
-        
-        private void CheckUserRating()
+
+        private void UserRatingList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            //CheckUserRatingList();
+        }
+
+        private void CheckUserRatingList()
         {
             if (UserRatingList != null && UserRatingList.Count != 0)
             {
@@ -72,7 +66,7 @@ namespace MediaReviewUWP.View.HomePageView
             }
         }
 
-        public void ReloadData()
+        public void ReloadPageContent()
         {
             GetUserRatedMedia();
         }
@@ -84,11 +78,15 @@ namespace MediaReviewUWP.View.HomePageView
 
         public async Task UpdateRatedMediaList(List<UserRatingBObj> userRatingList)
         {
-            if (userRatingList == null) return;
+            if (userRatingList == null)
+            {
+                return;
+            }
 
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
-                var mediaDict = userRatingList.ToDictionary(m => m.MediaId);
+                var mediaDict = userRatingList.GroupBy(m => m.MediaId)
+                              .ToDictionary(g => g.Key, g => g.ToList());
 
                 for (int i = UserRatingList.Count - 1; i >= 0; i--)
                 {
@@ -111,6 +109,7 @@ namespace MediaReviewUWP.View.HomePageView
                         UserRatingList.Add(new UserRatingVObj(rating));
                     }
                 }
+                CheckUserRatingList();
             });
         }
 
@@ -118,16 +117,15 @@ namespace MediaReviewUWP.View.HomePageView
         {
             if (sender is Image image)
             {
-                image.Source = new BitmapImage(new Uri("ms-appx:///Assets/DefaultMediaImage.png"));
-                image.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
+                image.Source = new BitmapImage(new Uri(ImageManager.GetDefaultTileImagePath()));
             }
         }
 
         private void RatingControl_ValueChanged(RatingControl sender, object args)
         {
-            if(sender.DataContext is UserRatingVObj userRating)
+            if (sender.DataContext is UserRatingVObj userRating)
             {
-                _vm.ChangeUserRating(userRating.MediaId,(short)sender.Value);
+                _vm.ChangeUserRating(userRating.MediaId, (short)sender.Value);
             }
         }
 
@@ -156,17 +154,16 @@ namespace MediaReviewUWP.View.HomePageView
             ApplySorting(SortOrder.Descending);
         }
 
-
         private void ApplySorting(SortOrder order)
         {
-            var sortedList = order == SortOrder.Ascending
-                ? UserRatingList.OrderBy(item => item.UserRating).ToList()
-                : UserRatingList.OrderByDescending(item => item.UserRating).ToList();
-
-            UserRatingList.Clear();
-            foreach (var item in sortedList)
+            MediaCollectionView.SortDescriptions.Clear();
+            if(order == SortOrder.Ascending)
             {
-                UserRatingList.Add(item);
+                MediaCollectionView.SortDescriptions.Add(new SortDescription("UserRating", SortDirection.Ascending));
+            }
+            else
+            {
+                MediaCollectionView.SortDescriptions.Add(new SortDescription("UserRating", SortDirection.Descending));
             }
         }
 

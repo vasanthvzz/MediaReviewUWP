@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml.Data;
 
 namespace MediaReviewUWP.View.MediaPageView
@@ -7,18 +8,19 @@ namespace MediaReviewUWP.View.MediaPageView
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            var loader = new ResourceLoader();
             if (value is bool isFollowing)
             {
-                return isFollowing ? "Following" : "Follow";
+                return isFollowing ? loader.GetString("Following") : loader.GetString("Follow");
             }
-            return "Follow"; // Default value
+            return loader.GetString("Follow");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             if (value is string stringValue)
             {
-                return stringValue.Equals("Following", StringComparison.OrdinalIgnoreCase);
+                return stringValue.Equals("IsFollow", StringComparison.OrdinalIgnoreCase);
             }
             return false;
         }

@@ -1,13 +1,16 @@
 ﻿using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediaReviewUWP.View.Contract
 {
     public interface IUserReviewPage
     {
-        void DeleteReview(Review deletedReview);
-        void UpdateExistingReview(Review updatedReview);
-        void UpdateUserReviews(List<UserReviewBObj> userReviews);
+        Task DeleteReview(Review deletedReview);
+
+        Task UpdateExistingReview(Review updatedReview);
+
+        Task UpdateUserReviews(List<UserReviewBObj> userReviews);
     }
 }

@@ -1,12 +1,15 @@
 ﻿using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
+using MediaReviewUWP.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Windows.Media.MediaProperties;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 
 namespace MediaReviewUWP.ViewObject
 {
-    public class MediaDetailVObj  :INotifyPropertyChanged
+    public class MediaDetailVObj : INotifyPropertyChanged
     {
         public long MediaId { get; set; }
         public string Title { get; set; }
@@ -17,11 +20,12 @@ namespace MediaReviewUWP.ViewObject
         public string Runtime { get; set; }
         public string TagLine { get; set; }
 
-        public PersonalMedia UserPersonalMedia {  get; set; }
+        public PersonalMedia UserPersonalMedia { get; set; }
         public Rating UserRating { get; set; }
         public List<Genre> GenreList { get; set; }
 
         private string _posterPath;
+
         public string PosterPath
         {
             get => _posterPath;
@@ -36,6 +40,7 @@ namespace MediaReviewUWP.ViewObject
         }
 
         private float _mediaRating;
+
         public float MediaRating
         {
             get => _mediaRating;
@@ -51,6 +56,7 @@ namespace MediaReviewUWP.ViewObject
         }
 
         private long _ratedUserCount;
+
         public long RatedUserCount
         {
             get => _ratedUserCount;
@@ -66,6 +72,7 @@ namespace MediaReviewUWP.ViewObject
         }
 
         private string _mediaRatingString;
+
         public string MediaRatingString
         {
             get => _mediaRatingString;
@@ -84,11 +91,12 @@ namespace MediaReviewUWP.ViewObject
             MediaId = media.MediaDetail.MediaId;
             Title = media.MediaDetail.Title;
             Description = media.MediaDetail.Description;
-            ImagePath= media.MediaDetail.ImagePath;
-            PosterPath= media.MediaDetail.PosterPath;
-            HomePageUrl = media.MediaDetail.HomepageUrl ;
+            ImagePath = media.MediaDetail.ImagePath;
+            PosterPath = media.MediaDetail.PosterPath;
+            HomePageUrl = media.MediaDetail.HomepageUrl;
             ReleaseDate = media.MediaDetail.ReleaseDate.ToString("dd MMM yyyy");
-            Runtime = media.MediaDetail.Runtime <= 0 ? "" : media.MediaDetail.Runtime + " mins";
+            var loader = new ResourceLoader();
+            Runtime = media.MediaDetail.Runtime <= 0 ? "" : media.MediaDetail.Runtime + " " + loader.GetString("Minutes");
             UserPersonalMedia = media.UserPersonalMedia;
             UserRating = media.UserRating;
             GenreList = media.Genres;
@@ -100,6 +108,7 @@ namespace MediaReviewUWP.ViewObject
         {
             MediaRatingString = GetMediaRatingString();
         }
+
         private string GetMediaRatingString()
         {
             return MediaRating == 0 ? "" : (MediaRating % 1 == 0 ? $"{(int)MediaRating}" : $"{MediaRating:F1}") + "/5";

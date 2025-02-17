@@ -4,14 +4,14 @@ using MediaReviewClassLibrary.Data.DataHandler;
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.DataManager;
 using MediaReviewClassLibrary.Domain;
-using MediaReviewClassLibrary.Utlis;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MediaReviewClassLibrary
 {
-    public class MediaReviewDIServiceProvider
+    public static class MediaReviewDIServiceProvider
     {
         private static ServiceProvider _serviceProvider;
+
         static MediaReviewDIServiceProvider()
         {
             ServiceCollection services = new ServiceCollection();
@@ -21,6 +21,7 @@ namespace MediaReviewClassLibrary
             services.AddSingleton<ICreateUserDataManager, CreateUserDataManager>();
             services.AddSingleton<IGetAllMediaDataManager, GetAllMediaDataManager>();
             services.AddSingleton<IGetMediaDetailDataManager, GetMediaDetailDataManager>();
+            services.AddSingleton<IGetUserDetailDataManager, GetUserDetailDataManager>();
             services.AddSingleton<IUpdatePersonalMediaDataManager, UpdatePersonalMediaDataManager>();
             services.AddSingleton<IUpdateUserRatingDataManager, UpdateUserRatingDataManager>();
             services.AddSingleton<IAddReviewDataManager, AddReviewDataManager>();
@@ -32,11 +33,16 @@ namespace MediaReviewClassLibrary
             services.AddSingleton<IUpdateFollowDataManager, UpdateFollowDataManager>();
             services.AddSingleton<IGetUserRatedMediaDataManager, GetUserRatedMediaDataManager>();
             services.AddSingleton<IGetMediaRatingDataManager, GetMediaRatingDataManager>();
+            services.AddSingleton<IUniversalSearchDataManager, UniversalSearchDataManager>();
             services.AddSingleton<IGetUserReviewDataManager, GetUserReviewDataManager>();
-            
+            services.AddSingleton<IGetAllGenreDataManager, GetAllGenreDataManager>();
+            services.AddSingleton<IAddMediaDataManager, AddMediaDataManager>();
+            services.AddSingleton<IGetUserFollowDataManager, GetUserFollowDataManager>();
+            services.AddSingleton<IGetFilteredMediaDataManager, GetFilteredMediaDataManager>();
+
             //Data Handler
             services.AddSingleton<IUserDataHandler, UserDataHandler>();
-            services.AddSingleton<IMediaDataHandler, MediaDataHandler>(); 
+            services.AddSingleton<IMediaDataHandler, MediaDataHandler>();
             services.AddSingleton<IPersonalMediaDataHandler, PersonalMediaDataHandler>();
             services.AddSingleton<IRatingDataHandler, RatingDataHandler>();
             services.AddSingleton<IReviewDataHandler, ReviewDataHandler>();
@@ -45,17 +51,11 @@ namespace MediaReviewClassLibrary
 
             //Data Adapter
             services.AddSingleton<IDatabaseAdapter, DatabaseAdapter>();
-            services.AddSingleton<ISessionManager, SessionManager>();
             services.AddSingleton<IPasswordAdapter, PasswordAdapter>();
 
             //Build the service provider from the service collection.
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             _serviceProvider = serviceProvider;
-        }
-
-        public static ServiceProvider GetServiceProvider()
-        {
-            return _serviceProvider;
         }
 
         public static T GetRequiredService<T>()

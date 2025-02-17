@@ -32,6 +32,6 @@
         <ContentPresenter
             x:Name="MainContentPresenter"
             HorizontalAlignment="Stretch"
-            ContentTemplate="{StaticResource LoginControlComponent}" />
+            ContentTemplate="{StaticResource ApplicationInfoComponent}" />
     </Grid>
 </Page>

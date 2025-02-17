@@ -1,0 +1,105 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="TextBoxDictionary.xaml" />
+        <ResourceDictionary Source="ListViewDictionary.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Style x:Key="GenreContainerStyle" TargetType="Border">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{ThemeResource Shade3}" />
+        <Setter Property="BorderThickness" Value="1.2" />
+
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="Margin" Value="5" />
+    </Style>
+
+    <Style x:Key="GenreTextStyle" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="RemoveButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <FontIcon
+                            Margin="10,0,0,0"
+                            FontFamily="Segoe Fluent Icons"
+                            FontSize="12"
+                            Foreground="{ThemeResource Shade1}"
+                            Glyph="&#xE653;" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Name="GenreSuggestBoxStyle" TargetType="AutoSuggestBox">
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="TextBoxStyle" Value="{StaticResource AutoSuggestBoxTextBoxStyle}" />
+        <Setter Property="UseSystemFocusVisuals" Value="{ThemeResource IsApplicationFocusVisualKindReveal}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="AutoSuggestBox">
+                    <Grid x:Name="LayoutRoot">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBox
+                            x:Name="TextBox"
+                            Width="{TemplateBinding Width}"
+                            Margin="0"
+                            Canvas.ZIndex="0"
+                            CornerRadius="10"
+                            Description="{TemplateBinding Description}"
+                            DesiredCandidateWindowAlignment="BottomEdge"
+                            Header="{TemplateBinding Header}"
+                            PlaceholderText="{TemplateBinding PlaceholderText}"
+                            ScrollViewer.BringIntoViewOnFocusChange="False"
+                            Style="{StaticResource TextBoxStyle}"
+                            UseSystemFocusVisuals="{TemplateBinding UseSystemFocusVisuals}" />
+
+                        <Popup
+                            x:Name="SuggestionsPopup"
+                            Canvas.ZIndex="3"
+                            Opacity="1">
+
+                            <Border
+                                x:Name="SuggestionsContainer"
+                                Background="{ThemeResource Shade1}"
+                                CornerRadius="5"
+                                Opacity="1">
+                                <ListView
+                                    x:Name="SuggestionsList"
+                                    MaxHeight="200"
+                                    Margin="{ThemeResource AutoSuggestListMargin}"
+                                    Padding="{ThemeResource AutoSuggestListPadding}"
+                                    BorderThickness="{ThemeResource AutoSuggestListBorderThemeThickness}"
+                                    CornerRadius="5"
+                                    DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                                    IsItemClickEnabled="True"
+                                    ItemContainerStyle="{StaticResource MyListViewItemRevealStyle4}"
+                                    Opacity="1" />
+                            </Border>
+                        </Popup>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="Orientation">
+                                <VisualState x:Name="Landscape" />
+                                <VisualState x:Name="Portrait" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

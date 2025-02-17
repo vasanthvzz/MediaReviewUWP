@@ -6,11 +6,16 @@ namespace MediaReviewUWP.ViewModel.Contract
 {
     public interface IUserReviewViewModel
     {
-        void DeletReview(long reviewId);
+        void DeleteReview(long reviewId);
+
         void EditReview(long reviewId, string reviewContent);
+
         void GetUserReviews();
+
         void SendDeletedReview(Review deletedReview);
+
         void SendEditedReview(Review updatedReview);
+
         void UpdateUserReview(List<UserReviewBObj> userReviews);
     }
 }

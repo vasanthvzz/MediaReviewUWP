@@ -1,13 +1,10 @@
 ﻿using CommonClassLibrary;
-using MediaReviewClassLibrary;
+using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Utlis;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel.Contract;
-using MediaReviewUWP.ViewObject;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,8 +14,7 @@ namespace MediaReviewUWP.ViewModel
     public class ReviewSectionViewModel : IReviewSectionViewModel
     {
         private IManageReviewView _view;
-        private ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
-
+       
         public ReviewSectionViewModel(IManageReviewView view)
         {
             _view = view;
@@ -29,7 +25,7 @@ namespace MediaReviewUWP.ViewModel
         public void GetMediaReviews(long mediaId)
         {
             IGetMediaReviewPresenterCallback callback = new GetMediaReviewPresenterCallback(this);
-            GetMediaReviewRequest request = new GetMediaReviewRequest(mediaId, _sessionManager.RetriveUserFromStorage().UserId);
+            GetMediaReviewRequest request = new GetMediaReviewRequest(mediaId, SessionManager.User .UserId);
             GetMediaReviewUseCase uc = new GetMediaReviewUseCase(request, callback);
             uc.Execute();
         }
@@ -37,15 +33,16 @@ namespace MediaReviewUWP.ViewModel
         public void AddReview(long mediaId, string description)
         {
             AddReviewPresenterCallback callback = new AddReviewPresenterCallback(this);
-            var userId = _sessionManager.RetriveUserFromStorage().UserId;
+            long userId = SessionManager.User.UserId;
             AddReviewRequest request = new AddReviewRequest(userId, mediaId, description);
             AddReviewUseCase usecase = new AddReviewUseCase(request, callback);
             usecase.Execute();
         }
 
-        public void EditReview(long reviewId,long userId, string reviewContent)
+        public void EditReview(long reviewId, string reviewContent)
         {
-            EditReviewRequest request = new EditReviewRequest(reviewId , userId, reviewContent);
+            long userId = SessionManager.User.UserId;
+            EditReviewRequest request = new EditReviewRequest(reviewId, userId, reviewContent);
             EditReviewPresenterCallback callback = new EditReviewPresenterCallback(this);
             EditReviewUseCase uc = new EditReviewUseCase(request, callback);
             uc.Execute();
@@ -53,35 +50,25 @@ namespace MediaReviewUWP.ViewModel
 
         public void DeleteReview(long reviewId)
         {
-            var userId = _sessionManager.RetriveUserFromStorage().UserId;
-            DeleteReviewRequest request = new DeleteReviewRequest(reviewId,userId);
+            long userId = SessionManager.User.UserId;
+            DeleteReviewRequest request = new DeleteReviewRequest(reviewId, userId);
             DeleteReviewPresenterCallback callback = new DeleteReviewPresenterCallback(this);
             DeleteReviewUseCase uc = new DeleteReviewUseCase(request, callback);
             uc.Execute();
         }
 
-        public void UpdateFollow(long followeeId,bool isFollowing)
+        public void UpdateFollow(long followeeId, bool isFollowing)
         {
-            var userId = _sessionManager.RetriveUserFromStorage().UserId ;
+            long userId = SessionManager.User.UserId;
             UpdateFollowRequest request = new UpdateFollowRequest(userId, followeeId, isFollowing);
             UpdateFollowPresenterCallback callback = new UpdateFollowPresenterCallback(this);
             UpdateFollowUseCase uc = new UpdateFollowUseCase(request, callback);
             uc.Execute();
         }
 
-        #endregion
+        #endregion View to View Model Communication
 
         #region View model to View Communication
-
-        public void SendMediaReviews(List<MediaReviewBObj> mediaReviews)
-        {
-            List<MediaReviewVObj> mediaReviewVObjs = new List<MediaReviewVObj>();
-            foreach (var review in mediaReviews)
-            {
-                mediaReviewVObjs.Add(new MediaReviewVObj(review));
-            }
-            _view.UpdateMediaReviewList(mediaReviews);
-        }
 
         public void SendEditedReview(Review updatedReview)
         {
@@ -103,20 +90,20 @@ namespace MediaReviewUWP.ViewModel
             _view.DeleteReviewFromList(review);
         }
 
-        public void OnFollowUpdate(long followeeId,bool isFollowing)
+        public void OnFollowUpdate(long followeeId, bool isFollowing)
         {
             _view.ChangeFolloweeStatus(followeeId, isFollowing);
         }
 
-        #endregion
+        #endregion View model to View Communication
     }
 
     public class EditReviewPresenterCallback : IEditReviewPresenterCallback
     {
         private IReviewSectionViewModel _vm;
 
-        public EditReviewPresenterCallback(IReviewSectionViewModel vm) 
-        { 
+        public EditReviewPresenterCallback(IReviewSectionViewModel vm)
+        {
             _vm = vm;
         }
 
@@ -130,7 +117,6 @@ namespace MediaReviewUWP.ViewModel
             _vm.SendEditedReview(response.Data.UpdatedReview);
         }
     }
-
 
     public class GetMediaReviewPresenterCallback : IGetMediaReviewPresenterCallback
     {
@@ -178,6 +164,7 @@ namespace MediaReviewUWP.ViewModel
     public class DeleteReviewPresenterCallback : IDeleteReviewPresenterCallback
     {
         private IReviewSectionViewModel _viewModel;
+
         public DeleteReviewPresenterCallback(IReviewSectionViewModel viewModel)
         {
             _viewModel = viewModel;
@@ -197,6 +184,7 @@ namespace MediaReviewUWP.ViewModel
     public class UpdateFollowPresenterCallback : IUpdateFollowPresenterCallback
     {
         private IReviewSectionViewModel _viewModel;
+
         public UpdateFollowPresenterCallback(IReviewSectionViewModel viewModel)
         {
             _viewModel = viewModel;
@@ -210,8 +198,7 @@ namespace MediaReviewUWP.ViewModel
         public void OnSuccess(ZResponse<UpdateFollowResponse> response)
         {
             FolloweeMapper updatedFollow = response.Data.UpdatedFollow;
-            _viewModel.OnFollowUpdate(updatedFollow.FolloweeId, updatedFollow.IsFollowing);
+            _viewModel.OnFollowUpdate(updatedFollow.FolloweeId, updatedFollow.IsFollow);
         }
     }
-
 }

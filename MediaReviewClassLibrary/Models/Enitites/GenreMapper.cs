@@ -17,6 +17,7 @@ namespace MediaReviewClassLibrary.Models.Enitites
             MediaId = mediaId;
         }
 
-        public GenreMapper() { }
+        public GenreMapper()
+        { }
     }
 }

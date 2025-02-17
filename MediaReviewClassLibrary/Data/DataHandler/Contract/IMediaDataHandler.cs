@@ -7,9 +7,16 @@ namespace MediaReviewClassLibrary.Data.DataHandler.Contract
 {
     public interface IMediaDataHandler
     {
-        Task<bool> IsMediaExist(string title, DateTime releaseDate);
+        bool IsMediaExist(string title, DateTimeOffset releaseDate);
+
         Task<Media> CreateMedia(Media media);
-        Task<List<Media>> GetAllMedia(long currentCount,long requiredCount);
+
+        Task<List<Media>> GetAllMedia(long currentCount, long requiredCount);
+
         Task<Media> GetMediaById(long mediaId);
+
+        Task<List<Media>> SearchMediaByName(string searchString);
+
+        Task AddMedia(Media media);
     }
 }

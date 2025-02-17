@@ -1,9 +1,9 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary;
+using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Utlis;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel.Contract;
 using System;
@@ -15,16 +15,15 @@ namespace MediaReviewUWP.ViewModel
     public class UserReviewViewModel : IUserReviewViewModel
     {
         private IUserReviewPage _view;
-        private ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetRequiredService<ISessionManager>();   
 
         public UserReviewViewModel(IUserReviewPage view)
         {
             _view = view;
         }
 
-        public void DeletReview(long reviewId)
+        public void DeleteReview(long reviewId)
         {
-            long userId = _sessionManager.RetriveUserFromStorage().UserId;
+            long userId = SessionManager.User.UserId;
             DeleteReviewRequest request = new DeleteReviewRequest(reviewId, userId);
             DeleteReviewPresenterCallback callback = new DeleteReviewPresenterCallback(this);
             DeleteReviewUseCase uc = new DeleteReviewUseCase(request, callback);
@@ -33,8 +32,8 @@ namespace MediaReviewUWP.ViewModel
 
         public void EditReview(long reviewId, string reviewContent)
         {
-            long userId = _sessionManager.RetriveUserFromStorage().UserId;
-            EditReviewRequest request = new EditReviewRequest(reviewId, userId, reviewContent); 
+            long userId = SessionManager.User.UserId;
+            EditReviewRequest request = new EditReviewRequest(reviewId, userId, reviewContent);
             EditReviewPresenterCallback callback = new EditReviewPresenterCallback(this);
             EditReviewUseCase uc = new EditReviewUseCase(request, callback);
             uc.Execute();
@@ -42,7 +41,7 @@ namespace MediaReviewUWP.ViewModel
 
         public void GetUserReviews()
         {
-            long userId = _sessionManager.RetriveUserFromStorage().UserId;
+            long userId = SessionManager.User.UserId;
             GetUserReviewPresenterCallback callback = new GetUserReviewPresenterCallback(this);
             GetUserReviewRequest request = new GetUserReviewRequest(userId);
             GetUserReviewUseCase uc = new GetUserReviewUseCase(request, callback);
@@ -71,7 +70,7 @@ namespace MediaReviewUWP.ViewModel
             public GetUserReviewPresenterCallback(IUserReviewViewModel vm)
             {
                 _vm = vm;
-            }   
+            }
 
             public void OnFailure(Exception exception)
             {
@@ -128,4 +127,3 @@ namespace MediaReviewUWP.ViewModel
         }
     }
 }
- 

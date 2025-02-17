@@ -1,9 +1,10 @@
 ﻿using MediaReviewClassLibrary.Models;
+using System.Threading.Tasks;
 
 namespace MediaReviewUWP.View.Contract
 {
     public interface IMediaPage : IView
     {
-        void UpdateMediaPage(MediaDetailBObj mediaDetailBObj);
+        Task UpdateMediaPage(MediaDetailBObj mediaDetailBObj);
     }
 }

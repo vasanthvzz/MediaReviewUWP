@@ -8,12 +8,13 @@ namespace MediaReviewUWP.View.HomePageView
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if(value is string str){
+            if (value is string str)
+            {
                 return string.IsNullOrEmpty(str) ? Visibility.Collapsed : Visibility.Visible;
             }
-            if(value is short rating)
+            if (value is short rating)
             {
-                return rating<=0 ? Visibility.Collapsed : Visibility.Visible;
+                return rating <= 0 ? Visibility.Collapsed : Visibility.Visible;
             }
             if (value is float score)
             {

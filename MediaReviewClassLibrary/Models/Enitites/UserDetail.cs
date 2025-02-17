@@ -5,7 +5,6 @@ namespace MediaReviewClassLibrary.Models.Enitites
     [Table("user")]
     public class UserDetail
     {
-
         [PrimaryKey]
         [Column("user_id")]
         public long UserId { get; set; }
@@ -15,7 +14,10 @@ namespace MediaReviewClassLibrary.Models.Enitites
         public string UserName { get; set; }
 
         [Column("profile_picture")]
-        public string ProfilePicture {  get; set; }
+        public string ProfilePicture { get; set; }
+
+        [Column("is_admin")]
+        public bool IsAdmin { get; set; }
 
         public UserDetail(long userId, string userName)
         {
@@ -24,13 +26,22 @@ namespace MediaReviewClassLibrary.Models.Enitites
             ProfilePicture = "";
         }
 
-        public UserDetail(long userId, string userName,string profilePicture)
+        public UserDetail(long userId, string userName, string profilePicture)
         {
             UserId = userId;
             UserName = userName;
             ProfilePicture = profilePicture;
         }
 
-        public UserDetail() { }
+        public UserDetail(long userId, string userName, string profilePicture, bool isAdmin)
+        {
+            UserId = userId;
+            UserName = userName;
+            ProfilePicture = profilePicture;
+            IsAdmin = isAdmin;
+        }
+
+        public UserDetail()
+        { }
     }
 }

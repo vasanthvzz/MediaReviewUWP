@@ -1,51 +1,57 @@
 ﻿using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
+using MediaReviewUWP.Utility;
 using System;
 using System.ComponentModel;
-using System.Linq.Expressions;
 
 namespace MediaReviewUWP.ViewObject
 {
     public class UserReviewVObj : INotifyPropertyChanged
     {
-        public long MediaId {  get; set; }
+        public long MediaId { get; set; }
         public string MediaName { get; set; }
-        public long ReviewId {  get; set; }
-        public string ReviewDate {  get; set; }
+        public long ReviewId { get; set; }
+        public string ReviewDate { get; set; }
 
         public string _description;
-        //public short UserRating
-        //{
-        //    get => _userRating;
-        //    set
-        //    {
-        //        if (_userRating != value)
-        //        {
-        //            _userRating = value;
-        //            OnPropertyChanged(nameof(UserRating));
-        //        }
-        //    }
-        //}
-        public string Description {
+        public string Description
+        {
             get => _description;
             set
             {
-                if(_description != value)
+                if (_description != value)
                 {
                     _description = value;
-                    OnPropertyChanged(nameof(Description)); 
+                    OnPropertyChanged(nameof(Description));
                 }
             }
         }
-        public string MediaImagePath { get; set; }
+
+        private string _mediaImagePath;
+        public string MediaImagePath
+        {
+            get => _mediaImagePath;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    _mediaImagePath = ImageManager.GetDefaultTileImagePath();
+                }
+                else
+                {
+                    _mediaImagePath = value;
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public UserReviewVObj(Media media,Review review)
+        public UserReviewVObj(Media media, Review review)
         {
             MediaId = media.MediaId;
             MediaName = media.Title;
@@ -55,7 +61,7 @@ namespace MediaReviewUWP.ViewObject
             Description = review.Description;
         }
 
-        public UserReviewVObj(long mediaId,string mediaName,string imagePath,long reviewId,DateTime date,string description)
+        public UserReviewVObj(long mediaId, string mediaName, string imagePath, long reviewId, DateTime date, string description)
         {
             MediaId = mediaId;
             MediaName = mediaName;
@@ -77,8 +83,8 @@ namespace MediaReviewUWP.ViewObject
 
         public void UpdateFrom(UserReviewBObj review)
         {
-            if (ReviewId == review.ReviewId) 
-            { 
+            if (ReviewId == review.ReviewId)
+            {
                 Description = review.Description;
             }
         }

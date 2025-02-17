@@ -6,6 +6,8 @@ namespace MediaReviewClassLibrary.Models.Enitites
     [Table("media")]
     public class Media
     {
+        private string tileImage;
+        private string posterImage;
 
         [PrimaryKey]
         [Column("media_id")]
@@ -27,7 +29,7 @@ namespace MediaReviewClassLibrary.Models.Enitites
         public string HomepageUrl { get; set; }
 
         [Column("release_date")]
-        public DateTime ReleaseDate { get; set; }
+        public DateTimeOffset ReleaseDate { get; set; }
 
         [Column("runtime")]
         public int Runtime { get; set; }
@@ -48,7 +50,8 @@ namespace MediaReviewClassLibrary.Models.Enitites
             Tagline = tagline;
         }
 
-        public Media() { }
+        public Media()
+        { }
 
         public Media(long mediaId, string title, string description, string imagePath, string posterPath, string homepageUrl, DateTime releaseDate, int runtime)
         {
@@ -61,6 +64,16 @@ namespace MediaReviewClassLibrary.Models.Enitites
             ReleaseDate = releaseDate;
             Runtime = runtime;
         }
-    }
 
+        public Media(long mediaId, string title, string description, string tileImage, string posterImage, DateTimeOffset releaseDate, int runtime)
+        {
+            MediaId = mediaId;
+            Title = title;
+            Description = description;
+            ImagePath = tileImage;
+            PosterPath = posterImage;
+            ReleaseDate = releaseDate;
+            Runtime = runtime;
+        }
+    }
 }

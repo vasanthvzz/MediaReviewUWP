@@ -3,8 +3,7 @@ using MediaReviewClassLibrary.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-
-
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
@@ -16,7 +15,6 @@ namespace MediaReviewClassLibrary.Domain
         public GetUserRatedMediaUseCase(GetUserRatedMediaRequest request, ICallback<GetUserRatedMediaResponse> callback) : base(callback)
         {
             _request = request;
-            _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IGetUserRatedMediaDataManager>();
         }
 
         public override void Action()
@@ -47,7 +45,6 @@ namespace MediaReviewClassLibrary.Domain
 
     public class GetUserRatedMediaResponse
     {
-     
         public List<UserRatingBObj> RatedMedia { get; set; }
 
         public GetUserRatedMediaResponse(List<UserRatingBObj> ratedMedia)
@@ -68,8 +65,9 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IGetUserRatedMediaDataManager
     {
-        void GetUserRatedMedia(GetUserRatedMediaRequest request, GetUserRatedMediaUseCaseCallback callback);
+        Task GetUserRatedMedia(GetUserRatedMediaRequest request, GetUserRatedMediaUseCaseCallback callback);
     }
 
-    public interface IGetUserRatedMediaPresenterCallback : ICallback<GetUserRatedMediaResponse> { }
+    public interface IGetUserRatedMediaPresenterCallback : ICallback<GetUserRatedMediaResponse>
+    { }
 }

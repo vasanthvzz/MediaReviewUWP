@@ -126,20 +126,11 @@
   <data name="CreateAccountH2.Text" xml:space="preserve">
     <value>to access Movie Sphere</value>
   </data>
-  <data name="CreateAccountH2.FontSize" xml:space="preserve">
-    <value>15</value>
-  </data>
   <data name="Username.PlaceholderText" xml:space="preserve">
     <value>Username</value>
   </data>
-  <data name="Username.FontSize" xml:space="preserve">
-    <value>18</value>
-  </data>
   <data name="Password.PlaceholderText" xml:space="preserve">
     <value>Password</value>
-  </data>
-  <data name="Password.FontSize" xml:space="preserve">
-    <value>18</value>
   </data>
   <data name="ShowPasswordBtn.Content" xml:space="preserve">
     <value>Show Password</value>
@@ -150,26 +141,14 @@
   <data name="DontHaveAccount.Text" xml:space="preserve">
     <value>Dont have an Account?</value>
   </data>
-  <data name="DontHaveAccount.FontSize" xml:space="preserve">
-    <value>15</value>
-  </data>
   <data name="CreateAccountBtn.Content" xml:space="preserve">
     <value>Create Account</value>
-  </data>
-  <data name="CreateAccountBtn.FontSize" xml:space="preserve">
-    <value>15</value>
   </data>
   <data name="AlreadyHaveAccount.Text" xml:space="preserve">
     <value>Already have an Account?</value>
   </data>
-  <data name="AlreadyHaveAccount.FontSize" xml:space="preserve">
-    <value>15</value>
-  </data>
   <data name="UsernamePasswordMissmatch.Subtitle" xml:space="preserve">
     <value>The user name or password is incorrect.</value>
-  </data>
-  <data name="UsernamePasswordMissmatch.FontSize" xml:space="preserve">
-    <value>15</value>
   </data>
   <data name="UsernameError1" xml:space="preserve">
     <value>Username should have 4 to 16 letters</value>
@@ -190,13 +169,298 @@
   <data name="SigninH2.Text" xml:space="preserve">
     <value>to access Movie Sphere</value>
   </data>
-  <data name="SigninH2.FontSize" xml:space="preserve">
-    <value>15</value>
-  </data>
   <data name="LoginAccountSmallBtn.Content" xml:space="preserve">
     <value>Login Account</value>
   </data>
-  <data name="LoginAccountSmallBtn.FontSize" xml:space="preserve">
-    <value>15</value>
+  <data name="MyFavouritesTb.Text" xml:space="preserve">
+    <value>My Favourites</value>
+  </data>
+  <data name="WatchlistTb.Text" xml:space="preserve">
+    <value>Watchlist</value>
+  </data>
+  <data name="WatchedTb.Text" xml:space="preserve">
+    <value>I've Watched</value>
+  </data>
+  <data name="MyMovieListTb.Text" xml:space="preserve">
+    <value>My Movie List</value>
+  </data>
+  <data name="SocialTb.Text" xml:space="preserve">
+    <value>Social</value>
+  </data>
+  <data name="RatingsTb.Text" xml:space="preserve">
+    <value>My Ratings</value>
+  </data>
+  <data name="ReviewsTb.Text" xml:space="preserve">
+    <value>Reviews</value>
+  </data>
+  <data name="MyActionsTb.Text" xml:space="preserve">
+    <value>My Actions</value>
+  </data>
+  <data name="SettingsTb.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="PeopleIFollowTb.Text" xml:space="preserve">
+    <value>People I Follow</value>
+  </data>
+  <data name="MyFollowersTb.Text" xml:space="preserve">
+    <value>My Followers</value>
+  </data>
+  <data name="HomeTb.Text" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="SearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Favourite" xml:space="preserve">
+    <value>Favourite</value>
+  </data>
+  <data name="Favourited" xml:space="preserve">
+    <value>Favourited</value>
+  </data>
+  <data name="MarkAsSeen" xml:space="preserve">
+    <value>Mark as seen</value>
+  </data>
+  <data name="MarkedAsSeen" xml:space="preserve">
+    <value>Marked as seen</value>
+  </data>
+  <data name="Watchlist" xml:space="preserve">
+    <value>Watchlist</value>
+  </data>
+  <data name="InWatchlist" xml:space="preserve">
+    <value>In Watchlist</value>
+  </data>
+  <data name="RateMovieTb.Text" xml:space="preserve">
+    <value>Rate Movie</value>
+  </data>
+  <data name="LeaveAReviewTb.PlaceholderText" xml:space="preserve">
+    <value>Leave a Review</value>
+  </data>
+  <data name="SubmitBtn.Content" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="Follow" xml:space="preserve">
+    <value>Follow</value>
+  </data>
+  <data name="Following" xml:space="preserve">
+    <value>Following</value>
+  </data>
+  <data name="FollowButton.Width" xml:space="preserve">
+    <value>100</value>
+  </data>
+  <data name="EditTb.Text" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="DeleteTb.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="MyFavourites" xml:space="preserve">
+    <value>My Favourites</value>
+  </data>
+  <data name="MyWatchlist" xml:space="preserve">
+    <value>My Watchlist</value>
+  </data>
+  <data name="MyWatchedList" xml:space="preserve">
+    <value>Watched Movies</value>
+  </data>
+  <data name="MyReviews" xml:space="preserve">
+    <value>My Reviews</value>
+  </data>
+  <data name="MyRatings" xml:space="preserve">
+    <value>My Ratings</value>
+  </data>
+  <data name="NotRatedMovies.Text" xml:space="preserve">
+    <value>You have not Rated any Movies yet</value>
+  </data>
+  <data name="NotReviewedMovies.Text" xml:space="preserve">
+    <value>You have not reviewed any Movies</value>
+  </data>
+  <data name="YourMovieListEmpty.Text" xml:space="preserve">
+    <value>Oops! Your Movie list is empty.</value>
+  </data>
+  <data name="SortTb.Text" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="RatingLowToHighBtn.Content" xml:space="preserve">
+    <value>Rating : Low To High</value>
+  </data>
+  <data name="RatingHighToLowBtn.Content" xml:space="preserve">
+    <value>Rating : High to low</value>
+  </data>
+  <data name="LogoutBtn.Content" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="AppearanceTb.Text" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="Appearance.Text" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="AccentColor.Text" xml:space="preserve">
+    <value>Accent Color</value>
+  </data>
+  <data name="Theme.Text" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Dark.Text" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Light.Text" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Language.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="ChangeLanguageNote.Text" xml:space="preserve">
+    <value>Note : Changing language will restart the application.</value>
+  </data>
+  <data name="Remove.Text" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="AddMovieMenu.Text" xml:space="preserve">
+    <value>Add Movie</value>
+  </data>
+  <data name="Title.Text" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Description.Text" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="TileImage.Text" xml:space="preserve">
+    <value>Tile Image</value>
+  </data>
+  <data name="PosterImage.Text" xml:space="preserve">
+    <value>Poster Image</value>
+  </data>
+  <data name="Runtime.Text" xml:space="preserve">
+    <value>Runtime(in mins)</value>
+  </data>
+  <data name="SelectGenres.PlaceholderText" xml:space="preserve">
+    <value>Select Genres</value>
+  </data>
+  <data name="SearchResult.Text" xml:space="preserve">
+    <value>Search Result :</value>
+  </data>
+  <data name="PeopleIFollow" xml:space="preserve">
+    <value>People I Follow</value>
+  </data>
+  <data name="MyFollowers" xml:space="preserve">
+    <value>My Followers</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="RemoveText" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NoFollower" xml:space="preserve">
+    <value>You don't have any Follower.</value>
+  </data>
+  <data name="NoFollowee" xml:space="preserve">
+    <value>You haven't followed anyone.</value>
+  </data>
+  <data name="AddMovie.Text" xml:space="preserve">
+    <value>Add Movie</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>mins</value>
+  </data>
+  <data name="PipsPageTitle1" xml:space="preserve">
+    <value>Discover &amp; Explore</value>
+  </data>
+  <data name="PipsPageDesc1" xml:space="preserve">
+    <value>Immerse yourself in a world of media like never before. Discover trending movies, TV shows, and captivating stories curated just for you. Dive into a journey of entertainment.</value>
+  </data>
+  <data name="PipsPageTitle2" xml:space="preserve">
+    <value>Rate &amp; Review</value>
+  </data>
+  <data name="PipsPageDesc2" xml:space="preserve">
+    <value>Share your opinions and make your voice heard. Rate your favorite shows, leave detailed reviews, and help others find their next binge-worthy experience.</value>
+  </data>
+  <data name="PipsPageTitle3" xml:space="preserve">
+    <value>Connect &amp; Engage</value>
+  </data>
+  <data name="PipsPageDesc3" xml:space="preserve">
+    <value>Join a thriving community of movie enthusiasts. Follow other users, interact with their reviews, and build your profile as a media connoisseur.</value>
+  </data>
+  <data name="UnableToAddMovieError.Text" xml:space="preserve">
+    <value>Unable to Add Movie</value>
+  </data>
+  <data name="MovieTitleEmptyError.Text" xml:space="preserve">
+    <value>Movie Title should not be empty</value>
+  </data>
+  <data name="MovieReleaseDateError.Text" xml:space="preserve">
+    <value>Movie must have release date</value>
+  </data>
+  <data name="MovieRuntimeError.Text" xml:space="preserve">
+    <value>Movie Runtime Should not greater than 300 mins.</value>
+  </data>
+  <data name="Grid.Text" xml:space="preserve">
+    <value>Grid</value>
+  </data>
+  <data name="List.Text" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="FilteredMediaByGenre.Text" xml:space="preserve">
+    <value>Filtered Media by Genre : </value>
+  </data>
+  <data name="ApplyFilterBtn.Content" xml:space="preserve">
+    <value>Apply Filter</value>
+  </data>
+  <data name="FilteredMovies" xml:space="preserve">
+    <value>Filtered Movies</value>
+  </data>
+  <data name="ReleaseDate.Text" xml:space="preserve">
+    <value>Release Date</value>
+  </data>
+  <data name="GenreList.Text" xml:space="preserve">
+    <value>Genre list</value>
+  </data>
+  <data name="MediaAddedSuccess.Text" xml:space="preserve">
+    <value>Movie has been added successfully</value>
+  </data>
+  <data name="SigninToAccount.Content" xml:space="preserve">
+    <value>Sign in to your Account</value>
+  </data>
+  <data name="EditTb.Width" xml:space="preserve">
+    <value>40</value>
+  </data>
+  <data name="DeleteTb.Width" xml:space="preserve">
+    <value>40</value>
+  </data>
+  <data name="EditReview.Text" xml:space="preserve">
+    <value>Edit Review</value>
+  </data>
+  <data name="CancelBtn.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AskDeleteReview.Text" xml:space="preserve">
+    <value>Do you want to delete the review?</value>
+  </data>
+  <data name="ActionCannotUndone.Text" xml:space="preserve">
+    <value>Note : This action cannot be undone.</value>
+  </data>
+  <data name="DeleteBtn.Content" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ReviewLengthError.Text" xml:space="preserve">
+    <value>Review should not empty and more than 512 characters</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Just now</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>Minute</value>
+  </data>
+  <data name="Ago" xml:space="preserve">
+    <value>ago</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
   </data>
 </root>

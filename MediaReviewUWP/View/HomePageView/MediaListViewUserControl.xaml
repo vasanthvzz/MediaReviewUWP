@@ -2,6 +2,7 @@
     x:Class="MediaReviewUWP.View.HomePageView.MediaListViewUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="using:MediaReviewUWP.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MediaReviewUWP.View.HomePageView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,14 +16,15 @@
                 <ResourceDictionary Source="/ResourceDictionary/ListViewDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:RatingControlVisibility x:Key="RatingVisibility" />
+            <converter:DateTimeToStringConverter x:Key="DateTimeToString" />
         </ResourceDictionary>
     </UserControl.Resources>
-
     <Grid x:Name="CompactListGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="ListViewColumn" />
             <ColumnDefinition x:Name="CompactMediaColumn" />
         </Grid.ColumnDefinitions>
+
         <ListView
             x:Name="MediaListView"
             Margin="0,0,0,0"
@@ -30,7 +32,8 @@
             IsItemClickEnabled="True"
             ItemClick="MediaListView_ItemClick"
             ItemContainerStyle="{StaticResource MediaListViewItemContainer}"
-            ItemsSource="{x:Bind MediaList}"
+            Style="{StaticResource GenreListViewStyle}"
+            ItemsSource="{Binding}"
             Loaded="MediaListView_Loaded"
             SelectedIndex="0"
             SelectionChanged="ListView_SelectionChanged"
@@ -49,7 +52,7 @@
                             Width="100"
                             Height="150"
                             ImageFailed="Image_ImageFailed"
-                            Source="{x:Bind ImagePath}"
+                            Source="{x:Bind ImagePath, Mode=OneWay}"
                             Stretch="UniformToFill" />
                         <Grid Grid.Column="1" Margin="10,0,0,0">
                             <Grid.RowDefinitions>
@@ -72,10 +75,10 @@
                                 Margin="5"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Caption="{Binding MediaRating, Mode=OneWay}"
+                                Caption="{Binding MediaRating}"
                                 IsReadOnly="True"
                                 Visibility="{Binding MediaRating, Converter={StaticResource RatingVisibility}}"
-                                Value="{Binding MediaRating, Mode=OneWay}">
+                                Value="{Binding MediaRating}">
                                 <RatingControl.Resources>
                                     <SolidColorBrush x:Key="RatingControlSelectedForeground" Color="Gold" />
                                     <SolidColorBrush x:Key="RatingControlUnselectedForeground" Color="Gray" />
@@ -86,13 +89,13 @@
                                 Margin="5"
                                 FontSize="15"
                                 FontWeight="SemiBold"
-                                Text="{Binding ReleaseDate}" />
+                                Text="{x:Bind ReleaseDate, Converter={StaticResource DateTimeToString}}" />
                             <TextBlock
                                 Grid.Row="3"
                                 Margin="5"
                                 FontSize="12"
                                 MaxLines="3"
-                                Text="{Binding Description}"
+                                Text="{x:Bind Description}"
                                 TextTrimming="WordEllipsis"
                                 TextWrapping="Wrap" />
                         </Grid>
@@ -102,16 +105,40 @@
         </ListView>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Button
                 x:Name="ToggleViewButton"
                 Grid.Row="0"
-                Click="ToggleViewButton_Click">
+                Margin="5"
+                VerticalAlignment="Top"
+                Background="{ThemeResource MildBackground}"
+                Canvas.ZIndex="2"
+                Click="ToggleViewButton_Click"
+                CornerRadius="5"
+                Foreground="{ThemeResource MainShade}"
+                Style="{StaticResource AdaptiveButtonStyle}">
                 <Button.Content>
-                    <SymbolIcon Symbol="Back" />
+                    <FontIcon
+                        FontFamily="Segoe Fluent Icons"
+                        FontSize="15"
+                        Glyph="&#xE72B;" />
                 </Button.Content>
+            </Button>
+
+            <Button
+                x:Name="NewTabBtn"
+                Margin="10,5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="{ThemeResource MildBackground}"
+                Canvas.ZIndex="2"
+                Click="NewTabBtn_Click"
+                CornerRadius="5"
+                Foreground="{ThemeResource MainShade}"
+                Style="{StaticResource AdaptiveButtonStyle}"
+                ToolTipService.ToolTip="Open in new Tab">
+                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE8A7;" />
             </Button>
 
             <ContentPresenter
@@ -155,9 +182,7 @@
                         <Setter Target="ToggleViewButton.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
-
             </VisualStateGroup>
-
         </VisualStateManager.VisualStateGroups>
     </Grid>
 </UserControl>

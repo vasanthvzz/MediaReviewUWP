@@ -3,7 +3,9 @@ using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
 using System;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
+
 namespace MediaReviewUWP.View.MediaPageView
 {
     public sealed partial class UserRatingControl : UserControl, IUserRatingView
@@ -47,7 +49,7 @@ namespace MediaReviewUWP.View.MediaPageView
             UserRatingChanged?.Invoke(this, e);
         }
 
-        public async void UpdatedUserRating(Rating userRating)
+        public async Task UpdatedUserRating(Rating userRating)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
@@ -56,7 +58,7 @@ namespace MediaReviewUWP.View.MediaPageView
             });
         }
     }
-    
+
     public class UserRatingChangedEventArgs : EventArgs
     {
         public short CurrentValue { get; }

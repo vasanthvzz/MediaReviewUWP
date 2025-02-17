@@ -1,52 +1,37 @@
-﻿using MediaReviewUWP.View.MediaPageView;
+﻿using CommunityToolkit.WinUI.Collections;
+using MediaReviewUWP.Utility;
+using MediaReviewUWP.View.MediaPageView;
 using MediaReviewUWP.ViewObject;
 using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MediaReviewUWP.View.HomePageView
 {
-    public sealed partial class MediaListViewUserControl : UserControl 
+    public sealed partial class MediaListViewUserControl : UserControl
     {
-
         private bool ListViewSelected { get; set; } = false;
+        private MediaPage _mediaPage { get; set; }
+        public event EventHandler<MediaTileEventArgs> NewMediaTabRequested;
+        public AdvancedCollectionView tempView { get; set; }
+
         public event Action ScrollViewerEnd;
-
-
-        public ObservableCollection<MediaTileVObj> MediaList
-        {
-            get { return (ObservableCollection<MediaTileVObj>)GetValue(MediaListProperty); }
-            set { SetValue(MediaListProperty, value);
-                if (MediaList != null && MediaList.Any())
-                {
-                    MediaListView.SelectedItem = MediaList.First();
-                }
-            }
-        }
-
-        public static readonly DependencyProperty MediaListProperty =
-            DependencyProperty.Register("MediaList", typeof(ObservableCollection<MediaTileVObj>), typeof(MediaListViewUserControl), new PropertyMetadata(null));
-
-
 
         public MediaListViewUserControl()
         {
             this.InitializeComponent();
-            MediaList = new ObservableCollection<MediaTileVObj>();
             this.SizeChanged += MediaListViewUserControl_SizeChanged;
         }
 
         private void MediaListViewUserControl_SizeChanged(object sender = null, SizeChangedEventArgs e = null)
         {
-            if(this.ActualWidth > 1000)
+            if (this.ActualWidth > 1000)
             {
                 BothFocused.IsActive = true;
                 ListViewFocused.IsActive = false;
-                PageContentFocused.IsActive = false ;
+                PageContentFocused.IsActive = false;
                 ListViewSelected = false;
             }
             else
@@ -65,17 +50,22 @@ namespace MediaReviewUWP.View.HomePageView
             }
         }
 
-        private void ListView_SelectionChanged(object sender,  SelectionChangedEventArgs e)
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var page = new MediaPage();
-            CompactMediaPresenter.Content = page;
+            if (_mediaPage == null)
+            {
+                _mediaPage = new MediaPage();
+                CompactMediaPresenter.Content = _mediaPage;
+            }
             var listView = sender as ListView;
             var tile = listView.SelectedItem as MediaTileVObj;
-            page.MediaDetailControlComponent.MediaRatingChanged -= MediaDetailControlComponent_MediaRatingChanged;
-            page.MediaDetailControlComponent.MediaRatingChanged += MediaDetailControlComponent_MediaRatingChanged;
-            page.DataContextChanged -= MediaPageDataContext_Changed;
-            page.DataContextChanged += MediaPageDataContext_Changed;
-            page.Init(tile.MediaId);
+            _mediaPage.ScrollToTop();
+            _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High , () =>
+            {
+                if(tile != null)_mediaPage.Init(tile.MediaId);
+            });
+            _mediaPage.MediaDetailControlComponent.MediaRatingChanged -= MediaDetailControlComponent_MediaRatingChanged;
+            _mediaPage.MediaDetailControlComponent.MediaRatingChanged += MediaDetailControlComponent_MediaRatingChanged;
         }
 
         private async void MediaDetailControlComponent_MediaRatingChanged(object sender, MediaRatingChangeEventArgs e)
@@ -87,26 +77,12 @@ namespace MediaReviewUWP.View.HomePageView
             });
         }
 
-        private void MediaPageDataContext_Changed(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            if (CompactMediaPresenter.Content is MediaPage page)
-            {
-                var item = MediaListView.SelectedItem as MediaTileVObj;
-                if (sender is MediaPage mediaPage)
-                {
-                    var rating = mediaPage?.MediaDetailControlComponent?.MediaDetail?.MediaRating;
-                    if(rating != null)
-                    {
-                        item.MediaRating = rating.ToString();
-                    }
-                }
-                page.ReloadData();
-            }
-        }
-
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-
+            if (sender is Image image)
+            {
+                image.Source = new BitmapImage(new Uri(ImageManager.GetDefaultTileImagePath()));
+            }
         }
 
         private void ToggleViewButton_Click(object sender, RoutedEventArgs e)
@@ -120,7 +96,6 @@ namespace MediaReviewUWP.View.HomePageView
             ListViewSelected = false;
             MediaListViewUserControl_SizeChanged();
         }
-
 
         private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
@@ -165,6 +140,20 @@ namespace MediaReviewUWP.View.HomePageView
                 }
             }
             return null;
+        }
+
+        public void ReloadCurrentMedia()
+        {
+            _mediaPage?.ReloadPageContent();
+        }
+
+        private void NewTabBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if(MediaListView.SelectedItem is MediaTileVObj item)
+            {
+                MediaTileEventArgs args = new MediaTileEventArgs(item);
+                NewMediaTabRequested?.Invoke(null, args);
+            }
         }
     }
 }

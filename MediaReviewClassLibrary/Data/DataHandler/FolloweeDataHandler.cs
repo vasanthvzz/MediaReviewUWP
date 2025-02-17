@@ -1,7 +1,6 @@
 ﻿using MediaReviewClassLibrary.Data.Contract;
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Models.Enitites;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace MediaReviewClassLibrary.Data.DataHandler
 {
     public class FolloweeDataHandler : IFolloweeDataHandler
     {
-        private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IDatabaseAdapter>();
+        private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetRequiredService<IDatabaseAdapter>();
 
         public async Task<FolloweeMapper> AddFollowee(long userId, long followeeId)
         {
@@ -26,25 +25,25 @@ namespace MediaReviewClassLibrary.Data.DataHandler
 
         public async Task<FolloweeMapper> GetFollowingDetail(long userId, long followeeId)
         {
-            if(userId == followeeId)
+            if (userId == followeeId)
             {
                 throw new Exception("User id and followee id are same. Cannot perform follow");
             }
-            return await _databaseAdapter.GetTableQuery<FolloweeMapper>()
+            return await _databaseAdapter.GetAsyncTableQuery<FolloweeMapper>()
                 .Where(followerMapper => followerMapper.UserId == userId && followerMapper.FolloweeId == followeeId)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<List<FolloweeMapper>> GetUserFollowee(long userId)
         {
-            return await _databaseAdapter.GetTableQuery<FolloweeMapper>()
-                .Where(followerMapper => followerMapper.UserId == userId && followerMapper.IsFollowing).ToListAsync();
+            return await _databaseAdapter.GetAsyncTableQuery<FolloweeMapper>()
+                .Where(followerMapper => followerMapper.UserId == userId && followerMapper.IsFollow).ToListAsync();
         }
 
         public async Task<List<FolloweeMapper>> GetUserFollower(long userId)
         {
-            return await _databaseAdapter.GetTableQuery<FolloweeMapper>()
-                .Where(followerMapper => followerMapper.FolloweeId == userId && followerMapper.IsFollowing).ToListAsync();
+            return await _databaseAdapter.GetAsyncTableQuery<FolloweeMapper>()
+                .Where(followerMapper => followerMapper.FolloweeId == userId && followerMapper.IsFollow).ToListAsync();
         }
 
         public async Task<FolloweeMapper> UpdateFollowee(FolloweeMapper followeeDetail)
@@ -55,8 +54,8 @@ namespace MediaReviewClassLibrary.Data.DataHandler
             }
 
             var customQuery = "UPDATE followee_mapper SET is_following = ? WHERE user_id = ? AND followee_id = ?";
-            await _databaseAdapter.ExecuteQuery<FolloweeMapper>(customQuery, followeeDetail.IsFollowing, followeeDetail.UserId, followeeDetail.FolloweeId);
-            return await GetFollowingDetail(followeeDetail.UserId,followeeDetail.FolloweeId);
+            await _databaseAdapter.ExecuteQuery<FolloweeMapper>(customQuery, followeeDetail.IsFollow, followeeDetail.UserId, followeeDetail.FolloweeId);
+            return await GetFollowingDetail(followeeDetail.UserId, followeeDetail.FolloweeId);
         }
     }
 }

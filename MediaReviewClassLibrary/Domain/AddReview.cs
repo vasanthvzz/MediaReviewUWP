@@ -1,15 +1,15 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models;
-using MediaReviewClassLibrary.Models.Enitites;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
     public class AddReviewUseCase : UseCaseBase<AddReviewResponse>
     {
         private AddReviewRequest _request;
-        private IAddReviewDataManager _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IAddReviewDataManager>();
+        private IAddReviewDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IAddReviewDataManager>();
 
         public AddReviewUseCase(AddReviewRequest request, ICallback<AddReviewResponse> callback) : base(callback)
         {
@@ -18,40 +18,41 @@ namespace MediaReviewClassLibrary.Domain
 
         public override void Action()
         {
-            _dm.AddReview(_request, new AddReviewUseCaseCallback(this));   
+            _dm.AddReview(_request, new AddReviewUseCaseCallback(this));
         }
     }
 
     public class AddReviewUseCaseCallback : ICallback<AddReviewResponse>
     {
-        private AddReviewUseCase _usecase;
+        private AddReviewUseCase _uc;
 
         public AddReviewUseCaseCallback(AddReviewUseCase usecase)
         {
-            _usecase = usecase;
+            _uc = usecase;
         }
 
         public void OnFailure(Exception exception)
         {
-            _usecase?.PresenterCallback?.OnFailure(exception);
+            _uc?.PresenterCallback?.OnFailure(exception);
         }
 
         public void OnSuccess(ZResponse<AddReviewResponse> response)
         {
-            _usecase?.PresenterCallback?.OnSuccess(response);
+            _uc?.PresenterCallback?.OnSuccess(response);
         }
     }
 
-    public interface IAddReviewDataManager 
+    public interface IAddReviewDataManager
     {
-        void AddReview(AddReviewRequest request, AddReviewUseCaseCallback callback);
+        Task AddReview(AddReviewRequest request, AddReviewUseCaseCallback callback);
     }
 
-    public class AddReviewRequest 
+    public class AddReviewRequest
     {
         public long UserId { get; set; }
         public long MediaId { get; set; }
         public string Description { get; set; }
+
         public AddReviewRequest(long userId, long mediaId, string description)
         {
             UserId = userId;
@@ -72,5 +73,6 @@ namespace MediaReviewClassLibrary.Domain
         }
     }
 
-    public interface IAddReviewPresenterCallback : ICallback<AddReviewResponse>  { }
+    public interface IAddReviewPresenterCallback : ICallback<AddReviewResponse>
+    { }
 }

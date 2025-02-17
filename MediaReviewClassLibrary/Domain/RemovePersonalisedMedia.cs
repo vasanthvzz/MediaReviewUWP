@@ -1,19 +1,18 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary.Models.Constants;
-using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Domain
 {
     public class RemovePersonalisedMediaUseCase : UseCaseBase<RemovePersonalisedMediaResponse>
     {
         private RemovePersonalisedMediaRequest _request;
-        private IRemovePersonalisedMediaDataManager _dm;
+        private IRemovePersonalisedMediaDataManager _dm = MediaReviewDIServiceProvider.GetRequiredService<IRemovePersonalisedMediaDataManager>();
 
         public RemovePersonalisedMediaUseCase(RemovePersonalisedMediaRequest request, ICallback<RemovePersonalisedMediaResponse> callback) : base(callback)
         {
             _request = request;
-            _dm = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IRemovePersonalisedMediaDataManager>();
         }
 
         public override void Action()
@@ -45,7 +44,7 @@ namespace MediaReviewClassLibrary.Domain
 
     public class RemovePersonalisedMediaRequest
     {
-        public long UserId {  get; set; }
+        public long UserId { get; set; }
         public long MediaId { get; set; }
         public PersonalMediaType PersonalisedMediaType { get; set; }
 
@@ -54,13 +53,13 @@ namespace MediaReviewClassLibrary.Domain
             UserId = userId;
             MediaId = mediaId;
             PersonalisedMediaType = personalisedMediaType;
-        }   
+        }
     }
 
     public class RemovePersonalisedMediaResponse
     {
         public long MediaId { get; set; }
-        public bool Success {  get; set; }
+        public bool Success { get; set; }
 
         public RemovePersonalisedMediaResponse(long mediaId, bool success)
         {
@@ -71,8 +70,9 @@ namespace MediaReviewClassLibrary.Domain
 
     public interface IRemovePersonalisedMediaDataManager
     {
-        void RemovePersonalisedMedia(RemovePersonalisedMediaRequest request, RemovePersonalisedMediaUseCaseCallback callback);
+        Task RemovePersonalisedMedia(RemovePersonalisedMediaRequest request, RemovePersonalisedMediaUseCaseCallback callback);
     }
 
-    public interface IRemovePersonalisedMediaPresenterCallback : ICallback<RemovePersonalisedMediaResponse> { }
+    public interface IRemovePersonalisedMediaPresenterCallback : ICallback<RemovePersonalisedMediaResponse>
+    { }
 }

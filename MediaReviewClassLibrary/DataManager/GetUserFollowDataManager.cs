@@ -2,9 +2,11 @@
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models;
+using MediaReviewClassLibrary.Models.Constants;
 using MediaReviewClassLibrary.Models.Enitites;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.DataManager
 {
@@ -13,7 +15,7 @@ namespace MediaReviewClassLibrary.DataManager
         private IUserDataHandler _userDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IUserDataHandler>();
         private IFolloweeDataHandler _followeeDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IFolloweeDataHandler>();
 
-        public async void GetUserFollow(GetUserFollowRequest request, ICallback<GetUserFollowResponse> callback)
+        public async Task GetUserFollow(GetUserFollowRequest request, ICallback<GetUserFollowResponse> callback)
         {
             try
             {
@@ -22,11 +24,11 @@ namespace MediaReviewClassLibrary.DataManager
                 List<UserFollowBObj> userFollowList = new List<UserFollowBObj>();
                 if (request.UserFollowType == FollowType.FOLLOWER)
                 {
-                    followList =  await _followeeDataHandler.GetUserFollower(userId);
+                    followList = await _followeeDataHandler.GetUserFollower(userId);
                     foreach (var follow in followList)
                     {
                         UserDetail user = await _userDataHandler.GetUserById(follow.UserId);
-                        userFollowList.Add(new UserFollowBObj(user, follow));
+                        userFollowList.Add(new UserFollowBObj(user, follow,FollowType.FOLLOWER));
                     }
                 }
                 else
@@ -35,13 +37,13 @@ namespace MediaReviewClassLibrary.DataManager
                     foreach (var follow in followList)
                     {
                         UserDetail user = await _userDataHandler.GetUserById(follow.FolloweeId);
-                        userFollowList.Add(new UserFollowBObj(user,follow));    
+                        userFollowList.Add(new UserFollowBObj(user, follow,FollowType.FOLLOWEE));
                     }
                 }
                 ZResponse<GetUserFollowResponse> response = new ZResponse<GetUserFollowResponse>(new GetUserFollowResponse(userFollowList));
                 callback?.OnSuccess(response);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 callback?.OnFailure(e);
             }

@@ -1,25 +1,18 @@
 ﻿using CommonClassLibrary;
+using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Utlis;
-using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.DataManager
 {
     public class LoginUserDataManager : ILoginUserDataManager
     {
-        private IUserDataHandler _userDataHandler;
-        private ISessionManager _sessionAdapter;
+        private IUserDataHandler _userDataHandler = MediaReviewDIServiceProvider.GetRequiredService<IUserDataHandler>();
 
-        public LoginUserDataManager()
-        {
-            _userDataHandler = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IUserDataHandler>();
-            _sessionAdapter = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<ISessionManager>();
-        }
-
-        public async void ValidateUser(LoginUserRequest request, LoginUserUseCaseCallback callback)
+        public async Task ValidateUser(LoginUserRequest request, LoginUserUseCaseCallback callback)
         {
             try
             {
@@ -32,7 +25,7 @@ namespace MediaReviewClassLibrary.DataManager
                     if (success)
                     {
                         user = await _userDataHandler.GetUserByName(request.UserName);
-                        _sessionAdapter.SaveUserToStorage(user);
+                        SessionManager.SaveUserToStorage(user);
                     }
                 }
                 LoginUserResponse response = new LoginUserResponse(userExist, success, user);

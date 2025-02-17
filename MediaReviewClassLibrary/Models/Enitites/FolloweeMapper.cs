@@ -12,22 +12,23 @@ namespace MediaReviewClassLibrary.Models.Enitites
         public long FolloweeId { get; set; }
 
         [Column("is_following")]
-        public bool IsFollowing { get; set; }
+        public bool IsFollow { get; set; }
 
         public FolloweeMapper(long userId, long followeeId, bool isFollowing)
         {
             UserId = userId;
             FolloweeId = followeeId;
-            IsFollowing = isFollowing;
+            IsFollow = isFollowing;
         }
 
         public FolloweeMapper(long userId, long followeeId)
         {
             UserId = userId;
             FolloweeId = followeeId;
-            IsFollowing = false;
+            IsFollow = false;
         }
 
-        public FolloweeMapper() { }
+        public FolloweeMapper()
+        { }
     }
 }

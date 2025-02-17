@@ -1,5 +1,4 @@
 ﻿using MediaReviewClassLibrary.Data.Contract;
-using System;
 using Windows.Security.Credentials;
 
 namespace MediaReviewClassLibrary.Data
@@ -7,6 +6,7 @@ namespace MediaReviewClassLibrary.Data
     public class PasswordAdapter : IPasswordAdapter
     {
         private PasswordVault _vault;
+
         public PasswordAdapter()
         {
             _vault = new PasswordVault();

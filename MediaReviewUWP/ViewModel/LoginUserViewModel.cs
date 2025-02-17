@@ -1,4 +1,5 @@
 ﻿using CommonClassLibrary;
+using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel.Contract;
@@ -10,8 +11,6 @@ namespace MediaReviewUWP.ViewModel
     public class LoginUserViewModel : ILoginUserViewModel
     {
         private ILoginUserView _view;
-
-        public CoreDispatcher Dispatcher { get; set; }
 
         public LoginUserViewModel(ILoginUserView loginUserControl)
         {
@@ -39,6 +38,7 @@ namespace MediaReviewUWP.ViewModel
         public class LoginUserPresenterCallback : ILoginUserPresenterCallback
         {
             private LoginUserViewModel _presenter;
+
             public LoginUserPresenterCallback(LoginUserViewModel presenter)
             {
                 _presenter = presenter;
@@ -54,6 +54,7 @@ namespace MediaReviewUWP.ViewModel
                 var data = response.Data;
                 if (data.Success)
                 {
+                    SessionManager.User = data.User;
                     _presenter.ValidationSuccess();
                 }
                 else

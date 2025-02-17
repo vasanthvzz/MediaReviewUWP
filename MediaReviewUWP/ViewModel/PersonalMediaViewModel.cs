@@ -11,6 +11,7 @@ namespace MediaReviewUWP.ViewModel
     public class PersonalMediaViewModel : IPersonalMediaViewModel
     {
         private IPersonalMediaControl _view;
+
         public PersonalMediaViewModel(IPersonalMediaControl view)
         {
             _view = view;
@@ -24,8 +25,8 @@ namespace MediaReviewUWP.ViewModel
             usecase.Execute();
         }
 
-        public void SendUpdatedData(PersonalMedia userPersonalMedia) 
-        { 
+        public void SendUpdatedData(PersonalMedia userPersonalMedia)
+        {
             UpdatePersonalMedia(userPersonalMedia);
         }
     }
@@ -34,8 +35,8 @@ namespace MediaReviewUWP.ViewModel
     {
         private IPersonalMediaViewModel _vm;
 
-        public UpdatePersonalMediaPresenterCallback(IPersonalMediaViewModel vm) 
-        { 
+        public UpdatePersonalMediaPresenterCallback(IPersonalMediaViewModel vm)
+        {
             _vm = vm;
         }
 

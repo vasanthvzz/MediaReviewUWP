@@ -1,43 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MediaReviewUWP.View.HomePageView
 {
-
     public class ImageToBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
-            public object Convert(object value, Type targetType, object parameter, string language)
+            if (value is string imagePath)
             {
-                if (value is string imagePath)
+                return new ImageBrush
                 {
-                    // Create an ImageBrush from the image path
-                    return new ImageBrush
-                    {
-                        ImageSource = new BitmapImage(new Uri(imagePath))
-                    };
-                }
-                else if (value is BitmapImage bitmapImage)
+                    ImageSource = new BitmapImage(new Uri(imagePath))
+                };
+            }
+            else if (value is BitmapImage bitmapImage)
+            {
+                return new ImageBrush
                 {
-                    // Create an ImageBrush from a BitmapImage
-                    return new ImageBrush
-                    {
-                        ImageSource = bitmapImage
-                    };
-                }
-
-                return null; // Return null if value is not a valid image
+                    ImageSource = bitmapImage
+                };
             }
 
-            public object ConvertBack(object value, Type targetType, object parameter, string language)
-            {
-                throw new NotImplementedException("ConvertBack is not implemented.");
-            }
+            return null;
         }
 
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException("ConvertBack is not implemented.");
+        }
+    }
 }

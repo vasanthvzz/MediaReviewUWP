@@ -1,21 +1,24 @@
 ﻿using MediaReviewClassLibrary.Data.Contract;
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Models.Enitites;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MediaReviewClassLibrary.Data.DataHandler
 {
     public class GenreDataHandler : IGenreDataHandler
     {
-        private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetServiceProvider().GetRequiredService<IDatabaseAdapter>();
+        private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetRequiredService<IDatabaseAdapter>();
 
         public async Task<Genre> GetGenreById(long id)
         {
             return await _databaseAdapter.FindAsync<Genre>(id);
+        }
+
+        public async Task<List<Genre>> GetAllGenre()
+        {
+            return await _databaseAdapter.GetTableAsync<Genre>();
         }
 
         public async Task<List<Genre>> GetGenreByMediaId(long mediaId)
@@ -25,14 +28,21 @@ namespace MediaReviewClassLibrary.Data.DataHandler
             List<Genre> resultList = new List<Genre>();
             foreach (var item in result)
             {
-               resultList.Add(await GetGenreById(item.GenreId));
+                resultList.Add(await GetGenreById(item.GenreId));
             }
             return resultList;
         }
 
-        public List<long> GetMediaIdsByGenreId(long gereId)
+        public async Task<List<long>> GetMediaIdsByGenreId(long genreId)
         {
-            return null;
+            var customQuery = "SELECT media_id FROM genre_mapper WHERE genre_id = ?";
+            var result = await _databaseAdapter.ExecuteQuery<GenreMapper>(customQuery, genreId);
+            return result?.Select(gm => gm.MediaId).ToList();
+        }
+
+        public void AddGenre(GenreMapper genre)
+        {
+            _databaseAdapter.InsertOrReplaceAsync<GenreMapper>(genre);
         }
     }
 }

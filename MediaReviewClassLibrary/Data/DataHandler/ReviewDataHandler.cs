@@ -1,7 +1,6 @@
 ﻿using MediaReviewClassLibrary.Data.Contract;
 using MediaReviewClassLibrary.Data.DataHandler.Contract;
 using MediaReviewClassLibrary.Models.Enitites;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,7 +8,7 @@ namespace MediaReviewClassLibrary.Data.DataHandler
 {
     public class ReviewDataHandler : IReviewDataHandler
     {
-        private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetServiceProvider().GetService<IDatabaseAdapter>();
+        private IDatabaseAdapter _databaseAdapter = MediaReviewDIServiceProvider.GetRequiredService<IDatabaseAdapter>();
 
         public void AddReview(Review review)
         {
@@ -23,7 +22,7 @@ namespace MediaReviewClassLibrary.Data.DataHandler
 
         public async Task<List<Review>> GetAllUserReviews(long userId)
         {
-            var tabledQuery = _databaseAdapter.GetTableQuery<Review>();
+            var tabledQuery = _databaseAdapter.GetAsyncTableQuery<Review>();
             return await tabledQuery.Where(review => review.UserId == userId).ToListAsync();
         }
 
@@ -34,14 +33,14 @@ namespace MediaReviewClassLibrary.Data.DataHandler
 
         public async Task<List<Review>> GetReviewsByMedia(long mediaId)
         {
-            var tabledQuery = _databaseAdapter.GetTableQuery<Review>();
+            var tabledQuery = _databaseAdapter.GetAsyncTableQuery<Review>();
             return await tabledQuery.Where(review => review.MediaId == mediaId).ToListAsync();
         }
 
         public async Task<Review> UpdateReview(long reviewId, string reviewContent)
         {
             var customQuery = "UPDATE review SET description = ? , is_edited = ? WHERE review_id = ?";
-            await _databaseAdapter.ExecuteQuery<Review>(customQuery,reviewContent,true,reviewId);
+            await _databaseAdapter.ExecuteQuery<Review>(customQuery, reviewContent, true, reviewId);
             return await _databaseAdapter.FindAsync<Review>(reviewId);
         }
     }

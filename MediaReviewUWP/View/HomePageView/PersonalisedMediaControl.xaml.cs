@@ -1,5 +1,6 @@
 ﻿using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Constants;
+using MediaReviewUWP.Utility;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel;
 using MediaReviewUWP.ViewModel.Contract;
@@ -16,16 +17,19 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MediaReviewUWP.View.HomePageView
 {
-    public sealed partial class PersonalisedMediaControl : Page ,IPersonalisedMediaView , ITabItemContent
+    public sealed partial class PersonalisedMediaControl : Page, IPersonalisedMediaView, ITabItemContent
     {
         public PersonalMediaType PersonalisedMediaType { get; private set; }
         private IPersonalisedMediaViewModel _vm;
+
         public event EventHandler<MediaTileEventArgs> PersonalisedMediaTileClicked;
 
         public ObservableCollection<MediaTileVObj> MediaList
         {
             get { return (ObservableCollection<MediaTileVObj>)GetValue(mediaListProperty); }
-            set { SetValue(mediaListProperty, value);
+            set
+            {
+                SetValue(mediaListProperty, value);
                 MediaList.CollectionChanged += MediaList_CollectionChanged;
             }
         }
@@ -39,7 +43,7 @@ namespace MediaReviewUWP.View.HomePageView
             this.InitializeComponent();
             MediaList = new ObservableCollection<MediaTileVObj>();
         }
-        
+
         public void Init(PersonalMediaType personalMediaType)
         {
             PersonalisedMediaType = personalMediaType;
@@ -64,27 +68,26 @@ namespace MediaReviewUWP.View.HomePageView
             }
         }
 
-        public void ReloadData() 
+        public void ReloadPageContent()
         {
-            _vm.GetPersonlisedMedia(PersonalisedMediaType);
+            _vm.GetPersonalisedMedia(PersonalisedMediaType);
         }
-        
 
         public void UpdateMedia(List<MediaBObj> mediaList)
         {
-           _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                MediaList.Clear();
-                foreach (var media in mediaList)
-                {
-                    MediaList.Add(new MediaTileVObj(media));
-                }
-            });
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+             {
+                 MediaList.Clear();
+                 foreach (var media in mediaList)
+                 {
+                     MediaList.Add(new MediaTileVObj(media));
+                 }
+             });
         }
 
         private void DisplayModeButton_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(MainContentPresenter == null)
+            if (MainContentPresenter == null)
             {
                 return;
             }
@@ -110,10 +113,7 @@ namespace MediaReviewUWP.View.HomePageView
         private void Page_Loaded(object sender, RoutedEventArgs args)
         {
             MainScrollViewer.Height = Window.Current.Bounds.Height - 100;
-            Window.Current.SizeChanged += (s, e) =>
-            {
-                MainScrollViewer.Height = e.Size.Height - 100;
-            };
+            Window.Current.SizeChanged += (s, e) => MainScrollViewer.Height = e.Size.Height - 100;
         }
 
         private void MediaItemPointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
@@ -144,7 +144,7 @@ namespace MediaReviewUWP.View.HomePageView
         {
             if (sender is Button button && button.DataContext is MediaTileVObj mediaDetail)
             {
-                _vm.RemovePersonalisedMedia(mediaDetail.MediaId,PersonalisedMediaType);
+                _vm.RemovePersonalisedMedia(mediaDetail.MediaId, PersonalisedMediaType);
             }
         }
 
@@ -164,14 +164,8 @@ namespace MediaReviewUWP.View.HomePageView
         {
             if (sender is Image image)
             {
-                image.Source = new BitmapImage(new Uri("ms-appx:///Assets/DefaultMediaImage.png"));
-                image.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
+                image.Source = new BitmapImage(new Uri(ImageManager.GetDefaultTileImagePath()));
             }
-        }
-
-        private void myListButton_Click(Microsoft.UI.Xaml.Controls.SplitButton sender, Microsoft.UI.Xaml.Controls.SplitButtonClickEventArgs args)
-        {
-
         }
     }
 }

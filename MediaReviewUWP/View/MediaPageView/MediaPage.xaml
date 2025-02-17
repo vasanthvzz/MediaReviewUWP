@@ -2,12 +2,19 @@
     x:Class="MediaReviewUWP.View.MediaPageView.MediaPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="using:MediaReviewUWP.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MediaReviewUWP.View.MediaPageView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Background="{ThemeResource StrongBackground}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <converter:PosterImageConverter x:Key="PosterImageConv" />
+        </ResourceDictionary>
+    </Page.Resources>
 
     <Grid
         x:Name="BackgroundContainer"
@@ -17,7 +24,7 @@
             x:Name="BackgroundImageElement"
             VerticalAlignment="Stretch"
             ImageFailed="BackgroundImageElement_ImageFailed"
-            Source="{x:Bind MediaDetail.PosterPath, Mode=OneWay}"
+            Source="{Binding PosterPath, Converter={StaticResource PosterImageConv}}"
             Stretch="UniformToFill" />
 
         <Rectangle
@@ -49,8 +56,9 @@
                     HorizontalContentAlignment="Left"
                     MediaId="{x:Bind MediaDetail.MediaId, Mode=OneWay}" />
             </Grid>
-
         </ScrollViewer>
+
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LayoutStates">
                 <VisualState x:Name="WideLayout">
@@ -72,5 +80,4 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>
-
 </Page>

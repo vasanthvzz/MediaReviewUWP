@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Data;
 
@@ -18,6 +14,7 @@ namespace MediaReviewUWP.ResourceDictionary
                 {
                     case "PointerOver":
                         return ManipulateColor(baseColor, 0.2f);
+
                     case "Pressed":
                         return ManipulateColor(baseColor, -0.2f);
                 }

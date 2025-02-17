@@ -1,9 +1,10 @@
 ﻿using CommonClassLibrary;
 using MediaReviewClassLibrary;
+using MediaReviewClassLibrary.Data;
 using MediaReviewClassLibrary.Domain;
 using MediaReviewClassLibrary.Models;
 using MediaReviewClassLibrary.Models.Enitites;
-using MediaReviewClassLibrary.Utlis;
+using MediaReviewClassLibrary.Utility;
 using MediaReviewUWP.View.Contract;
 using MediaReviewUWP.ViewModel.Contract;
 using System;
@@ -14,7 +15,6 @@ namespace MediaReviewUWP.ViewModel
 {
     public class UserRatedMediaViewModel : IUserRatedMediaViewModel
     {
-        private ISessionManager _sessionManager = MediaReviewDIServiceProvider.GetRequiredService<ISessionManager>();
         private IUserRatedMediaPage _view;
 
         public UserRatedMediaViewModel(IUserRatedMediaPage view)
@@ -24,19 +24,19 @@ namespace MediaReviewUWP.ViewModel
 
         public void ChangeUserRating(long mediaId, short userRating)
         {
-            long userId = _sessionManager.RetriveUserFromStorage().UserId;
+            long userId = SessionManager.User.UserId;
             UpdateUserRatingRequest request = new UpdateUserRatingRequest(new Rating(userId, mediaId, userRating));
             UpdateUserRatingPresenterCallback callback = new UpdateUserRatingPresenterCallback(this);
-            UpdateUserRatingUseCase uc = new UpdateUserRatingUseCase(request,callback);
+            UpdateUserRatingUseCase uc = new UpdateUserRatingUseCase(request, callback);
             uc.Execute();
         }
 
         public void GetUserRatedMedia()
         {
-            long userId = _sessionManager.RetriveUserFromStorage().UserId;
+            long userId = SessionManager.User.UserId;
             GetUserRatedMediaRequest request = new GetUserRatedMediaRequest(userId);
             GetUserRatedMediaPresenterCallback callback = new GetUserRatedMediaPresenterCallback(this);
-            GetUserRatedMediaUseCase uc = new GetUserRatedMediaUseCase(request,callback);
+            GetUserRatedMediaUseCase uc = new GetUserRatedMediaUseCase(request, callback);
             uc.Execute();
         }
 
@@ -45,7 +45,7 @@ namespace MediaReviewUWP.ViewModel
             _view.UpdateRatedMediaList(ratedMedia);
         }
 
-        public void  SendUpdatedRating(Rating rating)
+        public void SendUpdatedRating(Rating rating)
         {
             _view.UpdatedMediaRating(rating);
         }
@@ -92,6 +92,5 @@ namespace MediaReviewUWP.ViewModel
                 }
             }
         }
-
     }
 }

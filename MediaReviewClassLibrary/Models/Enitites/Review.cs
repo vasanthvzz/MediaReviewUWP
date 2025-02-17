@@ -34,6 +34,7 @@ namespace MediaReviewClassLibrary.Models.Enitites
             Timestamp = timestamp;
         }
 
-        public Review() { }
+        public Review()
+        { }
     }
 }
